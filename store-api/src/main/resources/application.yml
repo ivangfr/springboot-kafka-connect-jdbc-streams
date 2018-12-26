@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: store-api
+  jpa:
+    hibernate.ddl-auto: create
+  datasource:
+    url: jdbc:mysql://${MYSQL_ADDR:localhost}:3306/storedb?autoReconnect=true&useSSL=false&useUnicode=yes&characterEncoding=UTF-8&useLegacyDatetimeCode=false&serverTimezone=UTC
+    username: root
+    password: secret
+
+management:
+  security:
+    enabled: false
+  endpoints:
+    web:
+      exposure.include: "*"
+  endpoint:
+    health:
+      show-details: always
