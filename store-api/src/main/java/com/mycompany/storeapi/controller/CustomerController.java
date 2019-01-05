@@ -50,10 +50,10 @@ public class CustomerController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public Long addCustomer(@Valid @RequestBody AddCustomerDto addCustomerDto) {
+    public CustomerDto addCustomer(@Valid @RequestBody AddCustomerDto addCustomerDto) {
         Customer customer = mapperFacade.map(addCustomerDto, Customer.class);
         customer = customerService.saveCustomer(customer);
-        return customer.getId();
+        return mapperFacade.map(customer, CustomerDto.class);
     }
 
     @ResponseStatus(HttpStatus.OK)

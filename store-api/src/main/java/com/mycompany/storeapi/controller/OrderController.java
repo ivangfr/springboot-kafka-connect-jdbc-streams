@@ -50,10 +50,10 @@ public class OrderController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public Long createOrder(@Valid @RequestBody CreateOrderDto createOrderDto) {
+    public OrderDto createOrder(@Valid @RequestBody CreateOrderDto createOrderDto) {
         Order order = mapperFacade.map(createOrderDto, Order.class);
         order = orderService.saveOrder(order);
-        return order.getId();
+        return mapperFacade.map(order, OrderDto.class);
     }
 
     @ResponseStatus(HttpStatus.OK)

@@ -50,10 +50,10 @@ public class ProductController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public Long addProduct(@Valid @RequestBody AddProductDto addProductDto) {
+    public ProductDto addProduct(@Valid @RequestBody AddProductDto addProductDto) {
         Product product = mapperFacade.map(addProductDto, Product.class);
         product = productService.saveProduct(product);
-        return product.getId();
+        return mapperFacade.map(product, ProductDto.class);
     }
 
     @ResponseStatus(HttpStatus.OK)

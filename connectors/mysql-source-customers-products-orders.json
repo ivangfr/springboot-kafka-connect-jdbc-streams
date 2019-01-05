@@ -1,0 +1,15 @@
+{
+  "name": "mysql-source-customers-products-orders",
+  "config": {
+    "connector.class": "io.confluent.connect.jdbc.JdbcSourceConnector",
+    "connection.url": "jdbc:mysql://store-mysql:3306/storedb?autoReconnect=true&useSSL=false&useUnicode=yes&characterEncoding=UTF-8&useLegacyDatetimeCode=false&serverTimezone=UTC",
+    "connection.user": "root",
+    "connection.password": "secret",
+    "table.whitelist": "customers,products,orders",
+    "mode": "timestamp+incrementing",
+    "timestamp.column.name": "updated_at",
+    "incrementing.column.name": "id",
+    "topic.prefix": "store-mysql-",
+    "tasks.max": "1"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "elasticsearch-sink-products",
+  "config": {
+    "connector.class": "io.confluent.connect.elasticsearch.ElasticsearchSinkConnector",
+    "topics": "store-mysql-products",
+    "key.ignore": "true",
+    "connection.url": "http://elasticsearch:9200",
+    "type.name": "kafka-connect",
+    "tasks.max": "1"
+  }
+}

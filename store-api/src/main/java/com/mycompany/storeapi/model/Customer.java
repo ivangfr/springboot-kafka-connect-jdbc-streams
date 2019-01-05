@@ -32,7 +32,10 @@ public class Customer {
     @Column(nullable = false)
     private String phone;
 
+    @Column(nullable = false)
     private LocalDateTime createdAt;
+
+    @Column(nullable = false)
     private LocalDateTime updatedAt;
 
     @PrePersist
