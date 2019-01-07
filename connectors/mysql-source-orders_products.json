@@ -9,6 +9,13 @@
     "mode": "timestamp",
     "timestamp.column.name": "updated_at",
     "topic.prefix": "store-mysql-",
-    "tasks.max": "1"
+    "tasks.max": "1",
+
+    "_comment": "--- SMT (Single Message Transform), it add key value to the message based on the entity id field ---",
+    "transforms":"createKey,extractInt",
+    "transforms.createKey.type":"org.apache.kafka.connect.transforms.ValueToKey",
+    "transforms.createKey.fields":"id",
+    "transforms.extractInt.type":"org.apache.kafka.connect.transforms.ExtractField$Key",
+    "transforms.extractInt.field":"id"
   }
 }

@@ -11,7 +11,9 @@ The goal of this project is ...
 ## Hosts & Ports
 
 ```
-Apache Kafka broker (plain text)    | 9092
+ZooKeeper                           | 2181
+Apache Kafka broker                 | 9092
+MySQL                               | 3306
 Elasticsearch REST API              | http://localhost:9200
 Kafka REST Proxy                    | http://localhost:8082
 Kafka Connect REST API              | http://localhost:8083
@@ -19,8 +21,7 @@ Kafka Connect UI (Web)              | http://localhost:8086
 Kafka Topics UI (Web)               | http://localhost:8085
 Schema Registry REST API            | http://localhost:8081
 Schema Registry (Web)               | http://localhost:8001
-ZooKeeper                           | 2181
-MySQL                               | 3306
+Kibana (Web)                        | http://localhost:5601
 ```
 
 ## Start Environment
@@ -53,7 +54,7 @@ docker-compose ps
 mvn clean spring-boot:run
 ```
 
-3. Wait for `store-api` to be up and running. It is configured to create the needed tables on `mysql`.
+3. Wait for `store-api` to be up and running. It is configured to create all needed tables on `mysql`.
 
 
 ### Create connectors
@@ -72,9 +73,18 @@ docker logs kafka-connect -f
 
 ## TODO
 
-- read https://www.confluent.io/blog/simplest-useful-kafka-connect-data-pipeline-world-thereabouts-part-1
-- use `transformers` to create the `key` (see https://www.confluent.io/blog/simplest-useful-kafka-connect-data-pipeline-world-thereabouts-part-3)
 - change `order` entity `id` from `Long` to `String (UUID)`
+- drop the store-mysql- prefix from the topic name and thus Elasticsearch index name (see https://www.confluent.io/blog/simplest-useful-kafka-connect-data-pipeline-world-thereabouts-part-3)
+something like
+```
+    "_comment": "SMT (Single Message Transform), it drops the store-mysql- prefix from the topic name. So, the Elasticsearch index name will be the table name ---",
+    "transforms": "dropPrefix",
+    "transforms.dropPrefix.type":"org.apache.kafka.connect.transforms.RegexRouter",
+    "transforms.dropPrefix.regex":"store-mysql-(.*)",
+    "transforms.dropPrefix.replacement":"$1"
+```
 - implement `store-kafka-streams` service
 
 ## References
+
+- https://www.confluent.io/blog/simplest-useful-kafka-connect-data-pipeline-world-thereabouts-part-1 (2 and 3)
