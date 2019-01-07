@@ -10,6 +10,6 @@ public interface OrderService {
 
     Order saveOrder(Order order);
 
-    Order validateAndGetOrderById(Long id);
+    Order validateAndGetOrderById(String id);
 
 }

@@ -7,7 +7,7 @@ import java.io.Serializable;
 @Data
 public class OrderProductPk implements Serializable {
 
-    private Long order;
+    private String order;
     private Long product;
 
 }

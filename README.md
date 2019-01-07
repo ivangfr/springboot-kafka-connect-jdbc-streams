@@ -64,16 +64,26 @@ mvn clean spring-boot:run
 ./create-connectors.sh
 ```
 
-2. You can check the status of the connectors at http://localhost:8086
+2. At the end of the script, it shows the connectors and their task's state. You must see something like
+```
+{"name":"mysql-source-customers-products","connector":{"state":"RUNNING","worker_id":"kafka-connect:8083"},"tasks":[{"state":"RUNNING","id":0,"worker_id":"kafka-connect:8083"}],"type":"source"}
+{"name":"mysql-source-orders","connector":{"state":"RUNNING","worker_id":"kafka-connect:8083"},"tasks":[{"state":"RUNNING","id":0,"worker_id":"kafka-connect:8083"}],"type":"source"}
+{"name":"mysql-source-orders_products","connector":{"state":"RUNNING","worker_id":"kafka-connect:8083"},"tasks":[{"state":"RUNNING","id":0,"worker_id":"kafka-connect:8083"}],"type":"source"}
+{"name":"elasticsearch-sink-customers","connector":{"state":"RUNNING","worker_id":"kafka-connect:8083"},"tasks":[{"state":"RUNNING","id":0,"worker_id":"kafka-connect:8083"}],"type":"sink"}
+{"name":"elasticsearch-sink-products","connector":{"state":"RUNNING","worker_id":"kafka-connect:8083"},"tasks":[{"state":"RUNNING","id":0,"worker_id":"kafka-connect:8083"}],"type":"sink"}
+```
+**Connectors and their tasks must have a RUNNING state**
 
-3. If there is any problem, you can check the logs in `kafka-connect` container
+3. You can also check the connectors and their task's state at http://localhost:8086
+
+4. If there is any problem, you can check the logs in `kafka-connect` container
 ```
 docker logs kafka-connect -f
 ```
 
 ## TODO
 
-- change `order` entity `id` from `Long` to `String (UUID)`
+- implement `store-kafka-streams` service
 - drop the store-mysql- prefix from the topic name and thus Elasticsearch index name (see https://www.confluent.io/blog/simplest-useful-kafka-connect-data-pipeline-world-thereabouts-part-3)
 something like
 ```
@@ -83,7 +93,6 @@ something like
     "transforms.dropPrefix.regex":"store-mysql-(.*)",
     "transforms.dropPrefix.replacement":"$1"
 ```
-- implement `store-kafka-streams` service
 
 ## References
 

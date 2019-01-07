@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -43,8 +44,8 @@ public class OrderController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
-    public OrderDto getOrder(@PathVariable Long id) {
-        Order order = orderService.validateAndGetOrderById(id);
+    public OrderDto getOrder(@PathVariable UUID id) {
+        Order order = orderService.validateAndGetOrderById(id.toString());
         return mapperFacade.map(order, OrderDto.class);
     }
 
@@ -52,14 +53,15 @@ public class OrderController {
     @PostMapping
     public OrderDto createOrder(@Valid @RequestBody CreateOrderDto createOrderDto) {
         Order order = mapperFacade.map(createOrderDto, Order.class);
+        order.setId(UUID.randomUUID().toString());
         order = orderService.saveOrder(order);
         return mapperFacade.map(order, OrderDto.class);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/{id}")
-    public OrderDto updateOrder(@PathVariable Long id, @Valid @RequestBody UpdateOrderDto updateOrderDto) {
-        Order order = orderService.validateAndGetOrderById(id);
+    public OrderDto updateOrder(@PathVariable UUID id, @Valid @RequestBody UpdateOrderDto updateOrderDto) {
+        Order order = orderService.validateAndGetOrderById(id.toString());
         mapperFacade.map(updateOrderDto, order);
         order = orderService.saveOrder(order);
         return mapperFacade.map(order, OrderDto.class);

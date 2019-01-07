@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 public class OrderDto {
 
-    private Long id;
+    private String id;
     private Long customerId;
     private PaymentType paymentType;
     private OrderStatus status;

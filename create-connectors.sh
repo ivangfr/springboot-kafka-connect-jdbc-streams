@@ -8,7 +8,13 @@ echo
 curl -i -X POST http://localhost:8083/connectors \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json' \
-  -d @connectors/mysql-source-customers-products-orders.json
+  -d @connectors/mysql-source-customers-products.json
+
+echo
+curl -i -X POST http://localhost:8083/connectors \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json' \
+  -d @connectors/mysql-source-orders.json
 
 echo
 curl -i -X POST http://localhost:8083/connectors \
@@ -31,9 +37,9 @@ curl -i -X POST http://localhost:8083/connectors \
 echo
 echo
 echo "---------------------------------------------"
-echo "Waiting for connectors to be ready (10 s) ..."
+echo "Waiting for connectors to be ready (20 s) ..."
 echo "---------------------------------------------"
-sleep 10
+sleep 20
 
 echo
 echo "-----------------------"
@@ -41,7 +47,10 @@ echo "Checking connectors ..."
 echo "-----------------------"
 
 echo
-curl localhost:8083/connectors/mysql-source-customers-products-orders/status
+curl localhost:8083/connectors/mysql-source-customers-products/status
+
+echo
+curl localhost:8083/connectors/mysql-source-orders/status
 
 echo
 curl localhost:8083/connectors/mysql-source-orders_products/status
@@ -51,3 +60,5 @@ curl localhost:8083/connectors/elasticsearch-sink-customers/status
 
 echo
 curl localhost:8083/connectors/elasticsearch-sink-products/status
+
+echo
