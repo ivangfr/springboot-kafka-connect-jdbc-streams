@@ -1,26 +1,31 @@
 {
-  "name": "mysql-source-orders",
+  "name": "mysql-source-customers",
   "config": {
     "connector.class": "io.confluent.connect.jdbc.JdbcSourceConnector",
     "connection.url": "jdbc:mysql://store-mysql:3306/storedb?autoReconnect=true&useSSL=false&useUnicode=yes&characterEncoding=UTF-8&useLegacyDatetimeCode=false&serverTimezone=UTC",
     "connection.user": "root",
     "connection.password": "secret",
-    "table.whitelist": "orders",
-    "mode": "timestamp",
+    "table.whitelist": "customers",
+    "mode": "timestamp+incrementing",
     "timestamp.column.name": "updated_at",
+    "incrementing.column.name": "id",
     "topic.prefix": "store-mysql-",
     "tasks.max": "1",
 
     "_comment": "--- SMT (Single Message Transform) ---",
-    "transforms": "setSchemaName, dropFields, createKey, extractId",
+    "transforms": "setSchemaName, dropFields, maskFields, createKey, extractId",
 
     "_comment": "--- Change the schema name ---",
     "transforms.setSchemaName.type": "org.apache.kafka.connect.transforms.SetSchemaMetadata$Value",
-    "transforms.setSchemaName.schema.name": "com.mycompany.commom.storeapp.avro.Order",
+    "transforms.setSchemaName.schema.name": "com.mycompany.commom.storeapp.avro.Customer",
 
     "_comment": "--- Drop fields ---",
     "transforms.dropFields.type": "org.apache.kafka.connect.transforms.ReplaceField$Value",
     "transforms.dropFields.blacklist": "updated_at",
+
+    "_comment": "--- Mask fields ---",
+    "transforms.maskFields.type":"org.apache.kafka.connect.transforms.MaskField$Value",
+    "transforms.maskFields.fields":"phone",
 
     "_comment": "--- Add key to the message based on the entity id field ---",
     "transforms.createKey.type": "org.apache.kafka.connect.transforms.ValueToKey",

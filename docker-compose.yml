@@ -23,10 +23,12 @@ services:
       - zookeeper
     ports:
       - "9092:9092"
+      - "29092:29092"
     environment:
-      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
-      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka:9092"
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "1"
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_DELETE_TOPIC_ENABLE: "true"
       TZ: "${TZ-Europe/Berlin}"
     healthcheck:
@@ -42,9 +44,9 @@ services:
     ports:
       - "8081:8081"
     environment:
-      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: "zookeeper:2181"
-      SCHEMA_REGISTRY_HOST_NAME: "schema-registry"
-      SCHEMA_REGISTRY_LISTENERS: "http://0.0.0.0:8081"
+      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: zookeeper:2181
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
       TZ: "${TZ-Europe/Berlin}"
     healthcheck:
       test: "curl -f http://localhost:8081 || exit 1"
@@ -58,7 +60,7 @@ services:
     ports:
       - "8001:8000"
     environment:
-      SCHEMAREGISTRY_URL: http://schema-registry:8081/
+      SCHEMAREGISTRY_URL: http://schema-registry:8081
       PROXY: "true"
     healthcheck:
       test: "wget --quiet --tries=1 --spider http://localhost:8000 || exit 1"
@@ -74,11 +76,11 @@ services:
     ports:
       - "8082:8082"
     environment:
-      KAFKA_REST_BOOTSTRAP_SERVERS: "PLAINTEXT://kafka:9092"
-      KAFKA_REST_ZOOKEEPER_CONNECT: "zookeeper:2181"
-      KAFKA_REST_HOST_NAME: "kafka-rest-proxy"
-      KAFKA_REST_LISTENERS: "http://0.0.0.0:8082"
-      KAFKA_REST_SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
+      KAFKA_REST_BOOTSTRAP_SERVERS: PLAINTEXT://kafka:9092
+      KAFKA_REST_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_REST_HOST_NAME: kafka-rest-proxy
+      KAFKA_REST_LISTENERS: http://0.0.0.0:8082
+      KAFKA_REST_SCHEMA_REGISTRY_URL: http://schema-registry:8081
       KAFKA_REST_CONSUMER_REQUEST_TIMEOUT_MS: 30000
       TZ: "${TZ-Europe/Berlin}"
     healthcheck:
@@ -94,7 +96,7 @@ services:
     ports:
       - "8085:8000"
     environment:
-      KAFKA_REST_PROXY_URL: "http://kafka-rest-proxy:8082"
+      KAFKA_REST_PROXY_URL: http://kafka-rest-proxy:8082
       PROXY: "true"
     healthcheck:
       test: "wget --quiet --tries=1 --spider http://localhost:8000 || exit 1"
@@ -108,25 +110,25 @@ services:
     ports:
       - "8083:8083"
     environment:
-      CONNECT_BOOTSTRAP_SERVERS: "kafka:9092"
+      CONNECT_BOOTSTRAP_SERVERS: kafka:9092
       CONNECT_REST_PORT: 8083
       CONNECT_GROUP_ID: compose-connect-group
       CONNECT_CONFIG_STORAGE_TOPIC: docker-connect-configs
-      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: "1"
+      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: 1
       CONNECT_OFFSET_STORAGE_TOPIC: docker-connect-offsets
-      CONNECT_OFFSET_STORAGE_PARTITIONS: "3"
-      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: "1"
+      CONNECT_OFFSET_STORAGE_PARTITIONS: 3
+      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 1
       CONNECT_STATUS_STORAGE_TOPIC: docker-connect-status
-      CONNECT_STATUS_STORAGE_PARTITIONS: "3"
-      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: "1"
+      CONNECT_STATUS_STORAGE_PARTITIONS: 3
+      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 1
       CONNECT_KEY_CONVERTER: io.confluent.connect.avro.AvroConverter
-      CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
+      CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
       CONNECT_VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
-      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
-      CONNECT_INTERNAL_KEY_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
-      CONNECT_INTERNAL_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
-      CONNECT_REST_ADVERTISED_HOST_NAME: "kafka-connect"
-      CONNECT_LOG4J_ROOT_LOGLEVEL: "INFO"
+      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+      CONNECT_INTERNAL_KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      CONNECT_INTERNAL_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      CONNECT_REST_ADVERTISED_HOST_NAME: kafka-connect
+      CONNECT_LOG4J_ROOT_LOGLEVEL: INFO
       CONNECT_LOG4J_LOGGERS: "org.apache.kafka.connect.runtime.rest=WARN,org.reflections=ERROR"
       CONNECT_PLUGIN_PATH: "/usr/share/java"
       TZ: "${TZ-Europe/Berlin}"
@@ -143,7 +145,7 @@ services:
     ports:
       - "8086:8000"
     environment:
-      CONNECT_URL: "http://kafka-connect:8083/"
+      CONNECT_URL: http://kafka-connect:8083
       PROXY: "true"
     healthcheck:
       test: "wget --quiet --tries=1 --spider http://localhost:8000 || exit 1"
@@ -154,7 +156,7 @@ services:
     image: mysql:5.7.24
     restart: unless-stopped
     ports:
-      - 3306:3306
+      - "3306:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=secret
       - MYSQL_DATABASE=storedb
@@ -184,24 +186,24 @@ services:
       test: "curl -f http://localhost:9200 || exit 1"
       start_period: 30s
 
-  kibana:
-    image: docker.elastic.co/kibana/kibana-oss:6.4.2
-    container_name: kibana
-    restart: unless-stopped
-    ports:
-      - "5601:5601"
-    environment:
-      ELASTICSEARCH_URL: http://elasticsearch:9200
-    healthcheck:
-      test: "curl -f http://localhost:5601 || exit 1"
-      start_period: 30s
+#  kibana:
+#    image: docker.elastic.co/kibana/kibana-oss:6.4.2
+#    container_name: kibana
+#    restart: unless-stopped
+#    ports:
+#      - "5601:5601"
+#    environment:
+#      ELASTICSEARCH_URL: http://elasticsearch:9200
+#    healthcheck:
+#      test: "curl -f http://localhost:5601 || exit 1"
+#      start_period: 30s
 
 #  zipkin:
 #    container_name: zipkin
 #    image: openzipkin/zipkin:2.11.7
 #    restart: unless-stopped
 #    ports:
-#      - 9411:9411
+#      - "9411:9411"
 #    healthcheck:
 #      test: "curl -f http://localhost:9411 || exit 1"
 #      start_period: 30s

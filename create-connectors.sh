@@ -8,7 +8,13 @@ echo
 curl -i -X POST http://localhost:8083/connectors \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json' \
-  -d @connectors/mysql-source-customers-products.json
+  -d @connectors/mysql-source-customers.json
+
+echo
+curl -i -X POST http://localhost:8083/connectors \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json' \
+  -d @connectors/mysql-source-products.json
 
 echo
 curl -i -X POST http://localhost:8083/connectors \
@@ -37,9 +43,9 @@ curl -i -X POST http://localhost:8083/connectors \
 echo
 echo
 echo "---------------------------------------------"
-echo "Waiting for connectors to be ready (20 s) ..."
+echo "Waiting for connectors to be ready (15 s) ..."
 echo "---------------------------------------------"
-sleep 20
+sleep 15
 
 echo
 echo "-----------------------"
@@ -47,7 +53,10 @@ echo "Checking connectors ..."
 echo "-----------------------"
 
 echo
-curl localhost:8083/connectors/mysql-source-customers-products/status
+curl localhost:8083/connectors/mysql-source-customers/status
+
+echo
+curl localhost:8083/connectors/mysql-source-products/status
 
 echo
 curl localhost:8083/connectors/mysql-source-orders/status
