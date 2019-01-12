@@ -32,7 +32,6 @@ public class ProductController {
         this.mapperFacade = mapperFacade;
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping
     public List<ProductDto> getAllProducts() {
         return productService.getAllProducts()
@@ -41,7 +40,6 @@ public class ProductController {
                 .collect(Collectors.toList());
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
     public ProductDto getProduct(@PathVariable Long id) {
         Product product = productService.validateAndGetProductById(id);
@@ -56,7 +54,6 @@ public class ProductController {
         return mapperFacade.map(product, ProductDto.class);
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/{id}")
     public ProductDto updateProduct(@PathVariable Long id, @Valid @RequestBody UpdateProductDto updateProductDto) {
         Product product = productService.validateAndGetProductById(id);

@@ -1,0 +1,33 @@
+server.port: 9082
+
+spring:
+  application:
+    name: school-api
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: localhost:29092
+      bindings:
+        student-output:
+          destination: school-api-students
+          producer:
+            header-mode: raw
+        course-output:
+          destination: school-api-courses
+          producer:
+            header-mode: raw
+        registration-output:
+          destination: school-api-registrations
+          producer:
+            header-mode: raw
+
+management:
+  security:
+    enabled: false
+  endpoints:
+    web:
+      exposure.include: "*"
+  endpoint:
+    health:
+      show-details: always

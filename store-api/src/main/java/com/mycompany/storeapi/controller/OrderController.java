@@ -33,7 +33,6 @@ public class OrderController {
         this.mapperFacade = mapperFacade;
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping
     public List<OrderDto> getAllOrders() {
         return orderService.getAllOrders()
@@ -42,7 +41,6 @@ public class OrderController {
                 .collect(Collectors.toList());
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
     public OrderDto getOrder(@PathVariable UUID id) {
         Order order = orderService.validateAndGetOrderById(id.toString());
@@ -58,7 +56,6 @@ public class OrderController {
         return mapperFacade.map(order, OrderDto.class);
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/{id}")
     public OrderDto updateOrder(@PathVariable UUID id, @Valid @RequestBody UpdateOrderDto updateOrderDto) {
         Order order = orderService.validateAndGetOrderById(id.toString());

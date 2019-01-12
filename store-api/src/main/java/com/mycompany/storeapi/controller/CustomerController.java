@@ -32,7 +32,6 @@ public class CustomerController {
         this.mapperFacade = mapperFacade;
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping
     public List<CustomerDto> getAllCustomers() {
         return customerService.getAllCustomers()
@@ -41,7 +40,6 @@ public class CustomerController {
                 .collect(Collectors.toList());
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
     public CustomerDto getCustomer(@PathVariable Long id) {
         Customer customer = customerService.validateAndGetCustomerById(id);
@@ -56,7 +54,6 @@ public class CustomerController {
         return mapperFacade.map(customer, CustomerDto.class);
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/{id}")
     public CustomerDto updateCustomer(@PathVariable Long id, @Valid @RequestBody UpdateCustomerDto updateCustomerDto) {
         Customer customer = customerService.validateAndGetCustomerById(id);

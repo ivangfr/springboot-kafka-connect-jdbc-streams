@@ -41,6 +41,12 @@ curl -i -X POST http://localhost:8083/connectors \
   -d @connectors/elasticsearch-sink-products.json
 
 echo
+curl -i -X POST http://localhost:8083/connectors \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json' \
+  -d @connectors/elasticsearch-sink-orders.json
+
+echo
 echo
 echo "---------------------------------------------"
 echo "Waiting for connectors to be ready (15 s) ..."
@@ -69,5 +75,8 @@ curl localhost:8083/connectors/elasticsearch-sink-customers/status
 
 echo
 curl localhost:8083/connectors/elasticsearch-sink-products/status
+
+echo
+curl localhost:8083/connectors/elasticsearch-sink-orders/status
 
 echo
