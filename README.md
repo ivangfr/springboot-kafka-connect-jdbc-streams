@@ -5,7 +5,7 @@
 The main goal of this project is to play with [Kafka](https://kafka.apache.org),
 [Kafka Connect](https://docs.confluent.io/current/connect/index.html) and
 [Kafka Streams](https://docs.confluent.io/current/streams/index.html). For this, we have the `store-api` that
-insert/update records on [MySQL](https://www.mysql.com) database; some `Kafka source connectors` that reads from MySQL
+inserts/updates records in [MySQL](https://www.mysql.com) database; some `Kafka source connectors` that reads from MySQL
 and push to Kafka; some `Kafka sink connectors` that reads event from Kafka and inserts in
 [Elasticsearch](https://www.elastic.co); finally, the `store-streams` that reads data from Kafka, treats them using
 Kafka Streams and push new events Kafka. 
@@ -17,7 +17,7 @@ Kafka Streams and push new events Kafka.
 ### store-api
 
 Monolithic spring-boot application that exposes a REST API to manage Customers, Products and Orders. The data is saved
-MySQL. This application does not connect directly to Kafka. 
+in MySQL. This application does not connect directly to Kafka. 
 
 ### store-streams
 
@@ -56,7 +56,7 @@ mvn spring-boot:run
 
 3. Wait for `store-api` to be up and running. It is configured to create all needed tables on `mysql`.
 
-4. The link for its swagger website is http://localhost:9080
+4. Its swagger website is http://localhost:9080
 
 ### Create connectors
 
@@ -79,7 +79,7 @@ mvn spring-boot:run
 
 3. You can also check the state of the connectors and their tasks at http://localhost:8086
 
-4. If there is any problem, you can check the logs in `kafka-connect` container
+4. If there is any problem, you can check `kafka-connect` container logs.
 ```
 docker logs kafka-connect -f
 ```
@@ -88,12 +88,12 @@ docker logs kafka-connect -f
 
 1. Open a new terminal
 
-2. In `/springboot-kafka-connect-streams/store-kafka-streams` folder, run
+2. In `/springboot-kafka-connect-streams/store-streams` folder, run
 ```
 mvn spring-boot:run
 ```
 
-3. The link for its swagger website is http://localhost:9081
+3. Its swagger website is http://localhost:9081
 
 > Note: the command below generates Java classes from Avro files
 > ```
