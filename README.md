@@ -56,7 +56,7 @@ mvn spring-boot:run
 
 3. Wait for `store-api` to be up and running. It is configured to create all needed tables on `mysql`.
 
-4. Its swagger website is http://localhost:9080
+4. Its swagger website is http://localhost:9080/swagger-ui.html
 
 ### Create connectors
 
@@ -93,7 +93,7 @@ docker logs kafka-connect -f
 mvn spring-boot:run
 ```
 
-3. Its swagger website is http://localhost:9081
+3. Its swagger website is http://localhost:9081/swagger-ui.html
 
 > Note: the command below generates Java classes from Avro files
 > ```
