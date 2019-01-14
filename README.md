@@ -15,7 +15,7 @@ Kafka Streams and push new events Kafka.
 The project has 2 branches:
 
 - `master`: uses `JSON` serialization format;
-- `avro-serialization-format`: uses `Avro` serialization format.
+- `avro-serialization-format`: uses `Avro` serialization format (**not ready**).
 
 ## Microservices
 
@@ -65,6 +65,8 @@ mvn spring-boot:run
 
 4. Its swagger website is http://localhost:9080/swagger-ui.html
 
+![store-api-swagger](images/store-api-swagger.png)
+
 ### Create connectors
 
 1. In a terminal, run the following script to create the connectors on `kafka-connect`
@@ -86,6 +88,8 @@ mvn spring-boot:run
 
 3. You can also check the state of the connectors and their tasks at http://localhost:8086
 
+![kafka-connect-ui](images/kafka-connect-ui.png)
+
 4. If there is any problem, you can check `kafka-connect` container logs.
 ```
 docker logs kafka-connect -f
@@ -100,7 +104,7 @@ docker logs kafka-connect -f
 mvn spring-boot:run
 ```
 
-3. Its swagger website is http://localhost:9081/swagger-ui.html
+3. It runs on port `9081`. The `health` endpoint is http://localhost:9081/actuator/health
 
 > Note: the command below generates Java classes from Avro files
 > ```
