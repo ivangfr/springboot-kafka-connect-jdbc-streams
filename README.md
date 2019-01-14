@@ -156,22 +156,4 @@ docker run --tty --interactive --rm --network=springboot-kafka-connect-streams_d
 
 ## Issues
 
-- Unable to make Kafka Streams and Avro work
-```
-2019-01-12 10:58:45.017 ERROR 8086 --- [-StreamThread-1] o.a.k.s.e.LogAndFailExceptionHandler     : Exception caught during Deserialization, taskId: 0_0, topic: store-mysql-customers, partition: 0, offset: 0
-
-java.lang.ClassCastException: java.lang.Long cannot be cast to org.apache.avro.specific.SpecificRecord
-        at io.confluent.kafka.streams.serdes.avro.SpecificAvroDeserializer.deserialize(SpecificAvroDeserializer.java:66) ~[kafka-streams-avro-serde-5.1.0.jar:na]
-        at io.confluent.kafka.streams.serdes.avro.SpecificAvroDeserializer.deserialize(SpecificAvroDeserializer.java:38) ~[kafka-streams-avro-serde-5.1.0.jar:na]
-        at org.apache.kafka.common.serialization.ExtendedDeserializer$Wrapper.deserialize(ExtendedDeserializer.java:65) ~[kafka-clients-2.0.1.jar:na]
-        at org.apache.kafka.common.serialization.ExtendedDeserializer$Wrapper.deserialize(ExtendedDeserializer.java:55) ~[kafka-clients-2.0.1.jar:na]
-        at org.apache.kafka.streams.processor.internals.SourceNode.deserializeKey(SourceNode.java:59) ~[kafka-streams-2.0.1.jar:na]
-        at org.apache.kafka.streams.processor.internals.RecordDeserializer.deserialize(RecordDeserializer.java:65) ~[kafka-streams-2.0.1.jar:na]
-        at org.apache.kafka.streams.processor.internals.RecordQueue.addRawRecords(RecordQueue.java:97) [kafka-streams-2.0.1.jar:na]
-        at org.apache.kafka.streams.processor.internals.PartitionGroup.addRawRecords(PartitionGroup.java:117) [kafka-streams-2.0.1.jar:na]
-        at org.apache.kafka.streams.processor.internals.StreamTask.addRecords(StreamTask.java:677) [kafka-streams-2.0.1.jar:na]
-        at org.apache.kafka.streams.processor.internals.StreamThread.addRecordsToTasks(StreamThread.java:943) [kafka-streams-2.0.1.jar:na]
-        at org.apache.kafka.streams.processor.internals.StreamThread.runOnce(StreamThread.java:831) [kafka-streams-2.0.1.jar:na]
-        at org.apache.kafka.streams.processor.internals.StreamThread.runLoop(StreamThread.java:767) [kafka-streams-2.0.1.jar:na]
-        at org.apache.kafka.streams.processor.internals.StreamThread.run(StreamThread.java:736) [kafka-streams-2.0.1.jar:na]
-```
+- Product `price` field, [numeric.mapping doesn't work for DECIMAL fields #563](https://github.com/confluentinc/kafka-connect-jdbc/issues/563)

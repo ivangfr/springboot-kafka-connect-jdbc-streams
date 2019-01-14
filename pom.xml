@@ -14,15 +14,13 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.1.RELEASE</version>
+        <version>2.1.2.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <modules>
         <module>/store-api</module>
         <module>/store-streams</module>
-        <module>/school-api</module>
-        <module>/school-streams</module>
     </modules>
 
     <properties>

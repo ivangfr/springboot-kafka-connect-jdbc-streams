@@ -12,7 +12,7 @@
     "tasks.max": "1",
 
     "_comment": "--- SMT (Single Message Transform) ---",
-    "transforms": "setSchemaName, dropFields",
+    "transforms": "setSchemaName, dropFields, createKey, extractId",
 
     "_comment": "--- Change the schema name ---",
     "transforms.setSchemaName.type": "org.apache.kafka.connect.transforms.SetSchemaMetadata$Value",
@@ -20,6 +20,18 @@
 
     "_comment": "--- Drop fields ---",
     "transforms.dropFields.type": "org.apache.kafka.connect.transforms.ReplaceField$Value",
-    "transforms.dropFields.blacklist": "created_at, updated_at"
+    "transforms.dropFields.blacklist": "created_at, updated_at",
+
+    "_comment": "--- Add key to the message based on the entity id field ---",
+    "transforms.createKey.type": "org.apache.kafka.connect.transforms.ValueToKey",
+    "transforms.createKey.fields": "order_id",
+    "transforms.extractId.type": "org.apache.kafka.connect.transforms.ExtractField$Key",
+    "transforms.extractId.field": "order_id",
+
+    "_comment": "--- Change Key/Value converters (default is Avro) ---",
+    "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "key.converter.schemas.enable": "false",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "false"
   }
 }

@@ -31,6 +31,12 @@
     "transforms.createKey.type": "org.apache.kafka.connect.transforms.ValueToKey",
     "transforms.createKey.fields": "id",
     "transforms.extractId.type": "org.apache.kafka.connect.transforms.ExtractField$Key",
-    "transforms.extractId.field": "id"
+    "transforms.extractId.field": "id",
+
+    "_comment": "--- Change Key/Value converters (default is Avro) ---",
+    "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "key.converter.schemas.enable": "false",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "false"
   }
 }
