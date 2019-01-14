@@ -8,7 +8,14 @@ The main goal of this project is to play with [Kafka](https://kafka.apache.org),
 inserts/updates records in [MySQL](https://www.mysql.com) database; some `Kafka source connectors` that reads from MySQL
 and push to Kafka; some `Kafka sink connectors` that reads event from Kafka and inserts in
 [Elasticsearch](https://www.elastic.co); finally, the `store-streams` that reads data from Kafka, treats them using
-Kafka Streams and push new events Kafka. 
+Kafka Streams and push new events Kafka.
+
+## Branches
+
+The project has 2 branches:
+
+- `master`: uses `JSON` serialization format;
+- `avro-serialization-format`: uses `Avro` serialization format.
 
 ## Microservices
 
@@ -22,7 +29,7 @@ in MySQL. This application does not connect directly to Kafka.
 ### store-streams
 
 Spring-boot application that connects Kafka and uses Kafka Streams to transform some input topics into a new topic in
-Kafka. (**It's not read yet, facing some problems mentioned on "Issues" section**).  
+Kafka.  
 
 ## Start Environment
 
@@ -156,22 +163,4 @@ docker run --tty --interactive --rm --network=springboot-kafka-connect-streams_d
 
 ## Issues
 
-- Unable to make Kafka Streams and Avro work
-```
-2019-01-12 10:58:45.017 ERROR 8086 --- [-StreamThread-1] o.a.k.s.e.LogAndFailExceptionHandler     : Exception caught during Deserialization, taskId: 0_0, topic: store-mysql-customers, partition: 0, offset: 0
-
-java.lang.ClassCastException: java.lang.Long cannot be cast to org.apache.avro.specific.SpecificRecord
-        at io.confluent.kafka.streams.serdes.avro.SpecificAvroDeserializer.deserialize(SpecificAvroDeserializer.java:66) ~[kafka-streams-avro-serde-5.1.0.jar:na]
-        at io.confluent.kafka.streams.serdes.avro.SpecificAvroDeserializer.deserialize(SpecificAvroDeserializer.java:38) ~[kafka-streams-avro-serde-5.1.0.jar:na]
-        at org.apache.kafka.common.serialization.ExtendedDeserializer$Wrapper.deserialize(ExtendedDeserializer.java:65) ~[kafka-clients-2.0.1.jar:na]
-        at org.apache.kafka.common.serialization.ExtendedDeserializer$Wrapper.deserialize(ExtendedDeserializer.java:55) ~[kafka-clients-2.0.1.jar:na]
-        at org.apache.kafka.streams.processor.internals.SourceNode.deserializeKey(SourceNode.java:59) ~[kafka-streams-2.0.1.jar:na]
-        at org.apache.kafka.streams.processor.internals.RecordDeserializer.deserialize(RecordDeserializer.java:65) ~[kafka-streams-2.0.1.jar:na]
-        at org.apache.kafka.streams.processor.internals.RecordQueue.addRawRecords(RecordQueue.java:97) [kafka-streams-2.0.1.jar:na]
-        at org.apache.kafka.streams.processor.internals.PartitionGroup.addRawRecords(PartitionGroup.java:117) [kafka-streams-2.0.1.jar:na]
-        at org.apache.kafka.streams.processor.internals.StreamTask.addRecords(StreamTask.java:677) [kafka-streams-2.0.1.jar:na]
-        at org.apache.kafka.streams.processor.internals.StreamThread.addRecordsToTasks(StreamThread.java:943) [kafka-streams-2.0.1.jar:na]
-        at org.apache.kafka.streams.processor.internals.StreamThread.runOnce(StreamThread.java:831) [kafka-streams-2.0.1.jar:na]
-        at org.apache.kafka.streams.processor.internals.StreamThread.runLoop(StreamThread.java:767) [kafka-streams-2.0.1.jar:na]
-        at org.apache.kafka.streams.processor.internals.StreamThread.run(StreamThread.java:736) [kafka-streams-2.0.1.jar:na]
-```
+- Product `price` field, [numeric.mapping doesn't work for DECIMAL fields #563](https://github.com/confluentinc/kafka-connect-jdbc/issues/563)

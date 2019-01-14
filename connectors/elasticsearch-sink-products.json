@@ -5,6 +5,15 @@
     "topics": "store-mysql-products",
     "connection.url": "http://elasticsearch:9200",
     "type.name": "kafka-connect",
-    "tasks.max": "1"
+    "tasks.max": "1",
+
+    "_comment": "--- Change Key/Value converters (default is Avro) ---",
+    "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "key.converter.schemas.enable": "false",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "false",
+
+    "_comment": "--- The topic has no schema ---",
+    "schema.ignore": "true"
   }
 }
