@@ -8,7 +8,14 @@ The main goal of this project is to play with [Kafka](https://kafka.apache.org),
 inserts/updates records in [MySQL](https://www.mysql.com) database; some `Kafka source connectors` that reads from MySQL
 and push to Kafka; some `Kafka sink connectors` that reads event from Kafka and inserts in
 [Elasticsearch](https://www.elastic.co); finally, the `store-streams` that reads data from Kafka, treats them using
-Kafka Streams and push new events Kafka. 
+Kafka Streams and push new events Kafka.
+
+## Branches
+
+The project has 2 branches:
+
+- `master`: uses `JSON` serialization format;
+- `avro-serialization-format`: uses `Avro` serialization format.
 
 ## Microservices
 
@@ -22,7 +29,7 @@ in MySQL. This application does not connect directly to Kafka.
 ### store-streams
 
 Spring-boot application that connects Kafka and uses Kafka Streams to transform some input topics into a new topic in
-Kafka. (**It's not read yet, facing some problems mentioned on "Issues" section**).  
+Kafka.  
 
 ## Start Environment
 
