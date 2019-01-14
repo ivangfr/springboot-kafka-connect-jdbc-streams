@@ -4,18 +4,11 @@
 
 The main goal of this project is to play with [Kafka](https://kafka.apache.org),
 [Kafka Connect](https://docs.confluent.io/current/connect/index.html) and
-[Kafka Streams](https://docs.confluent.io/current/streams/index.html). For this, we have the `store-api` that
-inserts/updates records in [MySQL](https://www.mysql.com) database; some `Kafka source connectors` that reads from MySQL
-and push to Kafka; some `Kafka sink connectors` that reads event from Kafka and inserts in
-[Elasticsearch](https://www.elastic.co); finally, the `store-streams` that reads data from Kafka, treats them using
-Kafka Streams and push new events Kafka.
-
-## Branches
-
-The project has 2 branches:
-
-- `master`: uses `JSON` serialization format;
-- `avro-serialization-format`: uses `Avro` serialization format (**not ready**).
+[Kafka Streams](https://docs.confluent.io/current/streams/index.html). For this, we have: `store-api` that
+inserts/updates records in [MySQL](https://www.mysql.com); `Kafka source connectors` that monitor
+inserted/updated records in MySQL and push messages related to those changes to Kafka; `Kafka sink connectors` that
+read messages from Kafka and insert documents in [Elasticsearch](https://www.elastic.co); finally, `store-streams` that
+listens for messages in Kafka, treats them using Kafka Streams and push new messages back to Kafka.
 
 ## Microservices
 
@@ -24,12 +17,12 @@ The project has 2 branches:
 ### store-api
 
 Monolithic spring-boot application that exposes a REST API to manage Customers, Products and Orders. The data is saved
-in MySQL. This application does not connect directly to Kafka. 
+in MySQL. 
 
 ### store-streams
 
-Spring-boot application that connects Kafka and uses Kafka Streams to transform some input topics into a new topic in
-Kafka.  
+Spring-boot application that connects to Kafka and uses Kafka Streams API to transform some "input" topics into a new
+"output" topic in Kafka.
 
 ## Start Environment
 
@@ -61,7 +54,7 @@ docker-compose ps
 mvn spring-boot:run
 ```
 
-3. Wait for `store-api` to be up and running. It is configured to create all needed tables on `mysql`.
+3. Wait for `store-api` to be up and running. It is configured to create all needed tables on MySQL.
 
 4. Its swagger website is http://localhost:9080/swagger-ui.html
 
@@ -72,7 +65,7 @@ mvn spring-boot:run
 1. In a terminal, run the following script to create the connectors on `kafka-connect`
 ```
 ./create-connectors.sh
-```
+```  
 
 2. At the end of the script, it shows (besides other info) the state connectors and their tasks. You must see something like
 ```
@@ -94,6 +87,9 @@ mvn spring-boot:run
 ```
 docker logs kafka-connect -f
 ```
+
+5. Source connectors use `JSONConverter` to serialize data from MySQL to Kafka. The same way, sink connectors use
+`JSONConverter` to deserialize messages from Kafka to Elasticsearch.
 
 ### Start store-streams
 
