@@ -53,6 +53,7 @@ export CONNECT_VALUE_CONVERTER=io.confluent.connect.avro.AvroConverter
 
 docker-compose up -d
 ```
+
 > Note 1.
 > The file `docker-compose.yml` has two environment variables: `CONNECT_KEY_CONVERTER` and `CONNECT_VALUE_CONVERTER`.
 > The default value is defined in `.env` file and is `org.apache.kafka.connect.json.JsonConverter` for `KEY` and `VALUE`.
