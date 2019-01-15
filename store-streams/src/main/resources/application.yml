@@ -10,34 +10,39 @@ spring:
           destination: store-mysql-customers
           consumer:
             nativeDecoding: true
+            headerMode: raw
         product-input:
           destination: store-mysql-products
           consumer:
             nativeDecoding: true
+            headerMode: raw
         order-input:
           destination: store-mysql-orders
           consumer:
             nativeDecoding: true
+            headerMode: raw
         order-product-input:
           destination: store-mysql-orders_products
           consumer:
             nativeDecoding: true
+            headerMode: raw
         order-output:
           destination: store-streams-orders
           producer:
             nativeEncoding: true
+            headerMode: raw
       kafka:
         streams:
           bindings:
             customer-input:
               consumer:
                 keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
-                valueSerde: com.mycompany.storestreams.serde.CustomerSerde
+                valueSerde: com.mycompany.storestreams.serde.json.CustomerJsonSerde
                 materializedAs: customer-ktable
             product-input:
               consumer:
                 keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
-                valueSerde: com.mycompany.storestreams.serde.ProductSerde
+                valueSerde: com.mycompany.storestreams.serde.json.ProductJsonSerde
                 materializedAs: product-ktable
             order-input:
               consumer:
@@ -70,3 +75,9 @@ management:
   health:
     binders:
       enabled: true
+
+---
+
+spring:
+  profiles: avroconverter
+  # TODO Continue implementation

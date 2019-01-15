@@ -1,7 +1,7 @@
-package com.mycompany.storestreams.serde;
+package com.mycompany.storestreams.serde.json;
 
 import com.mycompany.storestreams.event.Customer;
 import org.springframework.kafka.support.serializer.JsonSerde;
 
-public class CustomerSerde extends JsonSerde<Customer> {
+public class CustomerJsonSerde extends JsonSerde<Customer> {
 }

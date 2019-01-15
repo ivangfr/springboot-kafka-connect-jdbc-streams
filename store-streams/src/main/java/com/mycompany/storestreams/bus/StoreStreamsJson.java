@@ -22,6 +22,7 @@ import org.apache.kafka.streams.kstream.Serialized;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.Input;
 import org.springframework.cloud.stream.annotation.StreamListener;
+import org.springframework.context.annotation.Profile;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Component;
 
@@ -30,12 +31,13 @@ import java.util.Set;
 
 @Slf4j
 @Component
+@Profile("!avroconverter")
 @EnableBinding(StoreKafkaStreamsProcessor.class)
-public class StoreStream {
+public class StoreStreamsJson {
 
     private final MapperFacade mapperFacade;
 
-    public StoreStream(MapperFacade mapperFacade) {
+    public StoreStreamsJson(MapperFacade mapperFacade) {
         this.mapperFacade = mapperFacade;
     }
 
@@ -58,7 +60,7 @@ public class StoreStream {
                     OrderDetail orderDetailed = mapperFacade.map(order, OrderDetail.class);
                     orderDetailed.setCustomer_name(customer.getName());
                     return orderDetailed;
-                }, Joined.with(Serdes.String(), SerdeFactory.orderSerde, SerdeFactory.customerSerde));
+                }, Joined.with(Serdes.String(), SerdeFactory.orderJsonSerde, SerdeFactory.customerJsonSerde));
 
         KStream<String, OrderDetail> orderIdKeyOrderDetailValueKStream = customerIdKeyOrderDetailValueKStream
                 .map((s, orderDetailed) -> new KeyValue<>(orderDetailed.getId(), orderDetailed));
@@ -74,7 +76,7 @@ public class StoreStream {
                     OrderProductDetail orderProductDetail = mapperFacade.map(orderProduct, OrderProductDetail.class);
                     orderProductDetail.setProduct_name(product.getName());
                     return orderProductDetail;
-                }, Joined.with(Serdes.String(), SerdeFactory.orderProductSerde, SerdeFactory.productSerde));
+                }, Joined.with(Serdes.String(), SerdeFactory.orderProductJsonSerde, SerdeFactory.productJsonSerde));
 
         KStream<String, OrderProductDetail> orderIdKeyOrderProductDetailValueKStream = productIdKeyOrderProductDetailValueKStream
                 .map((s, orderProductDetail) -> new KeyValue<>(orderProductDetail.getOrder_id(), orderProductDetail));
@@ -89,7 +91,7 @@ public class StoreStream {
         // Aggregate (in a Set) ProductDetail by order
 
         KTable<String, Set> orderIdKeyOrderProductDetailSetValueKTable = orderIdKeyProductDetailValueKStream
-                .groupByKey(Serialized.with(Serdes.String(), SerdeFactory.productDetailSerde))
+                .groupByKey(Serialized.with(Serdes.String(), SerdeFactory.productDetailJsonSerde))
                 .aggregate(new Initializer<Set>() {
                     @Override
                     public Set apply() {
@@ -101,7 +103,7 @@ public class StoreStream {
                         set.add(productDetail);
                         return set;
                     }
-                }, Materialized.with(Serdes.String(), SerdeFactory.setSerde));
+                }, Materialized.with(Serdes.String(), SerdeFactory.setJsonSerde));
 
         // --
         // Add ProductDetail Set to OrderDetail
@@ -110,7 +112,7 @@ public class StoreStream {
                 .join(orderIdKeyOrderProductDetailSetValueKTable, (orderDetail, set) -> {
                     orderDetail.setProducts(set);
                     return orderDetail;
-                }, Joined.with(Serdes.String(), SerdeFactory.orderDetailSerde, SerdeFactory.setSerde));
+                }, Joined.with(Serdes.String(), SerdeFactory.orderDetailJsonSerde, SerdeFactory.setJsonSerde));
 
         orderIdKeyOrderDetailValueKStream.foreach((key, value) -> log.info("key: {}, value: {}", key, value));
 
