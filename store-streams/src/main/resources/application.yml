@@ -79,5 +79,5 @@ management:
 ---
 
 spring:
-  profiles: avroconverter
+  profiles: avro
   # TODO Continue implementation

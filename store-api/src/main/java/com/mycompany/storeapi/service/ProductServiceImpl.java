@@ -1,8 +1,10 @@
 package com.mycompany.storeapi.service;
 
+import com.mycompany.storeapi.exception.ProductDeletionException;
 import com.mycompany.storeapi.exception.ProductNotFoundException;
 import com.mycompany.storeapi.model.Product;
 import com.mycompany.storeapi.repository.ProductRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +26,15 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product saveProduct(Product product) {
         return productRepository.save(product);
+    }
+
+    @Override
+    public void deleteProduct(Product product) {
+        try {
+            productRepository.delete(product);
+        } catch (DataIntegrityViolationException e) {
+            throw new ProductDeletionException(String.format("Product with id '%s' cannot be deleted", product.getId()));
+        }
     }
 
     @Override

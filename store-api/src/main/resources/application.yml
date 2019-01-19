@@ -4,11 +4,17 @@ spring:
   application:
     name: store-api
   jpa:
-    hibernate.ddl-auto: create
+    hibernate.ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
   datasource:
     url: jdbc:mysql://${MYSQL_ADDR:localhost}:3306/storedb?autoReconnect=true&useSSL=false&useUnicode=yes&characterEncoding=UTF-8&useLegacyDatetimeCode=false&serverTimezone=UTC
     username: root
     password: secret
+
+logging.level:
+  org.hibernate:
+    SQL: DEBUG
+    type.descriptor.sql.BasicBinder: TRACE
 
 management:
   security:

@@ -31,7 +31,7 @@ import java.util.Set;
 
 @Slf4j
 @Component
-@Profile("!avroconverter")
+@Profile("!avro")
 @EnableBinding(StoreKafkaStreamsProcessor.class)
 public class StoreStreamsJson {
 

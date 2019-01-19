@@ -5,6 +5,8 @@ import com.mycompany.storeapi.dto.OrderDto;
 import com.mycompany.storeapi.dto.UpdateOrderDto;
 import com.mycompany.storeapi.model.Order;
 import com.mycompany.storeapi.service.OrderService;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import ma.glasnost.orika.MapperFacade;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +35,10 @@ public class OrderController {
         this.mapperFacade = mapperFacade;
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
     @GetMapping
     public List<OrderDto> getAllOrders() {
         return orderService.getAllOrders()
@@ -41,12 +47,21 @@ public class OrderController {
                 .collect(Collectors.toList());
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
     @GetMapping("/{id}")
     public OrderDto getOrder(@PathVariable UUID id) {
         Order order = orderService.validateAndGetOrderById(id.toString());
         return mapperFacade.map(order, OrderDto.class);
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Created"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public OrderDto createOrder(@Valid @RequestBody CreateOrderDto createOrderDto) {
@@ -56,6 +71,11 @@ public class OrderController {
         return mapperFacade.map(order, OrderDto.class);
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
     @PatchMapping("/{id}")
     public OrderDto updateOrder(@PathVariable UUID id, @Valid @RequestBody UpdateOrderDto updateOrderDto) {
         Order order = orderService.validateAndGetOrderById(id.toString());

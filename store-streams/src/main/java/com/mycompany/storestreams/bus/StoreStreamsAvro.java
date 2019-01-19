@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-@Profile("avroconverter")
+@Profile("avro")
 @EnableBinding(StoreKafkaStreamsProcessor.class)
 public class StoreStreamsAvro {
 

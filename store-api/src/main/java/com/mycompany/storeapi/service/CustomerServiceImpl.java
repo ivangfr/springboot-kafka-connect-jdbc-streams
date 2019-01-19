@@ -1,8 +1,10 @@
 package com.mycompany.storeapi.service;
 
+import com.mycompany.storeapi.exception.CustomerDeletionException;
 import com.mycompany.storeapi.exception.CustomerNotFoundException;
 import com.mycompany.storeapi.model.Customer;
 import com.mycompany.storeapi.repository.CustomerRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +26,15 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer saveCustomer(Customer customer) {
         return customerRepository.save(customer);
+    }
+
+    @Override
+    public void deleteCustomer(Customer customer) {
+        try {
+            customerRepository.delete(customer);
+        } catch (DataIntegrityViolationException e) {
+            throw new CustomerDeletionException(String.format("Customer with id '%s' cannot be deleted", customer.getId()));
+        }
     }
 
     @Override

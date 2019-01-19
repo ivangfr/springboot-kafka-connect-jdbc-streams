@@ -2,13 +2,13 @@
 
 ## Goal
 
-The main goal of this project is to play with [Kafka](https://kafka.apache.org),
-[Kafka Connect](https://docs.confluent.io/current/connect/index.html) and
-[Kafka Streams](https://docs.confluent.io/current/streams/index.html). For this, we have: `store-api` that
-inserts/updates records in [MySQL](https://www.mysql.com); `Kafka source connectors` that monitor
-inserted/updated records in MySQL and push messages related to those changes to Kafka; `Kafka sink connectors` that
-read messages from Kafka and insert/update documents in [Elasticsearch](https://www.elastic.co); finally, `store-streams` that
-listens for messages in Kafka, treats them using Kafka Streams and push new messages back to Kafka.
+The main goal of this project is to play with [`Kafka`](https://kafka.apache.org),
+[`Kafka Connect`](https://docs.confluent.io/current/connect/index.html) and
+[`Kafka Streams`](https://docs.confluent.io/current/streams/index.html). For this, we have: `store-api` that
+inserts/updates records in [`MySQL`](https://www.mysql.com); `Source Connectors` that monitor
+inserted/updated records in MySQL and push messages related to those changes to Kafka; `Sink Connectors` that
+read messages from Kafka and insert/update documents in [`Elasticsearch`](https://www.elastic.co); finally,
+`store-streams` that listens for messages in Kafka, treats them using Kafka Streams and push new messages back to Kafka.
 
 ## Microservices
 
@@ -24,14 +24,14 @@ in MySQL.
 Spring-boot application that connects to Kafka and uses Kafka Streams API to transform some "input" topics into a new
 "output" topic in Kafka.
 
-## Serialization/Deserialization (SerDes) formats
+## (De)Serialization formats
 
-In order to run this project, you can use [JSON](https://www.json.org) or
-[Avro](http://avro.apache.org/docs/current/gettingstartedjava.html) formats for data serialization/deserialization
-to/from Kafka. The default format is `JSON`. Throughout this document, I will point out what to do if you want to use
-`Avro`.
+In order to run this project, you can use [`JSON`](https://www.json.org) or
+[`Avro`](http://avro.apache.org/docs/current/gettingstartedjava.html) formats for data serialization/deserialization
+to/from the `binary` format that is used by Kafka. The default format is `JSON`. Throughout this document, I will point
+out what to do if you want to use `Avro`.
 
-**P.S. Avro SerDes is a work in progress and it is not completely implemented!**
+**P.S. Avro (de)serialization is a work in progress and it is not completely implemented!**
 
 ## Start Environment
 
@@ -41,12 +41,12 @@ to/from Kafka. The default format is `JSON`. Throughout this document, I will po
 
 2. Inside `/springboot-kafka-connect-streams` root folder run
 
-**For JSON SerDes**
+- **For JSON (de)serialization**
 ```
 docker-compose up -d
 ```
 
-**For Avro SerDes**
+- **For Avro (de)serialization**
 ```
 export CONNECT_KEY_CONVERTER=io.confluent.connect.avro.AvroConverter 
 export CONNECT_VALUE_CONVERTER=io.confluent.connect.avro.AvroConverter
@@ -55,9 +55,9 @@ docker-compose up -d
 ```
 
 > Note 1.
-> The file `docker-compose.yml` has two environment variables: `CONNECT_KEY_CONVERTER` and `CONNECT_VALUE_CONVERTER`.
-> The default value is defined in `.env` file and is `org.apache.kafka.connect.json.JsonConverter` for `KEY` and `VALUE`.
-> So, we just need to change in case we are configuring `For Avro SerDes`.
+> The `docker-compose.yml` file has two environment variables: `CONNECT_KEY_CONVERTER` and `CONNECT_VALUE_CONVERTER`.
+> Their default values are defined in `.env` file and is `org.apache.kafka.connect.json.JsonConverter` for both.
+> So, we just need to change them in case we are configuring `For Avro (de)serialization`.
 
 > Note 2.
 > To stop and remove containers, networks and volumes type:
@@ -65,7 +65,7 @@ docker-compose up -d
 > docker-compose down -v
 > ```
 
-3. Wait a little bit until all containers are `Up (healthy)`. In order to check the status of the containers run the command
+3. Wait a little bit until all containers are `Up (healthy)`. To check the status of the containers run the command
 ```
 docker-compose ps
 ```
@@ -79,7 +79,7 @@ docker-compose ps
 mvn spring-boot:run
 ```
 
-3. Wait for `store-api` to be up and running. It is configured to create all needed tables on MySQL.
+3. Wait for `store-api` to be up and running. It is configured to create all needed tables on `MySQL`.
 
 4. Its swagger website is http://localhost:9080/swagger-ui.html
 
@@ -89,12 +89,12 @@ mvn spring-boot:run
 
 1. In a terminal, run the following script to create the connectors on `kafka-connect`
 
-**For JSON SerDes**
+- **For JSON (de)serialization**
 ```
 ./create-connectors-jsonconverter.sh
 ```
 
-**For Avro SerDes**
+- **For Avro (de)serialization**
 ```
 ./create-connectors-avroconverter.sh
 ```
@@ -124,12 +124,11 @@ On Kafka Connect UI, you should see
 docker logs kafka-connect -f
 ```
 
-5. Connectors use *Converters* for data serialization and deserialization. If you are configuring `For JSON SerDes`, the
-converter used is `JsonConverter`. On the other hand, if the configuration is `For Avro SerDes`, the converter used is
-`AvroConverter`.
+5. Connectors use *Converters* for data serialization and deserialization. If you are configuring `For JSON (de)serialization`,
+the converter used is `JsonConverter`. On the other hand, the converter used is `AvroConverter`.
 
-**IMPORTANT**: if the Source Connector Converter serializes data, for instance, from `JSON` to `Bytes` (using
-`JsonConverter`), then the Sink Connector Converter must also use `JsonConverter` to deserialize the `Bytes`,
+**IMPORTANT**: if the Source Connector Converter serializes data, for instance, from `JSON` to `bytes` (using
+`JsonConverter`), then the Sink Connector Converter must also use `JsonConverter` to deserialize the `bytes`,
 otherwise an error will be thrown. The document
 [Kafka Connect Deep Dive – Converters and Serialization Explained](https://www.confluent.io/blog/kafka-connect-deep-dive-converters-serialization-explained)
 explains it very well.
@@ -140,15 +139,16 @@ explains it very well.
 
 2. In `/springboot-kafka-connect-streams/store-streams` folder, run
 
-**For JSON SerDes**
+- **For JSON (de)serialization**
 ```
 mvn spring-boot:run
 ```
 
-**(NOT READY!) For Avro SerDes**
+- **For Avro (de)serialization (NOT READY!)**
 ```
-mvn spring-boot:run -Dspring-boot.run.profiles=avroconverter
+mvn spring-boot:run -Dspring-boot.run.profiles=avro
 ```
+
 > Note: the command below generates Java classes from Avro files
 > ```
 > mvn generate-sources
@@ -157,15 +157,6 @@ mvn spring-boot:run -Dspring-boot.run.profiles=avroconverter
 3. This service runs on port `9081`. The `health` endpoint is http://localhost:9081/actuator/health
 
 ## Useful Links/Commands
-
-### Elasticsearch
-
-- Elasticsearch can be accessed at http://localhost:9200
-
-- You can use `curl` to check some documents, for example in `store-mysql-customers` index
-```
-curl http://localhost:9200/store-streams-orders/_search?pretty
-```
 
 ### Kafka Topics UI
 
@@ -196,6 +187,15 @@ curl http://localhost:8081/subjects/store-mysql-customers-value/versions/latest
 
 - Kibana can be accessed at http://localhost:5601
 
+### Elasticsearch
+
+- Elasticsearch can be accessed at http://localhost:9200
+
+- You can use `curl` to check some documents, for example in `store-mysql-customers` index
+```
+curl http://localhost:9200/store-streams-orders/_search?pretty
+```
+
 ### Kafkacat
 
 ```
@@ -205,9 +205,16 @@ docker run --tty --interactive --rm --network=springboot-kafka-connect-streams_d
   -t store-mysql-customers -C -c1
 ```
 
+### MySQL
+```
+docker exec -it store-mysql bash -c 'mysql -uroot -psecret'
+use storedb;
+select * from customers;
+```
+
 ## TODO
 
-- adapt `store-streams` to run `For Avro SerDes`. I am having problem with making `spring-cloud-stream-kafka-streams`
+- adapt `store-streams` to run `For Avro (de)serialization`. I am having problem with making `spring-cloud-stream-kafka-streams`
 and `Avro` work together.
 
 ## References
