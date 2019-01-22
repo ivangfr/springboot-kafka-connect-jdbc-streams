@@ -1,11 +1,11 @@
 package com.mycompany.storestreams.util;
 
-import com.mycompany.storestreams.event.Customer;
-import com.mycompany.storestreams.event.Order;
-import com.mycompany.storestreams.event.OrderDetail;
-import com.mycompany.storestreams.event.OrderProduct;
-import com.mycompany.storestreams.event.Product;
-import com.mycompany.storestreams.event.ProductDetail;
+import com.mycompany.commons.storeapp.events.Customer;
+import com.mycompany.commons.storeapp.events.Order;
+import com.mycompany.commons.storeapp.events.OrderDetail;
+import com.mycompany.commons.storeapp.events.OrderProduct;
+import com.mycompany.commons.storeapp.events.Product;
+import com.mycompany.commons.storeapp.events.ProductDetail;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
 import org.springframework.kafka.support.serializer.JsonDeserializer;

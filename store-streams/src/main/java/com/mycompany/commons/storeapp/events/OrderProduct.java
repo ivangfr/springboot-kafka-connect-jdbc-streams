@@ -1,8 +1,6 @@
-package com.mycompany.storestreams.event;
+package com.mycompany.commons.storeapp.events;
 
 import lombok.Data;
-
-import java.util.Date;
 
 @Data
 public class OrderProduct {

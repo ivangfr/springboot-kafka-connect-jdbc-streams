@@ -27,11 +27,11 @@ Spring-boot application that connects to Kafka and uses Kafka Streams API to tra
 ## (De)Serialization formats
 
 In order to run this project, you can use [`JSON`](https://www.json.org) or
-[`Avro`](http://avro.apache.org/docs/current/gettingstartedjava.html) formats for data serialization/deserialization
-to/from the `binary` format that is used by Kafka. The default format is `JSON`. Throughout this document, I will point
-out what to do if you want to use `Avro`.
+[`Avro`](http://avro.apache.org/docs/current/gettingstartedjava.html) format to serialize/deserialize data to/from the
+`binary` format used by Kafka. The default format is `JSON`. Throughout this document, I will point out what to do if
+you want to use `Avro`.
 
-**P.S. Avro (de)serialization is a work in progress and it is not completely implemented!**
+**P.S. Avro (de)serialization is not completely implemented!**
 
 ## Start Environment
 
@@ -41,25 +41,9 @@ out what to do if you want to use `Avro`.
 
 2. Inside `/springboot-kafka-connect-streams` root folder run
 
-- **For JSON (de)serialization**
 ```
 docker-compose up -d
 ```
-
-- **For Avro (de)serialization**
-```
-export CONNECT_KEY_CONVERTER=io.confluent.connect.avro.AvroConverter 
-export CONNECT_VALUE_CONVERTER=io.confluent.connect.avro.AvroConverter
-
-docker-compose up -d
-```
-
-> Note 1.
-> The `docker-compose.yml` file has two environment variables: `CONNECT_KEY_CONVERTER` and `CONNECT_VALUE_CONVERTER`.
-> Their default values are defined in `.env` file and is `org.apache.kafka.connect.json.JsonConverter` for both.
-> So, we just need to change them in case we are configuring `For Avro (de)serialization`.
-
-> Note 2.
 > To stop and remove containers, networks and volumes type:
 > ```
 > docker-compose down -v

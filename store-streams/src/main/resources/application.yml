@@ -8,29 +8,28 @@ spring:
       bindings:
         customer-input:
           destination: store-mysql-customers
+          group: storeStreamsGroup
           consumer:
             nativeDecoding: true
-            headerMode: raw
         product-input:
           destination: store-mysql-products
+          group: storeStreamsGroup
           consumer:
             nativeDecoding: true
-            headerMode: raw
         order-input:
           destination: store-mysql-orders
+          group: storeStreamsGroup
           consumer:
             nativeDecoding: true
-            headerMode: raw
         order-product-input:
           destination: store-mysql-orders_products
+          group: storeStreamsGroup
           consumer:
             nativeDecoding: true
-            headerMode: raw
         order-output:
           destination: store-streams-orders
           producer:
             nativeEncoding: true
-            headerMode: raw
       kafka:
         streams:
           bindings:
@@ -44,18 +43,18 @@ spring:
                 keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
                 valueSerde: com.mycompany.storestreams.serde.json.ProductJsonSerde
                 materializedAs: product-ktable
-            order-input:
-              consumer:
-                keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
-                valueSerde: org.apache.kafka.common.serialization.Serdes$StringSerde
-            order-product-input:
-              consumer:
-                keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
-                valueSerde: org.apache.kafka.common.serialization.Serdes$StringSerde
-            order-output:
-              producer:
-                keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
-                valueSerde: org.apache.kafka.common.serialization.Serdes$StringSerde
+#            order-input:
+#              consumer:
+#                keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
+#                valueSerde: org.apache.kafka.common.serialization.Serdes$StringSerde
+#            order-product-input:
+#              consumer:
+#                keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
+#                valueSerde: org.apache.kafka.common.serialization.Serdes$StringSerde
+#            order-output:
+#              producer:
+#                keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
+#                valueSerde: org.apache.kafka.common.serialization.Serdes$StringSerde
           binder:
             brokers: localhost:29092
             configuration:
@@ -77,7 +76,21 @@ management:
       enabled: true
 
 ---
-
 spring:
   profiles: avro
-  # TODO Continue implementation
+  cloud:
+    stream:
+      schema-registry-client:
+        endpoint: http://localhost:8081
+      schema:
+        avro:
+          dynamic-schema-generation-enabled: true
+#      bindings:
+#        order-input:
+#          content-type: application/*+avro
+#          consumer:
+#            nativeDecoding: true
+#        order-output:
+#          content-type: application/*+avro
+#          producer:
+#            nativeEncoding: true

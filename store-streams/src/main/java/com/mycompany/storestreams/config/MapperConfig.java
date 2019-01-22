@@ -1,7 +1,7 @@
 package com.mycompany.storestreams.config;
 
-import com.mycompany.storestreams.event.OrderProductDetail;
-import com.mycompany.storestreams.event.ProductDetail;
+import com.mycompany.commons.storeapp.events.OrderProductDetail;
+import com.mycompany.commons.storeapp.events.ProductDetail;
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;

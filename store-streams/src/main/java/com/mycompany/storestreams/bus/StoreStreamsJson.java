@@ -1,12 +1,12 @@
 package com.mycompany.storestreams.bus;
 
-import com.mycompany.storestreams.event.Customer;
-import com.mycompany.storestreams.event.Order;
-import com.mycompany.storestreams.event.OrderDetail;
-import com.mycompany.storestreams.event.OrderProduct;
-import com.mycompany.storestreams.event.OrderProductDetail;
-import com.mycompany.storestreams.event.Product;
-import com.mycompany.storestreams.event.ProductDetail;
+import com.mycompany.commons.storeapp.events.Customer;
+import com.mycompany.commons.storeapp.events.Order;
+import com.mycompany.commons.storeapp.events.OrderDetail;
+import com.mycompany.commons.storeapp.events.OrderProduct;
+import com.mycompany.commons.storeapp.events.OrderProductDetail;
+import com.mycompany.commons.storeapp.events.Product;
+import com.mycompany.commons.storeapp.events.ProductDetail;
 import com.mycompany.storestreams.util.SerdeFactory;
 import lombok.extern.slf4j.Slf4j;
 import ma.glasnost.orika.MapperFacade;
@@ -48,6 +48,11 @@ public class StoreStreamsJson {
             @Input(StoreKafkaStreamsProcessor.PRODUCT_INPUT) KTable<String, Product> productKTable,
             @Input(StoreKafkaStreamsProcessor.ORDER_INPUT) KStream<String, Order> orderIdKeyOrderValueKStream,
             @Input(StoreKafkaStreamsProcessor.ORDER_PRODUCT_INPUT) KStream<String, OrderProduct> orderIdKeyOrderProductValueKStream) {
+
+        customerKTable.toStream().foreach((key, value) -> log.info("key: {}, value: {}", key, value));
+        productKTable.toStream().foreach((key, value) -> log.info("key: {}, value: {}", key, value));
+        orderIdKeyOrderValueKStream.foreach((key, value) -> log.info("key: {}, value: {}", key, value));
+        orderIdKeyOrderProductValueKStream.foreach((key, value) -> log.info("key: {}, value: {}", key, value));
 
         // --
         // Add customer info to OrderDetail
