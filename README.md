@@ -42,7 +42,7 @@ you want to use `Avro`.
 2. Inside `/springboot-kafka-connect-streams` root folder run
 
 ```
-docker-compose up -d
+docker-compose up -d --build
 ```
 > To stop and remove containers, networks and volumes type:
 > ```
@@ -162,9 +162,9 @@ mvn spring-boot:run -Dspring-boot.run.profiles=avro
 ```
 curl localhost:8081/subjects
 ```
-2. Get the latest version of the subject `store-mysql-customers-value`
+2. Get the latest version of the subject `mysql.storedb.customers-value`
 ```
-curl http://localhost:8081/subjects/store-mysql-customers-value/versions/latest
+curl http://localhost:8081/subjects/mysql.storedb.customers-value/versions/latest
 ```
 
 ### Kibana
@@ -175,9 +175,12 @@ curl http://localhost:8081/subjects/store-mysql-customers-value/versions/latest
 
 - Elasticsearch can be accessed at http://localhost:9200
 
-- You can use `curl` to check some documents, for example in `store-mysql-customers` index
+- You can use `curl` to check some documents, for example in `store.streams.orders` index
 ```
-curl http://localhost:9200/store-streams-orders/_search?pretty
+curl http://localhost:9200/_cat/indices?v
+curl http://localhost:9200/mysql.storedb.customers/_search?pretty
+curl http://localhost:9200/mysql.storedb.products/_search?pretty
+curl http://localhost:9200/store.streams.orders/_search?pretty
 ```
 
 ### Kafkacat
@@ -186,12 +189,12 @@ curl http://localhost:9200/store-streams-orders/_search?pretty
 docker run --tty --interactive --rm --network=springboot-kafka-connect-streams_default \
   confluentinc/cp-kafkacat:5.1.0 kafkacat -b kafka:9092\
   -f '\nKey (%K bytes): %k\t\nValue (%S bytes): %s\n\Partition: %p\tOffset: %o\n--\n' \
-  -t store-mysql-customers -C -c1
+  -t mysql.storedb.customers -C -c1
 ```
 
 ### MySQL
 ```
-docker exec -it store-mysql bash -c 'mysql -uroot -psecret'
+docker exec -it mysql bash -c 'mysql -uroot -psecret'
 use storedb;
 select * from customers;
 ```

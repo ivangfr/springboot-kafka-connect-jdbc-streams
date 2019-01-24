@@ -2,9 +2,9 @@
   "name": "elasticsearch-sink-products",
   "config": {
     "connector.class": "io.confluent.connect.elasticsearch.ElasticsearchSinkConnector",
-    "topics": "store-mysql-products",
+    "topics": "mysql.storedb.products",
     "connection.url": "http://elasticsearch:9200",
-    "type.name": "kafka-connect",
+    "type.name": "product",
     "tasks.max": "1",
 
     "_comment": "--- Change Key/Value converters (default is Avro) ---",

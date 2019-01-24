@@ -103,7 +103,7 @@ services:
       start_period: 30s
 
   kafka-connect:
-    build: ./kafka-connect
+    build: docker/kafka-connect
     container_name: kafka-connect
     depends_on:
       - schema-registry
@@ -151,8 +151,8 @@ services:
       test: "wget --quiet --tries=1 --spider http://localhost:8000 || exit 1"
       start_period: 30s
 
-  store-mysql:
-    container_name: store-mysql
+  mysql:
+    container_name: mysql
     image: mysql:5.7.24
     restart: unless-stopped
     ports:
@@ -197,13 +197,3 @@ services:
     healthcheck:
       test: "curl -f http://localhost:5601 || exit 1"
       start_period: 30s
-
-#  zipkin:
-#    container_name: zipkin
-#    image: openzipkin/zipkin:2.11.7
-#    restart: unless-stopped
-#    ports:
-#      - "9411:9411"
-#    healthcheck:
-#      test: "curl -f http://localhost:9411 || exit 1"
-#      start_period: 30s

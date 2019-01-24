@@ -7,27 +7,27 @@ spring:
     stream:
       bindings:
         customer-input:
-          destination: store-mysql-customers
+          destination: mysql.storedb.customers
           group: storeStreamsGroup
           consumer:
             nativeDecoding: true
         product-input:
-          destination: store-mysql-products
+          destination: mysql.storedb.products
           group: storeStreamsGroup
           consumer:
             nativeDecoding: true
         order-input:
-          destination: store-mysql-orders
+          destination: mysql.storedb.orders
           group: storeStreamsGroup
           consumer:
             nativeDecoding: true
         order-product-input:
-          destination: store-mysql-orders_products
+          destination: mysql.storedb.orders_products
           group: storeStreamsGroup
           consumer:
             nativeDecoding: true
         order-output:
-          destination: store-streams-orders
+          destination: store.streams.orders
           producer:
             nativeEncoding: true
       kafka:
@@ -37,12 +37,12 @@ spring:
               consumer:
                 keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
                 valueSerde: com.mycompany.storestreams.serde.json.CustomerJsonSerde
-                materializedAs: customer-ktable
+                materializedAs: ktable.customers
             product-input:
               consumer:
                 keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
                 valueSerde: com.mycompany.storestreams.serde.json.ProductJsonSerde
-                materializedAs: product-ktable
+                materializedAs: ktable.products
 #            order-input:
 #              consumer:
 #                keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde

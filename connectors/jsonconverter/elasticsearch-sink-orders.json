@@ -2,9 +2,9 @@
   "name": "elasticsearch-sink-orders",
   "config": {
     "connector.class": "io.confluent.connect.elasticsearch.ElasticsearchSinkConnector",
-    "topics": "store-streams-orders",
+    "topics": "store.streams.orders",
     "connection.url": "http://elasticsearch:9200",
-    "type.name": "kafka-connect",
+    "type.name": "order",
     "tasks.max": "1",
 
     "_comment": "--- Change Key/Value converters (default is Avro) ---",
