@@ -59,37 +59,6 @@ docker-compose up -d
 docker-compose ps
 ```
 
-### Run store-api
-
-There are two ways to run `store-api`: **REST API** or **Batch Simulation**
-
-#### REST API
-
-In a new terminal, run the command below inside `/springboot-kafka-connect-streams/store-api`. It will start
-the service as a REST API
-```
-./mvnw spring-boot:run
-```
-The Swagger link is http://localhost:9080/swagger-ui.html
-
-![store-api-swagger](images/store-api-swagger.png)
-
-#### Batch Simulation
-
-This mode will create automatically and randomly a certain number of orders. The parameters available are:
-
-| parameter | default | description |
-| --------- | ------- | ----------- |
-| `orders.total` | `10` | total number of orders you want to be created |
-| `orders.delay-millis` | `0` | delay between the creation of orders in millis |
-
-Inside `/springboot-kafka-connect-streams/store-api`, you can run the simulation, for example, changing the
-default values
-```
-./mvnw spring-boot:run \
-  -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=simulation -Dorders.total=100 -Dorders.delay-millis=0"
-```
-
 ### Create connectors
 
 1. In a terminal, run the following script to create the connectors on `kafka-connect`
@@ -138,7 +107,38 @@ otherwise an error will be thrown. The document
 [Kafka Connect Deep Dive – Converters and Serialization Explained](https://www.confluent.io/blog/kafka-connect-deep-dive-converters-serialization-explained)
 explains it very well.
 
-### Start store-streams
+### Run store-api
+
+There are two ways to run `store-api`: **REST API** or **Batch Simulation**
+
+#### REST API
+
+In a new terminal, run the command below inside `/springboot-kafka-connect-streams/store-api`. It will start
+the service as a REST API
+```
+./mvnw spring-boot:run
+```
+The Swagger link is http://localhost:9080/swagger-ui.html
+
+![store-api-swagger](images/store-api-swagger.png)
+
+#### Batch Simulation
+
+This mode will create automatically and randomly a certain number of orders. The parameters available are:
+
+| parameter | default | description |
+| --------- | ------- | ----------- |
+| `orders.total` | `10` | total number of orders you want to be created |
+| `orders.delay-millis` | `0` | delay between the creation of orders in millis |
+
+Inside `/springboot-kafka-connect-streams/store-api`, you can run the simulation, for example, changing the
+default values
+```
+./mvnw spring-boot:run \
+  -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=simulation -Dorders.total=100 -Dorders.delay-millis=0"
+```
+
+### Run store-streams
 
 1. Open a new terminal
 
@@ -222,7 +222,10 @@ select * from customers;
 
 ## TODO
 
-- adapt `store-streams` to run `For Avro (de)serialization`. I am having problem with making `spring-cloud-stream-kafka-streams`
+1. implement `kafka-store-streams` using `spring-kafka` instead of `spring-cloud-streams` used by `store-streams`,
+because it is been hard to make TODO item 2. to work.
+
+2. adapt `store-streams` to run `For Avro (de)serialization`. I am having problem with making `spring-cloud-stream-kafka-streams`
 and `Avro` work together.
 
 ## References

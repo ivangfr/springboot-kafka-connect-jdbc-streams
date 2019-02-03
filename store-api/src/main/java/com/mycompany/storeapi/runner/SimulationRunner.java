@@ -94,9 +94,9 @@ public class SimulationRunner implements CommandLineRunner {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
-            log.info("Order simulation finished!");
         }
+
+        log.info("Order simulation finished!");
     }
 
 }
