@@ -1,0 +1,5 @@
+server.port: 9081
+
+spring:
+  application:
+    name: kafka-store-streams

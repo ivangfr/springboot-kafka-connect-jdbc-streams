@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 @Data
 public class UpdateProductDto {
 
-    @ApiModelProperty(example = "Macbook Air")
+    @ApiModelProperty(example = "MacBook Air")
     private String name;
 
     @ApiModelProperty(position = 2, example = "2450")

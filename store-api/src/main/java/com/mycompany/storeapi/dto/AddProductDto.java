@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @Data
 public class AddProductDto {
 
-    @ApiModelProperty(example = "Macbook Pro")
+    @ApiModelProperty(example = "MacBook Pro")
     @NotBlank
     private String name;
 

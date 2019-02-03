@@ -5,6 +5,10 @@
     "topics": "store.streams.orders",
     "connection.url": "http://elasticsearch:9200",
     "type.name": "order",
-    "tasks.max": "1"
+    "tasks.max": "1",
+
+    "_comment": "--- Change Key converter (default is Avro) ---",
+    "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+    "key.converter.schemas.enable": "false"
   }
 }

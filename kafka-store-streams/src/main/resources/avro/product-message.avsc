@@ -1,0 +1,25 @@
+{
+  "type": "record",
+  "name": "Product",
+  "namespace": "com.mycompany.commons.storeapp.avro",
+  "fields": [
+    {
+      "name": "id",
+      "type": "long"
+    },
+    {
+      "name": "created_at",
+      "type": {
+        "type": "long",
+        "connect.version": 1,
+        "connect.name": "org.apache.kafka.connect.data.Timestamp",
+        "logicalType": "timestamp-millis"
+      }
+    },
+    {
+      "name": "name",
+      "type": "string"
+    }
+  ],
+  "connect.name": "com.mycompany.commons.storeapp.avro.Product"
+}

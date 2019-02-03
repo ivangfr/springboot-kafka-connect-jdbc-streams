@@ -6,9 +6,9 @@ The main goal of this project is to play with [`Kafka`](https://kafka.apache.org
 [`Kafka Connect`](https://docs.confluent.io/current/connect/index.html) and
 [`Kafka Streams`](https://docs.confluent.io/current/streams/index.html). For this, we have: `store-api` that
 inserts/updates records in [`MySQL`](https://www.mysql.com); `Source Connectors` that monitor
-inserted/updated records in MySQL and push messages related to those changes to Kafka; `Sink Connectors` that
-read messages from Kafka and insert/update documents in [`Elasticsearch`](https://www.elastic.co); finally,
-`store-streams` that listens for messages in Kafka, treats them using Kafka Streams and push new messages back to Kafka.
+inserted/updated records in `MySQL` and push messages related to those changes to `Kafka`; `Sink Connectors` that
+listen messages from `Kafka` and insert/update documents in [`Elasticsearch`](https://www.elastic.co); finally,
+`store-streams` that listens messages from `Kafka`, treats them using `Kafka Streams` and push new messages back to `Kafka`.
 
 ## Microservices
 
@@ -16,13 +16,13 @@ read messages from Kafka and insert/update documents in [`Elasticsearch`](https:
 
 ### store-api
 
-Monolithic spring-boot application that exposes a REST API to manage Customers, Products and Orders. The data is saved
-in MySQL. 
+Monolithic spring-boot application that exposes a REST API to manage `Customers`, `Products` and `Orders`. The data is
+saved in `MySQL`. 
 
 ### store-streams
 
-Spring-boot application that connects to Kafka and uses Kafka Streams API to transform some "input" topics into a new
-"output" topic in Kafka.
+Spring-boot application that connects to `Kafka` and uses `Kafka Streams API` to transform some _"input"_ topics into a
+new _"output"_ topic in `Kafka`.
 
 ## (De)Serialization formats
 
@@ -42,8 +42,13 @@ you want to use `Avro`.
 2. Inside `/springboot-kafka-connect-streams` root folder run
 
 ```
-docker-compose up -d --build
+docker-compose up -d
 ```
+> During the first run, an image for `kafka-connect`will be built, whose name is `springboot-kafka-connect-streams_kafka-connect`.
+> To rebuild this image run
+> ```
+> docker-compose build
+> ```
 > To stop and remove containers, networks and volumes type:
 > ```
 > docker-compose down -v
@@ -54,20 +59,36 @@ docker-compose up -d --build
 docker-compose ps
 ```
 
-### Start store-api
+### Run store-api
 
-1. Open a new terminal
+There are two ways to run `store-api`: **REST API** or **Batch Simulation**
 
-2. In `/springboot-kafka-connect-streams/store-api` folder, run
+#### REST API
+
+In a new terminal, run the command below inside `/springboot-kafka-connect-streams/store-api`. It will start
+the service as a REST API
 ```
-mvn spring-boot:run
+./mvnw spring-boot:run
 ```
-
-3. Wait for `store-api` to be up and running. It is configured to create all needed tables on `MySQL`.
-
-4. Its swagger website is http://localhost:9080/swagger-ui.html
+The Swagger link is http://localhost:9080/swagger-ui.html
 
 ![store-api-swagger](images/store-api-swagger.png)
+
+#### Batch Simulation
+
+This mode will create automatically and randomly a certain number of orders. The parameters available are:
+
+| parameter | default | description |
+| --------- | ------- | ----------- |
+| `orders.total` | `10` | total number of orders you want to be created |
+| `orders.delay-millis` | `0` | delay between the creation of orders in millis |
+
+Inside `/springboot-kafka-connect-streams/store-api`, you can run the simulation, for example, changing the
+default values
+```
+./mvnw spring-boot:run \
+  -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=simulation -Dorders.total=100 -Dorders.delay-millis=0"
+```
 
 ### Create connectors
 
@@ -125,17 +146,17 @@ explains it very well.
 
 - **For JSON (de)serialization**
 ```
-mvn spring-boot:run
+./mvnw spring-boot:run
 ```
 
 - **For Avro (de)serialization (NOT READY!)**
 ```
-mvn spring-boot:run -Dspring-boot.run.profiles=avro
+./mvnw spring-boot:run -Dspring-boot.run.profiles=avro
 ```
 
 > Note: the command below generates Java classes from Avro files
 > ```
-> mvn generate-sources
+> ./mvnw generate-sources
 > ```
 
 3. This service runs on port `9081`. The `health` endpoint is http://localhost:9081/actuator/health

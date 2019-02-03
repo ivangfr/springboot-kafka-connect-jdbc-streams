@@ -16,7 +16,7 @@
 
     "_comment": "--- Change the schema name ---",
     "transforms.setSchemaName.type": "org.apache.kafka.connect.transforms.SetSchemaMetadata$Value",
-    "transforms.setSchemaName.schema.name": "com.mycompany.commons.storeapp.events.OrderProduct",
+    "transforms.setSchemaName.schema.name": "com.mycompany.commons.storeapp.avro.OrderProduct",
 
     "_comment": "--- Drop fields ---",
     "transforms.dropFields.type": "org.apache.kafka.connect.transforms.ReplaceField$Value",
@@ -26,6 +26,10 @@
     "transforms.createKey.type": "org.apache.kafka.connect.transforms.ValueToKey",
     "transforms.createKey.fields": "order_id",
     "transforms.extractId.type": "org.apache.kafka.connect.transforms.ExtractField$Key",
-    "transforms.extractId.field": "order_id"
+    "transforms.extractId.field": "order_id",
+
+    "_comment": "--- Change Key converter (default is Avro) ---",
+    "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+    "key.converter.schemas.enable": "false"
   }
 }

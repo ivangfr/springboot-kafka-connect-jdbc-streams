@@ -17,7 +17,7 @@
 
     "_comment": "--- Change the schema name ---",
     "transforms.setSchemaName.type": "org.apache.kafka.connect.transforms.SetSchemaMetadata$Value",
-    "transforms.setSchemaName.schema.name": "com.mycompany.commons.storeapp.events.Product",
+    "transforms.setSchemaName.schema.name": "com.mycompany.commons.storeapp.avro.Product",
 
     "_comment": "--- Drop fields ---",
     "transforms.dropFields.type": "org.apache.kafka.connect.transforms.ReplaceField$Value",
@@ -28,6 +28,10 @@
     "transforms.createKey.fields": "id",
     "transforms.extractId.type": "org.apache.kafka.connect.transforms.ExtractField$Key",
     "transforms.extractId.field": "id",
+
+    "_comment": "--- Change Key converter (default is Avro) ---",
+    "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+    "key.converter.schemas.enable": "false",
 
     "_comment": "--- numeric.mapping doesn't work for DECIMAL fields #563 ---",
     "_comment": "--- https://github.com/confluentinc/kafka-connect-jdbc/issues/563 ---",
