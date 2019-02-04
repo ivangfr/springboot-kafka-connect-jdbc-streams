@@ -28,11 +28,11 @@ import java.util.UUID;
 @org.springframework.core.annotation.Order(2)
 public class SimulationRunner implements CommandLineRunner {
 
-    @Value("${orders.total}")
-    private Integer ordersTotal;
+    @Value("${simulation.orders.total}")
+    private Integer total;
 
-    @Value("${orders.delay-millis}")
-    private Integer ordersDelayMillis;
+    @Value("${simulation.orders.sleep}")
+    private Integer sleep;
 
     private final Random random = new Random();
 
@@ -47,13 +47,13 @@ public class SimulationRunner implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) {
+    public void run(String... args) throws InterruptedException {
         log.info("Running order simulation ...");
 
         List<Customer> customers = customerService.getAllCustomers();
         List<Product> products = productService.getAllProducts();
 
-        for (int i = 0; i < ordersTotal; i++) {
+        for (int i = 0; i < total; i++) {
             Order order = new Order();
             order.setId(UUID.randomUUID().toString());
             order.setPaymentType(PaymentType.values()[random.nextInt(PaymentType.values().length)]);
@@ -86,14 +86,9 @@ public class SimulationRunner implements CommandLineRunner {
             order.setOrderProducts(orderProducts);
 
             orderService.saveOrder(order);
-
             log.info("Order created: {}", order);
 
-            try {
-                Thread.sleep(ordersDelayMillis);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            Thread.sleep(sleep);
         }
 
         log.info("Order simulation finished!");

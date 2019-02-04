@@ -128,14 +128,14 @@ This mode will create automatically and randomly a certain number of orders. The
 
 | parameter | default | description |
 | --------- | ------- | ----------- |
-| `orders.total` | `10` | total number of orders you want to be created |
-| `orders.delay-millis` | `0` | delay between the creation of orders in millis |
+| `simulation.orders.total` | `10` | total number of orders to be created |
+| `simulation.orders.sleep` | `100` | sleep time (in milliseconds) between the creation of orders |
 
 Inside `/springboot-kafka-connect-streams/store-api`, you can run the simulation, for example, changing the
 default values
 ```
 ./mvnw spring-boot:run \
-  -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=simulation -Dorders.total=100 -Dorders.delay-millis=0"
+  -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=simulation -Dsimulation.orders.total=100 -Dsimulation.orders.sleep=0"
 ```
 
 ### Run store-streams
@@ -196,7 +196,7 @@ curl http://localhost:8081/subjects/mysql.storedb.customers-value/versions/lates
 
 - Elasticsearch can be accessed at http://localhost:9200
 
-- You can use `curl` to check some documents, for example in `store.streams.orders` index
+- You can use `curl` to check some Elasticsearch indices and documents
 ```
 curl http://localhost:9200/_cat/indices?v
 curl http://localhost:9200/mysql.storedb.customers/_search?pretty
