@@ -59,6 +59,39 @@ docker-compose up -d
 docker-compose ps
 ```
 
+### Run store-api
+
+**It is important to run `store-api` first because it will initialize the MySQL database**.
+
+There are two ways to run `store-api`: **REST API** or **Batch Simulation**
+
+#### REST API
+
+In a new terminal, run the command below inside `/springboot-kafka-connect-streams` root folder. It will start
+the service as a REST API
+```
+./mvnw spring-boot:run --projects store-api
+```
+The Swagger link is http://localhost:9080/swagger-ui.html
+
+![store-api-swagger](images/store-api-swagger.png)
+
+#### Batch Simulation
+
+This mode will create automatically and randomly a certain number of orders. The parameters available are:
+
+| parameter | default | description |
+| --------- | ------- | ----------- |
+| `simulation.orders.total` | `10` | total number of orders to be created |
+| `simulation.orders.sleep` | `100` | sleep time (in milliseconds) between the creation of orders |
+
+Inside `/springboot-kafka-connect-streams/store-api`, you can run the simulation, for example, changing the
+default values
+```
+./mvnw spring-boot:run --projects store-api \
+  -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=simulation -Dsimulation.orders.total=10 -Dsimulation.orders.sleep=0"
+```
+
 ### Create connectors
 
 1. In a terminal, run the following script to create the connectors on `kafka-connect`
@@ -107,56 +140,25 @@ otherwise an error will be thrown. The document
 [Kafka Connect Deep Dive – Converters and Serialization Explained](https://www.confluent.io/blog/kafka-connect-deep-dive-converters-serialization-explained)
 explains it very well.
 
-### Run store-api
-
-There are two ways to run `store-api`: **REST API** or **Batch Simulation**
-
-#### REST API
-
-In a new terminal, run the command below inside `/springboot-kafka-connect-streams/store-api`. It will start
-the service as a REST API
-```
-./mvnw spring-boot:run
-```
-The Swagger link is http://localhost:9080/swagger-ui.html
-
-![store-api-swagger](images/store-api-swagger.png)
-
-#### Batch Simulation
-
-This mode will create automatically and randomly a certain number of orders. The parameters available are:
-
-| parameter | default | description |
-| --------- | ------- | ----------- |
-| `simulation.orders.total` | `10` | total number of orders to be created |
-| `simulation.orders.sleep` | `100` | sleep time (in milliseconds) between the creation of orders |
-
-Inside `/springboot-kafka-connect-streams/store-api`, you can run the simulation, for example, changing the
-default values
-```
-./mvnw spring-boot:run \
-  -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=simulation -Dsimulation.orders.total=100 -Dsimulation.orders.sleep=0"
-```
-
 ### Run store-streams
 
 1. Open a new terminal
 
-2. In `/springboot-kafka-connect-streams/store-streams` folder, run
+2. In `/springboot-kafka-connect-streams` root folder, run
 
 - **For JSON (de)serialization**
 ```
-./mvnw spring-boot:run
+./mvnw spring-boot:run --projects store-streams
 ```
 
 - **For Avro (de)serialization (NOT READY!)**
 ```
-./mvnw spring-boot:run -Dspring-boot.run.profiles=avro
+./mvnw spring-boot:run --projects store-streams -Dspring-boot.run.profiles=avro
 ```
 
 > Note: the command below generates Java classes from Avro files
 > ```
-> ./mvnw generate-sources
+> ./mvnw generate-sources --projects store-streams
 > ```
 
 3. This service runs on port `9081`. The `health` endpoint is http://localhost:9081/actuator/health
