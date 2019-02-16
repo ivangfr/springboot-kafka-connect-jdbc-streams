@@ -1,6 +1,4 @@
-# springboot-kafka-connect-streams
-
-## Goal
+# `springboot-kafka-connect-streams`
 
 The main goal of this project is to play with [`Kafka`](https://kafka.apache.org),
 [`Kafka Connect`](https://docs.confluent.io/current/connect/index.html) and
@@ -10,21 +8,21 @@ inserted/updated records in `MySQL` and push messages related to those changes t
 listen messages from `Kafka` and insert/update documents in [`Elasticsearch`](https://www.elastic.co); finally,
 `store-streams` that listens messages from `Kafka`, treats them using `Kafka Streams` and push new messages back to `Kafka`.
 
-## Microservices
+# Microservices
 
 ![project-diagram](images/project-diagram.png)
 
-### store-api
+## store-api
 
 Monolithic spring-boot application that exposes a REST API to manage `Customers`, `Products` and `Orders`. The data is
 saved in `MySQL`. 
 
-### store-streams
+## store-streams
 
 Spring-boot application that connects to `Kafka` and uses `Kafka Streams API` to transform some _"input"_ topics into a
 new _"output"_ topic in `Kafka`.
 
-## (De)Serialization formats
+# (De)Serialization formats
 
 In order to run this project, you can use [`JSON`](https://www.json.org) or
 [`Avro`](http://avro.apache.org/docs/current/gettingstartedjava.html) format to serialize/deserialize data to/from the
@@ -33,9 +31,9 @@ you want to use `Avro`.
 
 **P.S. Avro (de)serialization is not completely implemented!**
 
-## Start Environment
+# Start Environment
 
-### Docker Compose
+## Docker Compose
 
 1. Open one terminal
 
@@ -59,13 +57,13 @@ docker-compose up -d
 docker-compose ps
 ```
 
-### Run store-api
+## Run store-api
 
 **It is important to run `store-api` first because it will initialize the MySQL database**.
 
 There are two ways to run `store-api`: **REST API** or **Batch Simulation**
 
-#### REST API
+### REST API
 
 In a new terminal, run the command below inside `/springboot-kafka-connect-streams` root folder. It will start
 the service as a REST API
@@ -76,7 +74,7 @@ The Swagger link is http://localhost:9080/swagger-ui.html
 
 ![store-api-swagger](images/store-api-swagger.png)
 
-#### Batch Simulation
+### Batch Simulation
 
 This mode will create automatically and randomly a certain number of orders. The parameters available are:
 
@@ -92,7 +90,7 @@ default values
   -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=simulation -Dsimulation.orders.total=10 -Dsimulation.orders.sleep=0"
 ```
 
-### Create connectors
+## Create connectors
 
 1. In a terminal, run the following script to create the connectors on `kafka-connect`
 
@@ -140,7 +138,7 @@ otherwise an error will be thrown. The document
 [Kafka Connect Deep Dive – Converters and Serialization Explained](https://www.confluent.io/blog/kafka-connect-deep-dive-converters-serialization-explained)
 explains it very well.
 
-### Run store-streams
+## Run store-streams
 
 1. Open a new terminal
 
@@ -163,7 +161,7 @@ explains it very well.
 
 3. This service runs on port `9081`. The `health` endpoint is http://localhost:9081/actuator/health
 
-## Useful Links/Commands
+# Useful Links/Commands
 
 ### Kafka Topics UI
 
@@ -201,6 +199,7 @@ curl http://localhost:8081/subjects/mysql.storedb.customers-value/versions/lates
 - You can use `curl` to check some Elasticsearch indices and documents
 ```
 curl http://localhost:9200/_cat/indices?v
+
 curl http://localhost:9200/mysql.storedb.customers/_search?pretty
 curl http://localhost:9200/mysql.storedb.products/_search?pretty
 curl http://localhost:9200/store.streams.orders/_search?pretty
@@ -222,19 +221,20 @@ use storedb;
 select * from customers;
 ```
 
-## TODO
+# TODO
 
 1. implement `kafka-store-streams` using `spring-kafka` instead of `spring-cloud-streams` used by `store-streams`,
-because it is been hard to make TODO item 2. to work.
+because it is been hard to make TODO _item 2_ to work.
 
 2. adapt `store-streams` to run `For Avro (de)serialization`. I am having problem with making `spring-cloud-stream-kafka-streams`
 and `Avro` work together.
 
-## References
+# References
 
 - https://www.confluent.io/blog/simplest-useful-kafka-connect-data-pipeline-world-thereabouts-part-1 (2 and 3)
+
 - https://www.confluent.io/blog/kafka-connect-deep-dive-converters-serialization-explained
 
-## Issues
+# Issues
 
 - Product `price` field, [numeric.mapping doesn't work for DECIMAL fields #563](https://github.com/confluentinc/kafka-connect-jdbc/issues/563)

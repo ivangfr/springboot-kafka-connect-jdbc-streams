@@ -49,10 +49,10 @@ public class StoreStreamsJson {
             @Input(StoreKafkaStreamsProcessor.ORDER_INPUT) KStream<String, Order> orderIdKeyOrderValueKStream,
             @Input(StoreKafkaStreamsProcessor.ORDER_PRODUCT_INPUT) KStream<String, OrderProduct> orderIdKeyOrderProductValueKStream) {
 
-        customerKTable.toStream().foreach((key, value) -> log.info("key: {}, value: {}", key, value));
-        productKTable.toStream().foreach((key, value) -> log.info("key: {}, value: {}", key, value));
-        orderIdKeyOrderValueKStream.foreach((key, value) -> log.info("key: {}, value: {}", key, value));
-        orderIdKeyOrderProductValueKStream.foreach((key, value) -> log.info("key: {}, value: {}", key, value));
+//        customerKTable.toStream().foreach((key, value) -> log.info("key: {}, value: {}", key, value));
+//        productKTable.toStream().foreach((key, value) -> log.info("key: {}, value: {}", key, value));
+//        orderIdKeyOrderValueKStream.foreach((key, value) -> log.info("key: {}, value: {}", key, value));
+//        orderIdKeyOrderProductValueKStream.foreach((key, value) -> log.info("key: {}, value: {}", key, value));
 
         // --
         // Add customer info to OrderDetail
