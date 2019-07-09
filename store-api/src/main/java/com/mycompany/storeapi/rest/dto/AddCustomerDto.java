@@ -1,4 +1,4 @@
-package com.mycompany.storeapi.dto;
+package com.mycompany.storeapi.rest.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

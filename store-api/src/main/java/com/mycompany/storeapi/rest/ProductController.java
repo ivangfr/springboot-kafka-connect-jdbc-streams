@@ -1,8 +1,8 @@
-package com.mycompany.storeapi.controller;
+package com.mycompany.storeapi.rest;
 
-import com.mycompany.storeapi.dto.AddProductDto;
-import com.mycompany.storeapi.dto.ProductDto;
-import com.mycompany.storeapi.dto.UpdateProductDto;
+import com.mycompany.storeapi.rest.dto.AddProductDto;
+import com.mycompany.storeapi.rest.dto.ProductDto;
+import com.mycompany.storeapi.rest.dto.UpdateProductDto;
 import com.mycompany.storeapi.model.Product;
 import com.mycompany.storeapi.service.ProductService;
 import io.swagger.annotations.ApiResponse;

@@ -153,7 +153,7 @@ services:
 
   mysql:
     container_name: mysql
-    image: mysql:5.7.24
+    image: mysql:5.7.26
     restart: unless-stopped
     ports:
       - "3306:3306"

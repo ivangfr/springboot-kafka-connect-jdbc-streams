@@ -1,10 +1,7 @@
 package com.mycompany.storeapi.config;
 
-import com.mycompany.storeapi.dto.CreateOrderDto;
-import com.mycompany.storeapi.dto.OrderDto;
-import com.mycompany.storeapi.dto.UpdateCustomerDto;
-import com.mycompany.storeapi.dto.UpdateOrderDto;
-import com.mycompany.storeapi.dto.UpdateProductDto;
+import com.mycompany.storeapi.rest.dto.CreateOrderDto;
+import com.mycompany.storeapi.rest.dto.OrderDto;
 import com.mycompany.storeapi.model.Customer;
 import com.mycompany.storeapi.model.Order;
 import com.mycompany.storeapi.model.OrderProduct;
@@ -32,19 +29,11 @@ public class MapperConfig {
 
     @Bean
     MapperFactory mapperFactory() {
-        DefaultMapperFactory defaultMapperFactory = new DefaultMapperFactory.Builder().useAutoMapping(true).build();
-
-        // --
-        // Customer
-        defaultMapperFactory.classMap(UpdateCustomerDto.class, Customer.class).mapNulls(false).byDefault().register();
-
-        // --
-        // Product
-        defaultMapperFactory.classMap(UpdateProductDto.class, Product.class).mapNulls(false).byDefault().register();
+        DefaultMapperFactory defaultMapperFactory = new DefaultMapperFactory.Builder()
+                .useAutoMapping(true).mapNulls(false).build();
 
         // --
         // Order
-        defaultMapperFactory.classMap(UpdateOrderDto.class, Order.class).mapNulls(false).byDefault().register();
 
         defaultMapperFactory.classMap(CreateOrderDto.class, Order.class)
                 .byDefault()

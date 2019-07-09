@@ -1,5 +1,6 @@
-package com.mycompany.storeapi.runner;
+package com.mycompany.storeapi.rest;
 
+import com.mycompany.storeapi.rest.dto.RandomOrdersDto;
 import com.mycompany.storeapi.model.Customer;
 import com.mycompany.storeapi.model.Order;
 import com.mycompany.storeapi.model.OrderProduct;
@@ -11,10 +12,12 @@ import com.mycompany.storeapi.service.OrderService;
 import com.mycompany.storeapi.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -23,10 +26,9 @@ import java.util.Set;
 import java.util.UUID;
 
 @Slf4j
-@Profile("simulation")
-@Component
-@org.springframework.core.annotation.Order(2)
-public class SimulationRunner implements CommandLineRunner {
+@RestController
+@RequestMapping("/api/simulation")
+public class SimulationController {
 
     @Value("${simulation.orders.total}")
     private Integer total;
@@ -34,22 +36,26 @@ public class SimulationRunner implements CommandLineRunner {
     @Value("${simulation.orders.sleep}")
     private Integer sleep;
 
-    private final Random random = new Random();
+    private final static Random random = new Random();
 
     private final CustomerService customerService;
     private final ProductService productService;
     private final OrderService orderService;
 
-    public SimulationRunner(CustomerService customerService, ProductService productService, OrderService orderService) {
+    public SimulationController(CustomerService customerService, ProductService productService, OrderService orderService) {
         this.customerService = customerService;
         this.productService = productService;
         this.orderService = orderService;
     }
 
-    @Override
-    public void run(String... args) throws InterruptedException {
-        log.info("Running order simulation ...");
+    @PostMapping("/orders")
+    public List<String> createRandomOrders(@RequestBody RandomOrdersDto randomOrdersDto) throws InterruptedException {
+        total = randomOrdersDto.getTotal() == null ? total : randomOrdersDto.getTotal();
+        sleep = randomOrdersDto.getSleep() == null ? sleep : randomOrdersDto.getSleep();
 
+        log.info("## Running order simulation - total: {}, sleep: {}", total, sleep);
+
+        List<String> orderIds = new ArrayList<>();
         List<Customer> customers = customerService.getAllCustomers();
         List<Product> products = productService.getAllProducts();
 
@@ -85,13 +91,16 @@ public class SimulationRunner implements CommandLineRunner {
             }
             order.setOrderProducts(orderProducts);
 
-            orderService.saveOrder(order);
+            order = orderService.saveOrder(order);
+            orderIds.add(order.getId());
             log.info("Order created: {}", order);
 
             Thread.sleep(sleep);
         }
 
-        log.info("Order simulation finished!");
+        log.info("## Order simulation finished successfully!");
+
+        return orderIds;
     }
 
 }

@@ -1,4 +1,4 @@
-package com.mycompany.storeapi.dto;
+package com.mycompany.storeapi.rest.dto;
 
 import com.mycompany.storeapi.model.OrderStatus;
 import com.mycompany.storeapi.model.PaymentType;

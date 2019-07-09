@@ -5,8 +5,8 @@ import com.mycompany.storeapi.model.Product;
 import com.mycompany.storeapi.service.CustomerService;
 import com.mycompany.storeapi.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -15,8 +15,13 @@ import java.util.List;
 
 @Slf4j
 @Component
-@Order(1)
 public class LoadSamples implements CommandLineRunner {
+
+    @Value("${load-samples.customers.enabled}")
+    private boolean customerSamples;
+
+    @Value("${load-samples.products.enabled}")
+    private boolean productSamples;
 
     private final CustomerService customerService;
     private final ProductService productService;
@@ -29,39 +34,52 @@ public class LoadSamples implements CommandLineRunner {
     @Override
     public void run(String... args) {
 
-        log.info("Loading customers and products samples ...");
+        if (customerSamples || productSamples) {
 
-        if (customerService.getAllCustomers().isEmpty()) {
-            customerRecords.forEach(customerRecord -> {
-                String[] customerArr = customerRecord.split(";");
-                Customer customer = new Customer();
-                customer.setName(customerArr[0]);
-                customer.setEmail(customerArr[1]);
-                customer.setAddress(customerArr[2]);
-                customer.setPhone(customerArr[0]);
-                customerService.saveCustomer(customer);
+            log.info("## Start loading samples of customers and products ...");
 
-                log.info("Customer created: {}", customer);
-            });
-        }
+            if (customerSamples) {
+                if (customerService.getAllCustomers().isEmpty()) {
+                    customerRecords.forEach(customerRecord -> {
+                        String[] customerArr = customerRecord.split(";");
+                        Customer customer = new Customer();
+                        customer.setName(customerArr[0]);
+                        customer.setEmail(customerArr[1]);
+                        customer.setAddress(customerArr[2]);
+                        customer.setPhone(customerArr[3]);
+                        customerService.saveCustomer(customer);
 
-        if (productService.getAllProducts().isEmpty()) {
-            productsRecords.forEach(productsRecord -> {
-                String[] productArr = productsRecord.split(";");
-                Product product = new Product();
-                product.setName(productArr[0]);
-                product.setPrice(new BigDecimal(productArr[1]));
-                productService.saveProduct(product);
+                        log.info("Customer created: {}", customer);
+                    });
+                } else {
+                    log.info("Sample of customers already created");
+                }
+            }
 
-                log.info("Product created: {}", product);
-            });
+            if (productSamples) {
+                if (productService.getAllProducts().isEmpty()) {
+                    productsRecords.forEach(productsRecord -> {
+                        String[] productArr = productsRecord.split(";");
+                        Product product = new Product();
+                        product.setName(productArr[0]);
+                        product.setPrice(new BigDecimal(productArr[1]));
+                        productService.saveProduct(product);
+
+                        log.info("Product created: {}", product);
+                    });
+                } else {
+                    log.info("Sample of products already created");
+                }
+            }
+
+            log.info("## Finished successfully loading samples of customers and products!");
         }
     }
 
     private static final List<String> customerRecords = Arrays.asList(
             "John Gates;john.gates@test.com;street 1;112233",
             "Mark Bacon;mark.bacon@test.com;street 2;112244",
-            "Alex Stone;alice.stone@test.com;street 3;112255",
+            "Alex Stone;alex.stone@test.com;street 3;112255",
             "Susan Spice;susan.spice@test.com;street 4;112266",
             "Peter Lopes;peter.lopes@test.com;street 5;112277",
             "Mikael Lopes;mikael.lopes@test.com;street 6;112288",
