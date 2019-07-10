@@ -38,8 +38,8 @@ Open one terminal and inside `springboot-kafka-connect-streams` root folder run
 ```
 docker-compose up -d
 ```
-> During the first run, an image for `kafka-connect`will be built, whose name is `springboot-kafka-connect-streams_kafka-connect`.
-> To rebuild this image run
+> During the first run, an image for `kafka-connect` will be built, whose name is
+> `springboot-kafka-connect-streams_kafka-connect`. To rebuild this image run
 > ```
 > docker-compose build
 > ```
@@ -53,8 +53,7 @@ docker-compose ps
 
 **It is important to run `store-api` first because it will initialize the MySQL database**.
 
-In a new terminal, run the command below inside `springboot-kafka-connect-streams` root folder. It will start the
-service as a REST API
+In a new terminal, run the command below inside `springboot-kafka-connect-streams` root folder
 ```
 ./mvnw spring-boot:run --projects store-api
 ```
@@ -129,73 +128,6 @@ Open a new terminal and inside `springboot-kafka-connect-streams` root folder, r
 > ```
 
 This service runs on port `9081`. The `health` endpoint is http://localhost:9081/actuator/health
-
-## Microservice URLs
-
-<table>
-    <thead>
-        <tr>
-            <th>Microservice</th>
-            <th>URL</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><b>store-api</b></td>
-            <td>http://localhost:9080/swagger-ui.html</td>
-        </tr>
-        <tr>
-            <td><b>store-streams</b></td>
-            <td>http://localhost:9081/actuator/health</td>
-        </tr>
-        <tr>
-            <td><b>Kafka Topics UI</b></td>
-            <td>http://localhost:8085</td>
-        </tr>
-        <tr>
-            <td><b>Kafka Connect UI</b></td>
-            <td>http://localhost:8086</td>
-        </tr>
-        <tr>
-            <td><b>Schema Registry UI</b></td>
-            <td>http://localhost:8001</td>
-        </tr>        
-        <tr>
-            <td rowspan=4><b>Schema Registry</b></td>
-            <td><i>Get the list of subjects<i></td>
-        </tr>
-        <tr>
-            <td>http://localhost:8081/subjects</td>
-        </tr>
-            <td><i>Get the latest version of the subject `mysql.storedb.customers-value`</i></td>
-        <tr>
-            <td>http://localhost:8081/subjects/mysql.storedb.customers-value/versions/latest</td>
-        </tr>
-        <tr>
-            <td><b>Kibana</b></td>
-            <td>http://localhost:5601</td>
-        </tr>
-        <tr>
-            <td rowspan=6><b>Elasticsearch</b></td>
-            <td>http://localhost:9200</td>
-        </tr>
-        <tr>
-            <td><i>Check some indices and documents<i></td>
-        </tr>
-        <tr>
-            <td>http://localhost:9200/_cat/indices?v</td>
-        </tr>
-        <tr>
-            <td>http://localhost:9200/mysql.storedb.customers/_search?pretty</td>
-        </tr>
-        <tr>
-            <td>http://localhost:9200/mysql.storedb.products/_search?pretty</td>
-        </tr>
-        <tr>
-            <td>http://localhost:9200/store.streams.orders/_search?pretty</td>
-        </tr>
-    </tbody>
-</table>
 
 ## Testing
 
@@ -300,7 +232,61 @@ curl -i -X POST http://localhost:9080/api/simulation/orders \
   -d '{"total": 5, "sleep": 100}'
 ```
 
-## Useful Commands
+## Useful Links/Commands
+
+### Kafka Topics UI
+
+Kafka Topics UI can be accessed at http://localhost:8085
+
+### Kafka Connect UI
+
+Kafka Connect UI can be accessed at http://localhost:8086
+
+### Schema Registry UI
+
+Schema Registry UI can be accessed at http://localhost:8001
+
+### Schema Registry
+
+You can use `curl` to check the subjects in Schema Registry
+
+- Get the list of subjects
+```
+curl localhost:8081/subjects
+```
+- Get the latest version of the subject `mysql.storedb.customers-value`
+```
+curl http://localhost:8081/subjects/mysql.storedb.customers-value/versions/latest
+```
+
+### Kibana
+
+`Kibana` can be accessed at http://localhost:5601
+
+### Kafka Manager
+
+`Kafka Manager` can be accessed at http://localhost:9000
+
+**Configuration**
+- First, you must create a new cluster. Click on `Cluster` (dropdown on the header) and then on `Add Cluster`
+- Type on `Cluster Name` field the name of your cluster, for example: `MyZooCluster`
+- On `Cluster Zookeeper Hosts` field type: `zookeeper:2181`
+- Click on `Save` button on the bottom of the page. Done!
+
+### Elasticsearch
+
+`Elasticsearch` can be accessed at http://localhost:9200
+
+- Get all indices
+```
+http://localhost:9200/_cat/indices?v
+```
+- Search for documents
+```
+http://localhost:9200/mysql.storedb.customers/_search?pretty
+http://localhost:9200/mysql.storedb.products/_search?pretty
+http://localhost:9200/store.streams.orders/_search?pretty
+```
 
 ### Kafkacat
 
@@ -313,8 +299,7 @@ docker run --tty --interactive --rm --network=springboot-kafka-connect-streams_d
 
 ### MySQL
 ```
-docker exec -it mysql bash -c 'mysql -uroot -psecret'
-use storedb;
+docker exec -it mysql mysql -uroot -psecret --database storedb
 select * from customers;
 ```
 
