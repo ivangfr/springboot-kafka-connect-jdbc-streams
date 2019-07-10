@@ -292,7 +292,7 @@ http://localhost:9200/store.streams.orders/_search?pretty
 
 ```
 docker run --tty --interactive --rm --network=springboot-kafka-connect-streams_default \
-  confluentinc/cp-kafkacat:5.1.0 kafkacat -b kafka:9092\
+  confluentinc/cp-kafkacat:5.2.2 kafkacat -b kafka:9092\
   -f '\nKey (%K bytes): %k\t\nValue (%S bytes): %s\n\Partition: %p\tOffset: %o\n--\n' \
   -t mysql.storedb.customers -C -c1
 ```
