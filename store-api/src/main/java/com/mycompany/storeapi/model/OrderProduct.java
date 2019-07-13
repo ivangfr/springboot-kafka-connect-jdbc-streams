@@ -22,12 +22,12 @@ public class OrderProduct {
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "order_id", foreignKey = @ForeignKey(name = "FK_ORDER"))
+    @JoinColumn(name = "order_id", nullable = false, foreignKey = @ForeignKey(name = "FK_ORDER"))
     private Order order;
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "product_id", foreignKey = @ForeignKey(name = "FK_PRODUCT"))
+    @JoinColumn(name = "product_id", nullable = false, foreignKey = @ForeignKey(name = "FK_PRODUCT"))
     private Product product;
 
     @Column(nullable = false)

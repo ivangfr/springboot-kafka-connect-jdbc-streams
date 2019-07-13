@@ -33,7 +33,7 @@ public class Order {
     private String id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id", foreignKey = @ForeignKey(name = "FK_CUSTOMER"))
+    @JoinColumn(name = "customer_id", nullable = false, foreignKey = @ForeignKey(name = "FK_CUSTOMER"))
     private Customer customer;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)

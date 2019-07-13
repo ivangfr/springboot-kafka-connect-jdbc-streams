@@ -10,26 +10,26 @@ spring:
           destination: mysql.storedb.customers
           group: storeStreamsGroup
           consumer:
-            nativeDecoding: true
+            useNativeDecoding: true
         product-input:
           destination: mysql.storedb.products
           group: storeStreamsGroup
           consumer:
-            nativeDecoding: true
+            useNativeDecoding: true
         order-input:
           destination: mysql.storedb.orders
           group: storeStreamsGroup
           consumer:
-            nativeDecoding: true
+            useNativeDecoding: true
         order-product-input:
           destination: mysql.storedb.orders_products
           group: storeStreamsGroup
           consumer:
-            nativeDecoding: true
+            useNativeDecoding: true
         order-output:
           destination: store.streams.orders
           producer:
-            nativeEncoding: true
+            useNativeEncoding: true
       kafka:
         streams:
           bindings:
@@ -43,18 +43,18 @@ spring:
                 keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
                 valueSerde: com.mycompany.storestreams.serde.json.ProductJsonSerde
                 materializedAs: ktable.products
-#            order-input:
-#              consumer:
-#                keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
-#                valueSerde: org.apache.kafka.common.serialization.Serdes$StringSerde
-#            order-product-input:
-#              consumer:
-#                keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
-#                valueSerde: org.apache.kafka.common.serialization.Serdes$StringSerde
-#            order-output:
-#              producer:
-#                keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
-#                valueSerde: org.apache.kafka.common.serialization.Serdes$StringSerde
+            order-input:
+              consumer:
+                keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
+                valueSerde: com.mycompany.storestreams.serde.json.OrderJsonSerde
+            order-product-input:
+              consumer:
+                keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
+                valueSerde: com.mycompany.storestreams.serde.json.OrderProductJsonSerde
+            order-output:
+              producer:
+                keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
+                valueSerde: com.mycompany.storestreams.serde.json.OrderDetailedJsonSerde
           binder:
             brokers: localhost:29092
             configuration:
@@ -62,6 +62,7 @@ spring:
               commit.interval.ms: 1000
               default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
               default.value.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+
 management:
   security:
     enabled: false
@@ -85,12 +86,22 @@ spring:
       schema:
         avro:
           dynamic-schema-generation-enabled: true
-#      bindings:
-#        order-input:
-#          content-type: application/*+avro
-#          consumer:
-#            nativeDecoding: true
-#        order-output:
-#          content-type: application/*+avro
-#          producer:
-#            nativeEncoding: true
+      kafka:
+        streams:
+          bindings:
+            customer-input:
+              consumer:
+                valueSerde: com.mycompany.storestreams.serde.avro.CustomerAvroSerde
+            product-input:
+              consumer:
+                valueSerde: com.mycompany.storestreams.serde.avro.ProductAvroSerde
+            order-input:
+              consumer:
+                valueSerde: com.mycompany.storestreams.serde.avro.OrderAvroSerde
+            order-product-input:
+              consumer:
+                valueSerde: com.mycompany.storestreams.serde.avro.OrderProductAvroSerde
+            order-output:
+              producer:
+                valueSerde: org.apache.kafka.common.serialization.Serdes$StringSerde
+

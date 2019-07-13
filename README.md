@@ -312,11 +312,8 @@ docker-compose down -v
 
 ## TODO
 
-1. implement `kafka-store-streams` using `spring-kafka` instead of `spring-cloud-streams` used by `store-streams`,
-because it is been hard to make TODO _item 2_ to work.
-
-2. adapt `store-streams` to run `For Avro (de)serialization`. I am having problem with making `spring-cloud-stream-kafka-streams`
-and `Avro` work together.
+- implement, inside `StoreStreamsAvro`, the logic to join `KTables` and `KStreams` to produce `OrderDetailed` output using `Avro`.
+- fix connector `avroconverter/elasticsearch-sink-orders.json`.
 
 ## References
 

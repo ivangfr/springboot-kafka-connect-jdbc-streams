@@ -1,6 +1,6 @@
 {
   "type": "record",
-  "name": "Order",
+  "name": "OrderDetailed",
   "namespace": "com.mycompany.commons.storeapp.avro",
   "fields": [
     {
@@ -26,12 +26,19 @@
     },
     {
       "name": "customer_id",
-      "type": [
-        "null",
-        "long"
-      ],
-      "default": null
+      "type": "long"
+    },
+    {
+      "name": "customer_name",
+      "type": "string"
+    },
+    {
+      "name": "products",
+      "type": {
+        "type": "array",
+        "items": "com.mycompany.commons.storeapp.avro.Product"
+      }
     }
   ],
-  "connect.name": "com.mycompany.commons.storeapp.avro.Order"
+  "connect.name": "com.mycompany.commons.storeapp.avro.OrderDetailed"
 }

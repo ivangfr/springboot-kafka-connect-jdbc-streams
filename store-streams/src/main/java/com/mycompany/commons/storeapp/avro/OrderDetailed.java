@@ -12,23 +12,23 @@ import org.apache.avro.message.SchemaStore;
 
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
-public class Order extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = -4729202181322962069L;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Order\",\"namespace\":\"com.mycompany.commons.storeapp.avro\",\"fields\":[{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"created_at\",\"type\":{\"type\":\"long\",\"connect.version\":1,\"connect.name\":\"org.apache.kafka.connect.data.Timestamp\",\"logicalType\":\"timestamp-millis\"}},{\"name\":\"payment_type\",\"type\":\"string\"},{\"name\":\"status\",\"type\":\"string\"},{\"name\":\"customer_id\",\"type\":[\"null\",\"long\"],\"default\":null}],\"connect.name\":\"com.mycompany.commons.storeapp.avro.Order\"}");
+public class OrderDetailed extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
+  private static final long serialVersionUID = -4247053473036058641L;
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"OrderDetailed\",\"namespace\":\"com.mycompany.commons.storeapp.avro\",\"fields\":[{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"created_at\",\"type\":{\"type\":\"long\",\"connect.version\":1,\"connect.name\":\"org.apache.kafka.connect.data.Timestamp\",\"logicalType\":\"timestamp-millis\"}},{\"name\":\"payment_type\",\"type\":\"string\"},{\"name\":\"status\",\"type\":\"string\"},{\"name\":\"customer_id\",\"type\":\"long\"},{\"name\":\"customer_name\",\"type\":\"string\"},{\"name\":\"products\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"Product\",\"fields\":[{\"name\":\"id\",\"type\":\"long\"},{\"name\":\"created_at\",\"type\":{\"type\":\"long\",\"connect.version\":1,\"connect.name\":\"org.apache.kafka.connect.data.Timestamp\",\"logicalType\":\"timestamp-millis\"}},{\"name\":\"name\",\"type\":\"string\"}],\"connect.name\":\"com.mycompany.commons.storeapp.avro.Product\"}}}],\"connect.name\":\"com.mycompany.commons.storeapp.avro.OrderDetailed\"}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static SpecificData MODEL$ = new SpecificData();
 
-  private static final BinaryMessageEncoder<Order> ENCODER =
-      new BinaryMessageEncoder<Order>(MODEL$, SCHEMA$);
+  private static final BinaryMessageEncoder<OrderDetailed> ENCODER =
+      new BinaryMessageEncoder<OrderDetailed>(MODEL$, SCHEMA$);
 
-  private static final BinaryMessageDecoder<Order> DECODER =
-      new BinaryMessageDecoder<Order>(MODEL$, SCHEMA$);
+  private static final BinaryMessageDecoder<OrderDetailed> DECODER =
+      new BinaryMessageDecoder<OrderDetailed>(MODEL$, SCHEMA$);
 
   /**
    * Return the BinaryMessageDecoder instance used by this class.
    */
-  public static BinaryMessageDecoder<Order> getDecoder() {
+  public static BinaryMessageDecoder<OrderDetailed> getDecoder() {
     return DECODER;
   }
 
@@ -36,17 +36,17 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
    * Create a new BinaryMessageDecoder instance for this class that uses the specified {@link SchemaStore}.
    * @param resolver a {@link SchemaStore} used to find schemas by fingerprint
    */
-  public static BinaryMessageDecoder<Order> createDecoder(SchemaStore resolver) {
-    return new BinaryMessageDecoder<Order>(MODEL$, SCHEMA$, resolver);
+  public static BinaryMessageDecoder<OrderDetailed> createDecoder(SchemaStore resolver) {
+    return new BinaryMessageDecoder<OrderDetailed>(MODEL$, SCHEMA$, resolver);
   }
 
-  /** Serializes this Order to a ByteBuffer. */
+  /** Serializes this OrderDetailed to a ByteBuffer. */
   public java.nio.ByteBuffer toByteBuffer() throws java.io.IOException {
     return ENCODER.encode(this);
   }
 
-  /** Deserializes a Order from a ByteBuffer. */
-  public static Order fromByteBuffer(
+  /** Deserializes a OrderDetailed from a ByteBuffer. */
+  public static OrderDetailed fromByteBuffer(
       java.nio.ByteBuffer b) throws java.io.IOException {
     return DECODER.decode(b);
   }
@@ -55,14 +55,16 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
   @Deprecated public org.joda.time.DateTime created_at;
   @Deprecated public java.lang.CharSequence payment_type;
   @Deprecated public java.lang.CharSequence status;
-  @Deprecated public java.lang.Long customer_id;
+  @Deprecated public long customer_id;
+  @Deprecated public java.lang.CharSequence customer_name;
+  @Deprecated public java.util.List<com.mycompany.commons.storeapp.avro.Product> products;
 
   /**
    * Default constructor.  Note that this does not initialize fields
    * to their default values from the schema.  If that is desired then
    * one should use <code>newBuilder()</code>.
    */
-  public Order() {}
+  public OrderDetailed() {}
 
   /**
    * All-args constructor.
@@ -71,13 +73,17 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
    * @param payment_type The new value for payment_type
    * @param status The new value for status
    * @param customer_id The new value for customer_id
+   * @param customer_name The new value for customer_name
+   * @param products The new value for products
    */
-  public Order(java.lang.CharSequence id, org.joda.time.DateTime created_at, java.lang.CharSequence payment_type, java.lang.CharSequence status, java.lang.Long customer_id) {
+  public OrderDetailed(java.lang.CharSequence id, org.joda.time.DateTime created_at, java.lang.CharSequence payment_type, java.lang.CharSequence status, java.lang.Long customer_id, java.lang.CharSequence customer_name, java.util.List<com.mycompany.commons.storeapp.avro.Product> products) {
     this.id = id;
     this.created_at = created_at;
     this.payment_type = payment_type;
     this.status = status;
     this.customer_id = customer_id;
+    this.customer_name = customer_name;
+    this.products = products;
   }
 
   public org.apache.avro.Schema getSchema() { return SCHEMA$; }
@@ -89,6 +95,8 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
     case 2: return payment_type;
     case 3: return status;
     case 4: return customer_id;
+    case 5: return customer_name;
+    case 6: return products;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
@@ -102,6 +110,8 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
       new org.apache.avro.Conversion<?>[] {
       null,
       TIMESTAMP_CONVERSION,
+      null,
+      null,
       null,
       null,
       null,
@@ -122,6 +132,8 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
     case 2: payment_type = (java.lang.CharSequence)value$; break;
     case 3: status = (java.lang.CharSequence)value$; break;
     case 4: customer_id = (java.lang.Long)value$; break;
+    case 5: customer_name = (java.lang.CharSequence)value$; break;
+    case 6: products = (java.util.List<com.mycompany.commons.storeapp.avro.Product>)value$; break;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
@@ -207,42 +219,76 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
   }
 
   /**
-   * Creates a new Order RecordBuilder.
-   * @return A new Order RecordBuilder
+   * Gets the value of the 'customer_name' field.
+   * @return The value of the 'customer_name' field.
    */
-  public static com.mycompany.commons.storeapp.avro.Order.Builder newBuilder() {
-    return new com.mycompany.commons.storeapp.avro.Order.Builder();
+  public java.lang.CharSequence getCustomerName() {
+    return customer_name;
   }
 
   /**
-   * Creates a new Order RecordBuilder by copying an existing Builder.
+   * Sets the value of the 'customer_name' field.
+   * @param value the value to set.
+   */
+  public void setCustomerName(java.lang.CharSequence value) {
+    this.customer_name = value;
+  }
+
+  /**
+   * Gets the value of the 'products' field.
+   * @return The value of the 'products' field.
+   */
+  public java.util.List<com.mycompany.commons.storeapp.avro.Product> getProducts() {
+    return products;
+  }
+
+  /**
+   * Sets the value of the 'products' field.
+   * @param value the value to set.
+   */
+  public void setProducts(java.util.List<com.mycompany.commons.storeapp.avro.Product> value) {
+    this.products = value;
+  }
+
+  /**
+   * Creates a new OrderDetailed RecordBuilder.
+   * @return A new OrderDetailed RecordBuilder
+   */
+  public static com.mycompany.commons.storeapp.avro.OrderDetailed.Builder newBuilder() {
+    return new com.mycompany.commons.storeapp.avro.OrderDetailed.Builder();
+  }
+
+  /**
+   * Creates a new OrderDetailed RecordBuilder by copying an existing Builder.
    * @param other The existing builder to copy.
-   * @return A new Order RecordBuilder
+   * @return A new OrderDetailed RecordBuilder
    */
-  public static com.mycompany.commons.storeapp.avro.Order.Builder newBuilder(com.mycompany.commons.storeapp.avro.Order.Builder other) {
-    return new com.mycompany.commons.storeapp.avro.Order.Builder(other);
+  public static com.mycompany.commons.storeapp.avro.OrderDetailed.Builder newBuilder(com.mycompany.commons.storeapp.avro.OrderDetailed.Builder other) {
+    return new com.mycompany.commons.storeapp.avro.OrderDetailed.Builder(other);
   }
 
   /**
-   * Creates a new Order RecordBuilder by copying an existing Order instance.
+   * Creates a new OrderDetailed RecordBuilder by copying an existing OrderDetailed instance.
    * @param other The existing instance to copy.
-   * @return A new Order RecordBuilder
+   * @return A new OrderDetailed RecordBuilder
    */
-  public static com.mycompany.commons.storeapp.avro.Order.Builder newBuilder(com.mycompany.commons.storeapp.avro.Order other) {
-    return new com.mycompany.commons.storeapp.avro.Order.Builder(other);
+  public static com.mycompany.commons.storeapp.avro.OrderDetailed.Builder newBuilder(com.mycompany.commons.storeapp.avro.OrderDetailed other) {
+    return new com.mycompany.commons.storeapp.avro.OrderDetailed.Builder(other);
   }
 
   /**
-   * RecordBuilder for Order instances.
+   * RecordBuilder for OrderDetailed instances.
    */
-  public static class Builder extends org.apache.avro.specific.SpecificRecordBuilderBase<Order>
-    implements org.apache.avro.data.RecordBuilder<Order> {
+  public static class Builder extends org.apache.avro.specific.SpecificRecordBuilderBase<OrderDetailed>
+    implements org.apache.avro.data.RecordBuilder<OrderDetailed> {
 
     private java.lang.CharSequence id;
     private org.joda.time.DateTime created_at;
     private java.lang.CharSequence payment_type;
     private java.lang.CharSequence status;
-    private java.lang.Long customer_id;
+    private long customer_id;
+    private java.lang.CharSequence customer_name;
+    private java.util.List<com.mycompany.commons.storeapp.avro.Product> products;
 
     /** Creates a new Builder */
     private Builder() {
@@ -253,7 +299,7 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
      * Creates a Builder by copying an existing Builder.
      * @param other The existing Builder to copy.
      */
-    private Builder(com.mycompany.commons.storeapp.avro.Order.Builder other) {
+    private Builder(com.mycompany.commons.storeapp.avro.OrderDetailed.Builder other) {
       super(other);
       if (isValidValue(fields()[0], other.id)) {
         this.id = data().deepCopy(fields()[0].schema(), other.id);
@@ -275,13 +321,21 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
         this.customer_id = data().deepCopy(fields()[4].schema(), other.customer_id);
         fieldSetFlags()[4] = true;
       }
+      if (isValidValue(fields()[5], other.customer_name)) {
+        this.customer_name = data().deepCopy(fields()[5].schema(), other.customer_name);
+        fieldSetFlags()[5] = true;
+      }
+      if (isValidValue(fields()[6], other.products)) {
+        this.products = data().deepCopy(fields()[6].schema(), other.products);
+        fieldSetFlags()[6] = true;
+      }
     }
 
     /**
-     * Creates a Builder by copying an existing Order instance
+     * Creates a Builder by copying an existing OrderDetailed instance
      * @param other The existing instance to copy.
      */
-    private Builder(com.mycompany.commons.storeapp.avro.Order other) {
+    private Builder(com.mycompany.commons.storeapp.avro.OrderDetailed other) {
             super(SCHEMA$);
       if (isValidValue(fields()[0], other.id)) {
         this.id = data().deepCopy(fields()[0].schema(), other.id);
@@ -303,6 +357,14 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
         this.customer_id = data().deepCopy(fields()[4].schema(), other.customer_id);
         fieldSetFlags()[4] = true;
       }
+      if (isValidValue(fields()[5], other.customer_name)) {
+        this.customer_name = data().deepCopy(fields()[5].schema(), other.customer_name);
+        fieldSetFlags()[5] = true;
+      }
+      if (isValidValue(fields()[6], other.products)) {
+        this.products = data().deepCopy(fields()[6].schema(), other.products);
+        fieldSetFlags()[6] = true;
+      }
     }
 
     /**
@@ -318,7 +380,7 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
       * @param value The value of 'id'.
       * @return This builder.
       */
-    public com.mycompany.commons.storeapp.avro.Order.Builder setId(java.lang.CharSequence value) {
+    public com.mycompany.commons.storeapp.avro.OrderDetailed.Builder setId(java.lang.CharSequence value) {
       validate(fields()[0], value);
       this.id = value;
       fieldSetFlags()[0] = true;
@@ -338,7 +400,7 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
       * Clears the value of the 'id' field.
       * @return This builder.
       */
-    public com.mycompany.commons.storeapp.avro.Order.Builder clearId() {
+    public com.mycompany.commons.storeapp.avro.OrderDetailed.Builder clearId() {
       id = null;
       fieldSetFlags()[0] = false;
       return this;
@@ -357,7 +419,7 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
       * @param value The value of 'created_at'.
       * @return This builder.
       */
-    public com.mycompany.commons.storeapp.avro.Order.Builder setCreatedAt(org.joda.time.DateTime value) {
+    public com.mycompany.commons.storeapp.avro.OrderDetailed.Builder setCreatedAt(org.joda.time.DateTime value) {
       validate(fields()[1], value);
       this.created_at = value;
       fieldSetFlags()[1] = true;
@@ -377,7 +439,7 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
       * Clears the value of the 'created_at' field.
       * @return This builder.
       */
-    public com.mycompany.commons.storeapp.avro.Order.Builder clearCreatedAt() {
+    public com.mycompany.commons.storeapp.avro.OrderDetailed.Builder clearCreatedAt() {
       fieldSetFlags()[1] = false;
       return this;
     }
@@ -395,7 +457,7 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
       * @param value The value of 'payment_type'.
       * @return This builder.
       */
-    public com.mycompany.commons.storeapp.avro.Order.Builder setPaymentType(java.lang.CharSequence value) {
+    public com.mycompany.commons.storeapp.avro.OrderDetailed.Builder setPaymentType(java.lang.CharSequence value) {
       validate(fields()[2], value);
       this.payment_type = value;
       fieldSetFlags()[2] = true;
@@ -415,7 +477,7 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
       * Clears the value of the 'payment_type' field.
       * @return This builder.
       */
-    public com.mycompany.commons.storeapp.avro.Order.Builder clearPaymentType() {
+    public com.mycompany.commons.storeapp.avro.OrderDetailed.Builder clearPaymentType() {
       payment_type = null;
       fieldSetFlags()[2] = false;
       return this;
@@ -434,7 +496,7 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
       * @param value The value of 'status'.
       * @return This builder.
       */
-    public com.mycompany.commons.storeapp.avro.Order.Builder setStatus(java.lang.CharSequence value) {
+    public com.mycompany.commons.storeapp.avro.OrderDetailed.Builder setStatus(java.lang.CharSequence value) {
       validate(fields()[3], value);
       this.status = value;
       fieldSetFlags()[3] = true;
@@ -454,7 +516,7 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
       * Clears the value of the 'status' field.
       * @return This builder.
       */
-    public com.mycompany.commons.storeapp.avro.Order.Builder clearStatus() {
+    public com.mycompany.commons.storeapp.avro.OrderDetailed.Builder clearStatus() {
       status = null;
       fieldSetFlags()[3] = false;
       return this;
@@ -473,7 +535,7 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
       * @param value The value of 'customer_id'.
       * @return This builder.
       */
-    public com.mycompany.commons.storeapp.avro.Order.Builder setCustomerId(java.lang.Long value) {
+    public com.mycompany.commons.storeapp.avro.OrderDetailed.Builder setCustomerId(long value) {
       validate(fields()[4], value);
       this.customer_id = value;
       fieldSetFlags()[4] = true;
@@ -493,22 +555,101 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
       * Clears the value of the 'customer_id' field.
       * @return This builder.
       */
-    public com.mycompany.commons.storeapp.avro.Order.Builder clearCustomerId() {
-      customer_id = null;
+    public com.mycompany.commons.storeapp.avro.OrderDetailed.Builder clearCustomerId() {
       fieldSetFlags()[4] = false;
+      return this;
+    }
+
+    /**
+      * Gets the value of the 'customer_name' field.
+      * @return The value.
+      */
+    public java.lang.CharSequence getCustomerName() {
+      return customer_name;
+    }
+
+    /**
+      * Sets the value of the 'customer_name' field.
+      * @param value The value of 'customer_name'.
+      * @return This builder.
+      */
+    public com.mycompany.commons.storeapp.avro.OrderDetailed.Builder setCustomerName(java.lang.CharSequence value) {
+      validate(fields()[5], value);
+      this.customer_name = value;
+      fieldSetFlags()[5] = true;
+      return this;
+    }
+
+    /**
+      * Checks whether the 'customer_name' field has been set.
+      * @return True if the 'customer_name' field has been set, false otherwise.
+      */
+    public boolean hasCustomerName() {
+      return fieldSetFlags()[5];
+    }
+
+
+    /**
+      * Clears the value of the 'customer_name' field.
+      * @return This builder.
+      */
+    public com.mycompany.commons.storeapp.avro.OrderDetailed.Builder clearCustomerName() {
+      customer_name = null;
+      fieldSetFlags()[5] = false;
+      return this;
+    }
+
+    /**
+      * Gets the value of the 'products' field.
+      * @return The value.
+      */
+    public java.util.List<com.mycompany.commons.storeapp.avro.Product> getProducts() {
+      return products;
+    }
+
+    /**
+      * Sets the value of the 'products' field.
+      * @param value The value of 'products'.
+      * @return This builder.
+      */
+    public com.mycompany.commons.storeapp.avro.OrderDetailed.Builder setProducts(java.util.List<com.mycompany.commons.storeapp.avro.Product> value) {
+      validate(fields()[6], value);
+      this.products = value;
+      fieldSetFlags()[6] = true;
+      return this;
+    }
+
+    /**
+      * Checks whether the 'products' field has been set.
+      * @return True if the 'products' field has been set, false otherwise.
+      */
+    public boolean hasProducts() {
+      return fieldSetFlags()[6];
+    }
+
+
+    /**
+      * Clears the value of the 'products' field.
+      * @return This builder.
+      */
+    public com.mycompany.commons.storeapp.avro.OrderDetailed.Builder clearProducts() {
+      products = null;
+      fieldSetFlags()[6] = false;
       return this;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public Order build() {
+    public OrderDetailed build() {
       try {
-        Order record = new Order();
+        OrderDetailed record = new OrderDetailed();
         record.id = fieldSetFlags()[0] ? this.id : (java.lang.CharSequence) defaultValue(fields()[0], record.getConversion(0));
         record.created_at = fieldSetFlags()[1] ? this.created_at : (org.joda.time.DateTime) defaultValue(fields()[1], record.getConversion(1));
         record.payment_type = fieldSetFlags()[2] ? this.payment_type : (java.lang.CharSequence) defaultValue(fields()[2], record.getConversion(2));
         record.status = fieldSetFlags()[3] ? this.status : (java.lang.CharSequence) defaultValue(fields()[3], record.getConversion(3));
         record.customer_id = fieldSetFlags()[4] ? this.customer_id : (java.lang.Long) defaultValue(fields()[4], record.getConversion(4));
+        record.customer_name = fieldSetFlags()[5] ? this.customer_name : (java.lang.CharSequence) defaultValue(fields()[5], record.getConversion(5));
+        record.products = fieldSetFlags()[6] ? this.products : (java.util.List<com.mycompany.commons.storeapp.avro.Product>) defaultValue(fields()[6], record.getConversion(6));
         return record;
       } catch (java.lang.Exception e) {
         throw new org.apache.avro.AvroRuntimeException(e);
@@ -517,8 +658,8 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
   }
 
   @SuppressWarnings("unchecked")
-  private static final org.apache.avro.io.DatumWriter<Order>
-    WRITER$ = (org.apache.avro.io.DatumWriter<Order>)MODEL$.createDatumWriter(SCHEMA$);
+  private static final org.apache.avro.io.DatumWriter<OrderDetailed>
+    WRITER$ = (org.apache.avro.io.DatumWriter<OrderDetailed>)MODEL$.createDatumWriter(SCHEMA$);
 
   @Override public void writeExternal(java.io.ObjectOutput out)
     throws java.io.IOException {
@@ -526,8 +667,8 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
   }
 
   @SuppressWarnings("unchecked")
-  private static final org.apache.avro.io.DatumReader<Order>
-    READER$ = (org.apache.avro.io.DatumReader<Order>)MODEL$.createDatumReader(SCHEMA$);
+  private static final org.apache.avro.io.DatumReader<OrderDetailed>
+    READER$ = (org.apache.avro.io.DatumReader<OrderDetailed>)MODEL$.createDatumReader(SCHEMA$);
 
   @Override public void readExternal(java.io.ObjectInput in)
     throws java.io.IOException {

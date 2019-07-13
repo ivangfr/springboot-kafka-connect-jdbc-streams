@@ -18,7 +18,6 @@
     <modules>
         <module>/store-api</module>
         <module>/store-streams</module>
-        <module>/kafka-store-streams</module>
     </modules>
 
     <properties>

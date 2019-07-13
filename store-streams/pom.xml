@@ -16,6 +16,7 @@
         <java.version>1.8</java.version>
         <avro.version>1.8.2</avro.version>
         <confluent.version>5.2.2</confluent.version>
+        <joda-time.version>2.10.1</joda-time.version>
     </properties>
 
     <dependencies>
@@ -55,6 +56,13 @@
             <version>${confluent.version}</version>
         </dependency>
 
+        <!-- Joda Time -->
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>${joda-time.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -72,6 +80,27 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.avro</groupId>
+                <artifactId>avro-maven-plugin</artifactId>
+                <version>${avro.version}</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>schema</goal>
+                        </goals>
+                        <configuration>
+                            <!-- The import in this order are needed so that Product can be referenced inside OrderDetailed -->
+                            <imports>
+                                <import>${project.basedir}/src/main/resources/avro/product-message.avsc</import>
+                            </imports>
+                            <sourceDirectory>${project.basedir}/src/main/resources/avro</sourceDirectory>
+                            <outputDirectory>${project.basedir}/src/main/java</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

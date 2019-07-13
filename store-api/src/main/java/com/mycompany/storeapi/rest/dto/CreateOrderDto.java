@@ -32,7 +32,7 @@ public class CreateOrderDto {
     @Data
     public static class CreateOrderProductDto {
 
-        @ApiModelProperty(example = "2")
+        @ApiModelProperty(example = "15")
         @NotNull
         private Long id;
 

@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.Set;
 
 @Data
-public class OrderDetail {
+public class OrderDetailed {
 
     private String id;
     private Long customer_id;
