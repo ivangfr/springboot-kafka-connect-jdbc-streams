@@ -48,7 +48,7 @@ public class StoreStreamsAvro {
         // TODO
 
         // Temporary output
-        KStream<String, String> tempKStream = orderIdKeyOrderValueKStream.map((s, order) -> new KeyValue<>(s, order.getCreatedAt().toString()));
+        KStream<String, String> tempKStream = orderIdKeyOrderValueKStream.map((s, order) -> new KeyValue<>(s, order.toString()));
         return tempKStream;
     }
 

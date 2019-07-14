@@ -1,5 +1,18 @@
 server.port: 9081
 
+management:
+  security:
+    enabled: false
+  endpoints:
+    web:
+      exposure.include: "*"
+  endpoint:
+    health:
+      show-details: always
+  health:
+    binders:
+      enabled: true
+
 spring:
   application:
     name: store-streams
@@ -58,34 +71,15 @@ spring:
           binder:
             brokers: localhost:29092
             configuration:
-              schema.registry.url: http://localhost:8081
               commit.interval.ms: 1000
               default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
               default.value.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
-
-management:
-  security:
-    enabled: false
-  endpoints:
-    web:
-      exposure.include: "*"
-  endpoint:
-    health:
-      show-details: always
-  health:
-    binders:
-      enabled: true
 
 ---
 spring:
   profiles: avro
   cloud:
     stream:
-      schema-registry-client:
-        endpoint: http://localhost:8081
-      schema:
-        avro:
-          dynamic-schema-generation-enabled: true
       kafka:
         streams:
           bindings:
@@ -104,4 +98,6 @@ spring:
             order-output:
               producer:
                 valueSerde: org.apache.kafka.common.serialization.Serdes$StringSerde
-
+          binder:
+            configuration:
+              schema.registry.url: http://localhost:8081
