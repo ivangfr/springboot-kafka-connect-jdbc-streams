@@ -13,12 +13,12 @@ import ma.glasnost.orika.MapperFacade;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.kstream.Aggregator;
+import org.apache.kafka.streams.kstream.Grouped;
 import org.apache.kafka.streams.kstream.Initializer;
 import org.apache.kafka.streams.kstream.Joined;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.KTable;
 import org.apache.kafka.streams.kstream.Materialized;
-import org.apache.kafka.streams.kstream.Serialized;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.Input;
 import org.springframework.cloud.stream.annotation.StreamListener;
@@ -52,10 +52,10 @@ public class StoreStreamsJson {
         //--
         // Useful for logging
         //
-        customerKTable.toStream().foreach((key, value) -> log.info("key: {}, value: {}", key, value));
-        productKTable.toStream().foreach((key, value) -> log.info("key: {}, value: {}", key, value));
-        orderIdKeyOrderValueKStream.foreach((key, value) -> log.info("key: {}, value: {}", key, value));
-        orderIdKeyOrderProductValueKStream.foreach((key, value) -> log.info("key: {}, value: {}", key, value));
+        customerKTable.toStream().foreach(this::logKeyValue);
+        productKTable.toStream().foreach(this::logKeyValue);
+        orderIdKeyOrderValueKStream.foreach(this::logKeyValue);
+        orderIdKeyOrderProductValueKStream.foreach(this::logKeyValue);
 
         // --
         // Add customer info to OrderDetailed
@@ -99,7 +99,7 @@ public class StoreStreamsJson {
         // Aggregate (in a Set) ProductDetail by order
 
         KTable<String, Set> orderIdKeyOrderProductDetailSetValueKTable = orderIdKeyProductDetailValueKStream
-                .groupByKey(Serialized.with(Serdes.String(), JsonSerdeFactory.productDetailSerde))
+                .groupByKey(Grouped.with(Serdes.String(), JsonSerdeFactory.productDetailSerde))
                 .aggregate(new Initializer<Set>() {
                     @Override
                     public Set apply() {
@@ -122,9 +122,13 @@ public class StoreStreamsJson {
                     return orderDetailed;
                 }, Joined.with(Serdes.String(), JsonSerdeFactory.orderDetailedSerde, JsonSerdeFactory.setSerde));
 
-        orderIdKeyOrderDetailedValueKStream.foreach((key, value) -> log.info("==> key: {}, value: {}", key, value));
+        orderIdKeyOrderDetailedValueKStream.foreach(this::logKeyValue);
 
         return orderIdKeyOrderDetailedValueKStream;
+    }
+
+    private void logKeyValue(String key, Object value) {
+        log.info("==> key: {}, value: {}", key, value);
     }
 
 }

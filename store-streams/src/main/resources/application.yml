@@ -1,17 +1,12 @@
 server.port: 9081
 
 management:
-  security:
-    enabled: false
   endpoints:
     web:
       exposure.include: "*"
   endpoint:
     health:
       show-details: always
-  health:
-    binders:
-      enabled: true
 
 spring:
   application:

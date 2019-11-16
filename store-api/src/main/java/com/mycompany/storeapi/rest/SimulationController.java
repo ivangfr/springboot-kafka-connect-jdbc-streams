@@ -36,7 +36,7 @@ public class SimulationController {
     @Value("${simulation.orders.sleep}")
     private Integer sleep;
 
-    private final static Random random = new Random();
+    private static final Random random = new Random();
 
     private final CustomerService customerService;
     private final ProductService productService;

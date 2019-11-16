@@ -11,7 +11,7 @@ public class UpdateOrderDto {
     @ApiModelProperty(example = "CASH")
     private PaymentType paymentType;
 
-    @ApiModelProperty(position = 2, example = "PAYED")
+    @ApiModelProperty(position = 1, example = "PAYED")
     private OrderStatus status;
 
 }

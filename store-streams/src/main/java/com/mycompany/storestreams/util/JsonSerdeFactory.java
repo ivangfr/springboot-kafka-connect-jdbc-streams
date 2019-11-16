@@ -23,6 +23,9 @@ public class JsonSerdeFactory {
     public static final Serde<OrderProduct> orderProductSerde;
     public static final Serde<Set> setSerde;
 
+    private JsonSerdeFactory() {
+    }
+
     static {
         JsonSerializer<Customer> customerSerializer = new JsonSerializer<>();
         JsonDeserializer<Customer> customerDeserializer = new JsonDeserializer<>(Customer.class);

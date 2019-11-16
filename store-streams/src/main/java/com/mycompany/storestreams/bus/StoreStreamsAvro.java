@@ -40,10 +40,10 @@ public class StoreStreamsAvro {
         //--
         // Useful for logging
         //
-        customerKTable.toStream().foreach((key, value) -> log.info("key: {}, value: {}", key, value));
-        productKTable.toStream().foreach((key, value) -> log.info("key: {}, value: {}", key, value));
-        orderIdKeyOrderValueKStream.foreach((key, value) -> log.info("key: {}, value: {}", key, value));
-        orderIdKeyOrderProductValueKStream.foreach((key, value) -> log.info("key: {}, value: {}", key, value));
+        customerKTable.toStream().foreach(this::logKeyValue);
+        productKTable.toStream().foreach(this::logKeyValue);
+        orderIdKeyOrderValueKStream.foreach(this::logKeyValue);
+        orderIdKeyOrderProductValueKStream.foreach(this::logKeyValue);
 
         // TODO
 
@@ -52,4 +52,7 @@ public class StoreStreamsAvro {
         return tempKStream;
     }
 
+    private void logKeyValue(String key, Object value) {
+        log.info("==> key: {}, value: {}", key, value);
+    }
 }

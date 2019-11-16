@@ -9,19 +9,21 @@ listen messages from `Kafka` and insert/update documents in [`Elasticsearch`](ht
 `store-streams` that listens messages from `Kafka`, treats them using `Kafka Streams` and push new messages back to
 `Kafka`.
 
-## Microservices
+## Project Diagram
 
 ![project-diagram](images/project-diagram.png)
 
+## Applications
+
 ### store-api
 
-Monolithic Spring-Boot application that exposes a REST API to manage `Customers`, `Products` and `Orders`. The data is
-stored in `MySQL`. 
+Monolithic `Spring Boot` application that exposes a REST API to manage `Customers`, `Products` and `Orders`. The data
+is stored in `MySQL`. 
 
 ### store-streams
 
-Spring-boot application that connects to `Kafka` and uses `Kafka Streams API` to transform some _"input"_ topics into a
-new _"output"_ topic in `Kafka`.
+`Spring Boot` application that connects to `Kafka` and uses `Kafka Streams API` to transform some _"input"_ topics into
+a new _"output"_ topic in `Kafka`.
 
 ## (De)Serialization formats
 
@@ -34,7 +36,7 @@ you want to use `Avro`.
 
 ## Start Environment
 
-Open one terminal and inside `springboot-kafka-connect-streams` root folder run
+Open a terminal and inside `springboot-kafka-connect-streams` root folder run
 ```
 docker-compose up -d
 ```
@@ -162,6 +164,7 @@ curl -i -X POST http://localhost:9080/api/orders \
   -H 'Content-Type: application/json' \
   -d '{"customerId": 1, "paymentType": "BITCOIN", "status": "OPEN", "products": [{"id": 15, "unit": 1}]}'
 ```
+
 The response should be
 ```
 HTTP/1.1 201
@@ -280,20 +283,20 @@ curl http://localhost:8081/subjects/mysql.storedb.customers-value/versions/lates
 
 - Get all indices
 ```
-http://localhost:9200/_cat/indices?v
+curl http://localhost:9200/_cat/indices?v
 ```
 - Search for documents
 ```
-http://localhost:9200/mysql.storedb.customers/_search?pretty
-http://localhost:9200/mysql.storedb.products/_search?pretty
-http://localhost:9200/store.streams.orders/_search?pretty
+curl http://localhost:9200/mysql.storedb.customers/_search?pretty
+curl http://localhost:9200/mysql.storedb.products/_search?pretty
+curl http://localhost:9200/store.streams.orders/_search?pretty
 ```
 
 ### Kafkacat
 
 ```
 docker run --tty --interactive --rm --network=springboot-kafka-connect-streams_default \
-  confluentinc/cp-kafkacat:5.2.2 kafkacat -b kafka:9092\
+  confluentinc/cp-kafkacat:5.3.1 kafkacat -b kafka:9092\
   -f '\nKey (%K bytes): %k\t\nValue (%S bytes): %s\n\Partition: %p\tOffset: %o\n--\n' \
   -t mysql.storedb.customers -C -c1
 ```

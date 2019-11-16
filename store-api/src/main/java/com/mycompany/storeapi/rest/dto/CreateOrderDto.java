@@ -17,15 +17,15 @@ public class CreateOrderDto {
     @NotNull
     private Long customerId;
 
-    @ApiModelProperty(position = 2, example = "BITCOIN")
+    @ApiModelProperty(position = 1, example = "BITCOIN")
     @NotNull
     private PaymentType paymentType;
 
-    @ApiModelProperty(position = 3, example = "OPEN")
+    @ApiModelProperty(position = 2, example = "OPEN")
     @NotNull
     private OrderStatus status;
 
-    @ApiModelProperty(position = 4)
+    @ApiModelProperty(position = 3)
     @Valid
     private List<CreateOrderProductDto> products;
 
@@ -36,7 +36,7 @@ public class CreateOrderDto {
         @NotNull
         private Long id;
 
-        @ApiModelProperty(position = 2, example = "1")
+        @ApiModelProperty(position = 1, example = "1")
         @NotNull
         @Positive
         private Integer unit;

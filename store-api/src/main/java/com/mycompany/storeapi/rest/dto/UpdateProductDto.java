@@ -12,7 +12,7 @@ public class UpdateProductDto {
     @ApiModelProperty(example = "MacBook Air")
     private String name;
 
-    @ApiModelProperty(position = 2, example = "2450")
+    @ApiModelProperty(position = 1, example = "2450")
     @Positive
     private BigDecimal price;
 

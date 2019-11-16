@@ -15,7 +15,7 @@ public class AddProductDto {
     @NotBlank
     private String name;
 
-    @ApiModelProperty(position = 2, example = "2500")
+    @ApiModelProperty(position = 1, example = "2500")
     @NotNull
     @Positive
     private BigDecimal price;
