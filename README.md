@@ -1,13 +1,6 @@
 # `springboot-kafka-connect-streams`
 
-The main goal of this project is to play with [`Kafka`](https://kafka.apache.org),
-[`Kafka Connect`](https://docs.confluent.io/current/connect/index.html) and
-[`Kafka Streams`](https://docs.confluent.io/current/streams/index.html). For this, we have: `store-api` that
-inserts/updates records in [`MySQL`](https://www.mysql.com); `Source Connectors` that monitor
-inserted/updated records in `MySQL` and push messages related to those changes to `Kafka`; `Sink Connectors` that
-listen messages from `Kafka` and insert/update documents in [`Elasticsearch`](https://www.elastic.co); finally,
-`store-streams` that listens messages from `Kafka`, treats them using `Kafka Streams` and push new messages back to
-`Kafka`.
+The main goal of this project is to play with [`Kafka`](https://kafka.apache.org), [`Kafka Connect`](https://docs.confluent.io/current/connect/index.html) and [`Kafka Streams`](https://docs.confluent.io/current/streams/index.html). For this, we have: `store-api` that inserts/updates records in [`MySQL`](https://www.mysql.com); `Source Connectors` that monitor inserted/updated records in `MySQL` and push messages related to those changes to `Kafka`; `Sink Connectors` that listen messages from `Kafka` and insert/update documents in [`Elasticsearch`](https://www.elastic.co); finally, `store-streams` that listens messages from `Kafka`, treats them using `Kafka Streams` and push new messages back to `Kafka`.
 
 ## Project Diagram
 
@@ -17,20 +10,15 @@ listen messages from `Kafka` and insert/update documents in [`Elasticsearch`](ht
 
 ### store-api
 
-Monolithic `Spring Boot` application that exposes a REST API to manage `Customers`, `Products` and `Orders`. The data
-is stored in `MySQL`. 
+Monolithic [`Spring Boot`]() application that exposes a REST API to manage `Customers`, `Products` and `Orders`. The data is stored in `MySQL`. 
 
 ### store-streams
 
-`Spring Boot` application that connects to `Kafka` and uses `Kafka Streams API` to transform some _"input"_ topics into
-a new _"output"_ topic in `Kafka`.
+`Spring Boot` application that connects to `Kafka` and uses `Kafka Streams API` to transform some _"input"_ topics into a new _"output"_ topic in `Kafka`.
 
 ## (De)Serialization formats
 
-In order to run this project, you can use [`JSON`](https://www.json.org) or
-[`Avro`](http://avro.apache.org/docs/current/gettingstartedjava.html) format to serialize/deserialize data to/from the
-`binary` format used by Kafka. The default format is `JSON`. Throughout this document, I will point out what to do if
-you want to use `Avro`.
+In order to run this project, you can use [`JSON`](https://www.json.org) or [`Avro`](http://avro.apache.org/docs/current/gettingstartedjava.html) format to serialize/deserialize data to/from the `binary` format used by Kafka. The default format is `JSON`. Throughout this document, I will point out what to do if you want to use `Avro`.
 
 **P.S. Avro (de)serialization is not completely implemented!**
 
@@ -40,8 +28,7 @@ Open a terminal and inside `springboot-kafka-connect-streams` root folder run
 ```
 docker-compose up -d
 ```
-> During the first run, an image for `kafka-connect` will be built, whose name is
-> `springboot-kafka-connect-streams_kafka-connect`. To rebuild this image run
+> **Note**: During the first run, an image for `kafka-connect` will be built, whose name is `springboot-kafka-connect-streams_kafka-connect`. To rebuild this image run
 > ```
 > docker-compose build
 > ```
@@ -53,14 +40,13 @@ docker-compose ps
 
 ## Run store-api
 
-**It is important to run `store-api` first because it will initialize the MySQL database**.
+**It is important to run `store-api` first because it will initialize the `MySQL` database**.
 
 In a new terminal, run the command below inside `springboot-kafka-connect-streams` root folder
 ```
 ./mvnw spring-boot:run --projects store-api
 ```
-> Note. It will create some customers and products. If you don't want it, just set to `false` the properties
-> `load-samples.customers.enabled` and `load-samples.products.enabled` in `application.yml`.
+> **Note**: It will create some customers and products. If you don't want it, just set to `false` the properties `load-samples.customers.enabled` and `load-samples.products.enabled` in `application.yml`.
 
 The Swagger link is http://localhost:9080/swagger-ui.html
 
@@ -69,14 +55,15 @@ The Swagger link is http://localhost:9080/swagger-ui.html
 ## Create connectors
 
 In a terminal, run the following script to create the connectors on `kafka-connect`
+
 - **For JSON (de)serialization**
-```
-./create-connectors-jsonconverter.sh
-```
+  ```
+  ./create-connectors-jsonconverter.sh
+  ```
 - **For Avro (de)serialization**
-```
-./create-connectors-avroconverter.sh
-```
+  ```
+  ./create-connectors-avroconverter.sh
+  ```
 
 You can check the state of the connectors and their tasks on `Kafka Connect UI` or running the following script
 ```
@@ -103,31 +90,26 @@ If there is any problem, you can check `kafka-connect` container logs.
 docker logs kafka-connect -f
 ```
 
-Connectors use `Converters` for data serialization and deserialization. If you are configuring `For JSON (de)serialization`,
-the converter used is `JsonConverter`. On the other hand, the converter used is `AvroConverter`.
+Connectors use `Converters` for data serialization and deserialization. If you are configuring `For JSON (de)serialization`, the converter used is `JsonConverter`. On the other hand, the converter used is `AvroConverter`.
 
-**IMPORTANT**: if the `Source Connector Converter` serializes data, for instance, from `JSON` to `bytes` (using
-`JsonConverter`), then the `Sink Connector Converter` must also use `JsonConverter` to deserialize the `bytes`,
-otherwise an error will be thrown. The document
-[Kafka Connect Deep Dive – Converters and Serialization Explained](https://www.confluent.io/blog/kafka-connect-deep-dive-converters-serialization-explained)
-explains it very well.
+**IMPORTANT**: if the `Source Connector Converter` serializes data, for instance, from `JSON` to `bytes` (using `JsonConverter`), then the `Sink Connector Converter` must also use `JsonConverter` to deserialize the `bytes`, otherwise an error will be thrown. The document [Kafka Connect Deep Dive – Converters and Serialization Explained](https://www.confluent.io/blog/kafka-connect-deep-dive-converters-serialization-explained) explains it very well.
 
 ## Run store-streams
 
 Open a new terminal and inside `springboot-kafka-connect-streams` root folder, run
-- **For JSON (de)serialization**
-```
-./mvnw spring-boot:run --projects store-streams
-```
-- **For Avro (de)serialization (NOT READY!)**
-```
-./mvnw spring-boot:run --projects store-streams -Dspring-boot.run.profiles=avro
-```
 
-> Note. the command below generates Java classes from Avro files
-> ```
-> ./mvnw generate-sources --projects store-streams
-> ```
+- **For JSON (de)serialization**
+  ```
+  ./mvnw spring-boot:run --projects store-streams
+  ```
+- **For Avro (de)serialization (NOT READY!)**
+  ```
+  ./mvnw spring-boot:run --projects store-streams -Dspring-boot.run.profiles=avro
+  ```
+  > The command below generates Java classes from Avro files
+  > ```
+  > ./mvnw generate-sources --projects store-streams
+  > ```
 
 This service runs on port `9081`. The `health` endpoint is http://localhost:9081/actuator/health
 
@@ -157,8 +139,15 @@ The response should be no orders
 ```
 
 Let's simulate an order creation. In this example, customer with id `1`
-(`{"id":1, "name":"John Gates", "email":"john.gates@test.com", "address":"street 1", "phone":"112233"}`)
-will order one unit of the product with id `15` (`{"id":15, "name":"iPhone Xr", "price":900.00}`).
+```
+{"id":1, "name":"John Gates", "email":"john.gates@test.com", "address":"street 1", "phone":"112233"}
+```
+will order one unit of the product with id `15`
+```
+{"id":15, "name":"iPhone Xr", "price":900.00}
+```
+
+The `curl` command is
 ```
 curl -i -X POST http://localhost:9080/api/orders \
   -H 'Content-Type: application/json' \
@@ -169,16 +158,16 @@ The response should be
 ```
 HTTP/1.1 201
 {
+  "id": "7daefa93-4b96-4174-bc20-5890e3e788cb",
   "customerId": 1,
-  "id": "00f708f2-0b0d-47d0-9d90-e42a34857064",
   "paymentType": "BITCOIN",
+  "status": "OPEN",
   "products": [
     {
       "id": 15,
       "unit": 1
     }
-  ],
-  "status": "OPEN"
+  ]
 }
 ```
 
@@ -189,7 +178,7 @@ curl http://localhost:9200/store.streams.orders/_search?pretty
 We should have one order with customer and products names.
 ```
 {
-  "took" : 55,
+  "took" : 12,
   "timed_out" : false,
   "_shards" : {
     "total" : 5,
@@ -204,12 +193,12 @@ We should have one order with customer and products names.
       {
         "_index" : "store.streams.orders",
         "_type" : "order",
-        "_id" : "ce314c0b-8e9b-47b7-9522-defacd163656",
+        "_id" : "7daefa93-4b96-4174-bc20-5890e3e788cb",
         "_score" : 1.0,
         "_source" : {
           "payment_type" : "BITCOIN",
-          "created_at" : "2019-07-08T22:12:44.000+0000",
-          "id" : "ce314c0b-8e9b-47b7-9522-defacd163656",
+          "created_at" : 1583066621332,
+          "id" : "7daefa93-4b96-4174-bc20-5890e3e788cb",
           "customer_name" : "John Gates",
           "customer_id" : 1,
           "status" : "OPEN",
@@ -239,28 +228,28 @@ curl -i -X POST http://localhost:9080/api/simulation/orders \
 
 ### Kafka Topics UI
 
-Kafka Topics UI can be accessed at http://localhost:8085
+`Kafka Topics UI` can be accessed at http://localhost:8085
 
 ### Kafka Connect UI
 
-Kafka Connect UI can be accessed at http://localhost:8086
+`Kafka Connect UI` can be accessed at http://localhost:8086
 
 ### Schema Registry UI
 
-Schema Registry UI can be accessed at http://localhost:8001
+`Schema Registry UI` can be accessed at http://localhost:8001
 
 ### Schema Registry
 
-You can use `curl` to check the subjects in Schema Registry
+You can use `curl` to check the subjects in `Schema Registry`
 
 - Get the list of subjects
-```
-curl localhost:8081/subjects
-```
+  ```
+  curl localhost:8081/subjects
+  ```
 - Get the latest version of the subject `mysql.storedb.customers-value`
-```
-curl http://localhost:8081/subjects/mysql.storedb.customers-value/versions/latest
-```
+  ```
+  curl http://localhost:8081/subjects/mysql.storedb.customers-value/versions/latest
+  ```
 
 ### Kibana
 
@@ -282,15 +271,15 @@ curl http://localhost:8081/subjects/mysql.storedb.customers-value/versions/lates
 `Elasticsearch` can be accessed at http://localhost:9200
 
 - Get all indices
-```
-curl http://localhost:9200/_cat/indices?v
-```
+  ```
+  curl http://localhost:9200/_cat/indices?v
+  ```
 - Search for documents
-```
-curl http://localhost:9200/mysql.storedb.customers/_search?pretty
-curl http://localhost:9200/mysql.storedb.products/_search?pretty
-curl http://localhost:9200/store.streams.orders/_search?pretty
-```
+  ```
+  curl http://localhost:9200/mysql.storedb.customers/_search?pretty
+  curl http://localhost:9200/mysql.storedb.products/_search?pretty
+  curl http://localhost:9200/store.streams.orders/_search?pretty
+  ```
 
 ### Kafkacat
 
@@ -304,7 +293,7 @@ docker run --tty --interactive --rm --network=springboot-kafka-connect-streams_d
 ### MySQL
 ```
 docker exec -it mysql mysql -uroot -psecret --database storedb
-select * from customers;
+select * from orders;
 ```
 
 ## Shutdown
@@ -319,11 +308,11 @@ docker-compose down -v
 - implement, inside `StoreStreamsAvro`, the logic to join `KTables` and `KStreams` to produce `OrderDetailed` output using `Avro`.
 - fix connector `avroconverter/elasticsearch-sink-orders.json`.
 
+## Issues
+
+- Product `price` field, [numeric.mapping doesn't work for DECIMAL fields #563](https://github.com/confluentinc/kafka-connect-jdbc/issues/563)
+
 ## References
 
 - https://www.confluent.io/blog/simplest-useful-kafka-connect-data-pipeline-world-thereabouts-part-1 (2 and 3)
 - https://www.confluent.io/blog/kafka-connect-deep-dive-converters-serialization-explained
-
-## Issues
-
-- Product `price` field, [numeric.mapping doesn't work for DECIMAL fields #563](https://github.com/confluentinc/kafka-connect-jdbc/issues/563)
