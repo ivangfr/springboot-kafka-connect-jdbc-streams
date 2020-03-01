@@ -52,16 +52,16 @@ public class StoreStreamsJson {
         //--
         // Useful for logging
         //
-        customerKTable.toStream().foreach(this::logDebugKeyValue);
-        productKTable.toStream().foreach(this::logDebugKeyValue);
-        orderIdKeyOrderValueKStream.foreach(this::logDebugKeyValue);
-        orderIdKeyOrderProductValueKStream.foreach(this::logDebugKeyValue);
+        customerKTable.toStream().foreach(this::logKeyValue);
+        productKTable.toStream().foreach(this::logKeyValue);
+        orderIdKeyOrderValueKStream.foreach(this::logKeyValue);
+        orderIdKeyOrderProductValueKStream.foreach(this::logKeyValue);
 
         // --
         // Add customer info to OrderDetailed
 
         KStream<String, Order> customerIdKeyOrderValueKStream = orderIdKeyOrderValueKStream
-                .map((s, order) -> new KeyValue<>(order.getCustomer_id().toString(), order));
+                .map((key, order) -> new KeyValue<>(order.getCustomer_id().toString(), order));
 
         KStream<String, OrderDetailed> customerIdKeyOrderDetailedValueKStream = customerIdKeyOrderValueKStream
                 .join(customerKTable, (order, customer) -> {
@@ -71,13 +71,13 @@ public class StoreStreamsJson {
                 }, Joined.with(Serdes.String(), JsonSerdeFactory.orderSerde, JsonSerdeFactory.customerSerde));
 
         KStream<String, OrderDetailed> orderIdKeyOrderDetailedWithoutProductsSetValueKStream = customerIdKeyOrderDetailedValueKStream
-                .map((s, orderDetailed) -> new KeyValue<>(orderDetailed.getId(), orderDetailed));
+                .map((key, orderDetailed) -> new KeyValue<>(orderDetailed.getId(), orderDetailed));
 
         // --
         // Add product info to OrderProductDetail
 
         KStream<String, OrderProduct> productIdKeyOrderProductValueKStream = orderIdKeyOrderProductValueKStream
-                .map((s, orderProduct) -> new KeyValue<>(orderProduct.getProduct_id().toString(), orderProduct));
+                .map((key, orderProduct) -> new KeyValue<>(orderProduct.getProduct_id().toString(), orderProduct));
 
         KStream<String, OrderProductDetail> productIdKeyOrderProductDetailValueKStream = productIdKeyOrderProductValueKStream
                 .join(productKTable, (orderProduct, product) -> {
@@ -87,7 +87,7 @@ public class StoreStreamsJson {
                 }, Joined.with(Serdes.String(), JsonSerdeFactory.orderProductSerde, JsonSerdeFactory.productSerde));
 
         KStream<String, OrderProductDetail> orderIdKeyOrderProductDetailValueKStream = productIdKeyOrderProductDetailValueKStream
-                .map((s, orderProductDetail) -> new KeyValue<>(orderProductDetail.getOrder_id(), orderProductDetail));
+                .map((key, orderProductDetail) -> new KeyValue<>(orderProductDetail.getOrder_id(), orderProductDetail));
 
         // --
         // Extract OrderProductDetail to ProductDetail
@@ -102,7 +102,7 @@ public class StoreStreamsJson {
                 .groupByKey(Grouped.with(Serdes.String(), JsonSerdeFactory.productDetailSerde))
                 .aggregate(
                         LinkedHashSet::new,
-                        (s, productDetail, set) -> {
+                        (key, productDetail, set) -> {
                             set.add(productDetail);
                             return set;
                         }, Materialized.with(Serdes.String(), JsonSerdeFactory.setSerde));
@@ -119,18 +119,15 @@ public class StoreStreamsJson {
                 .leftJoin(orderIdKeyOrderProductDetailSetValueKStream, (orderDetailed, set) -> {
                     orderDetailed.setProducts(set);
                     return orderDetailed;
-                }, JoinWindows.of(Duration.ofSeconds(60)), Joined.with(Serdes.String(), JsonSerdeFactory.orderDetailedSerde, JsonSerdeFactory.setSerde));
+                }, JoinWindows.of(Duration.ofHours(1)), Joined.with(Serdes.String(), JsonSerdeFactory.orderDetailedSerde, JsonSerdeFactory.setSerde));
 
-        orderIdKeyOrderDetailedValueKStream.foreach(this::logInfoKeyValue);
+        orderIdKeyOrderDetailedValueKStream.foreach(this::logKeyValue);
 
         return orderIdKeyOrderDetailedValueKStream;
     }
 
-    private void logInfoKeyValue(String key, Object value) {
+    private void logKeyValue(String key, Object value) {
         log.info("==> key: {}, value: {}", key, value);
-    }
-    private void logDebugKeyValue(String key, Object value) {
-        log.debug("==> key: {}, value: {}", key, value);
     }
 
 }
