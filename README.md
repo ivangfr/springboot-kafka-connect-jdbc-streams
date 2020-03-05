@@ -40,7 +40,7 @@ docker-compose ps
 
 ## Run store-api
 
-**It is important to run `store-api` first because it will initialize the `MySQL` database**.
+**Important**: run `store-api` first because it will initialize the `MySQL` database.
 
 In a new terminal, run the command below inside `springboot-kafka-connect-streams` root folder
 ```
@@ -92,7 +92,7 @@ docker logs kafka-connect -f
 
 Connectors use `Converters` for data serialization and deserialization. If you are configuring `For JSON (de)serialization`, the converter used is `JsonConverter`. On the other hand, the converter used is `AvroConverter`.
 
-**IMPORTANT**: if the `Source Connector Converter` serializes data, for instance, from `JSON` to `bytes` (using `JsonConverter`), then the `Sink Connector Converter` must also use `JsonConverter` to deserialize the `bytes`, otherwise an error will be thrown. The document [Kafka Connect Deep Dive – Converters and Serialization Explained](https://www.confluent.io/blog/kafka-connect-deep-dive-converters-serialization-explained) explains it very well.
+**Important**: if the `Source Connector Converter` serializes data, for instance, from `JSON` to `bytes` (using `JsonConverter`), then the `Sink Connector Converter` must also use `JsonConverter` to deserialize the `bytes`, otherwise an error will be thrown. The document [Kafka Connect Deep Dive – Converters and Serialization Explained](https://www.confluent.io/blog/kafka-connect-deep-dive-converters-serialization-explained) explains it very well.
 
 ## Run store-streams
 
@@ -115,7 +115,7 @@ This service runs on port `9081`. The `health` endpoint is http://localhost:9081
 
 ## Testing
 
-First, let's check the orders we have in `Elasticsearch`
+First, let's check the orders we have in `Elasticsearch`. For it, run the following command in a terminal
 ```
 curl http://localhost:9200/store.streams.orders/_search?pretty
 ```
@@ -224,6 +224,14 @@ curl -i -X POST http://localhost:9080/api/simulation/orders \
   -d '{"total": 5, "sleep": 100}'
 ```
 
+## Shutdown
+
+- Go to the terminals where `store-api` and `store-streams` are running and press `Ctrl+C` to stop them 
+- Run the command below in order to stop and remove Docker containers, networks and volumes
+  ```
+  docker-compose down -v
+  ```
+
 ## Useful Links/Commands
 
 ### Kafka Topics UI
@@ -281,6 +289,12 @@ You can use `curl` to check the subjects in `Schema Registry`
   curl http://localhost:9200/store.streams.orders/_search?pretty
   ```
 
+### MySQL
+```
+docker exec -it mysql mysql -uroot -psecret --database storedb
+select * from orders;
+```
+
 ### Kafkacat
 
 ```
@@ -288,19 +302,6 @@ docker run --tty --interactive --rm --network=springboot-kafka-connect-streams_d
   confluentinc/cp-kafkacat:5.3.1 kafkacat -b kafka:9092\
   -f '\nKey (%K bytes): %k\t\nValue (%S bytes): %s\n\Partition: %p\tOffset: %o\n--\n' \
   -t mysql.storedb.customers -C -c1
-```
-
-### MySQL
-```
-docker exec -it mysql mysql -uroot -psecret --database storedb
-select * from orders;
-```
-
-## Shutdown
-
-Run the command below in order to stop and remove containers, networks and volumes
-```
-docker-compose down -v
 ```
 
 ## TODO
