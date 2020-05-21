@@ -16,11 +16,12 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <avro.version>1.8.2</avro.version>
-        <confluent.version>5.3.1</confluent.version>
+        <avro.version>1.9.2</avro.version>
+        <confluent.version>5.4.1</confluent.version>
         <joda-time.version>2.10.5</joda-time.version>
         <springfox.version>2.9.2</springfox.version>
         <orika.version>1.5.4</orika.version>
+        <spring-cloud.version>Hoxton.SR4</spring-cloud.version>
     </properties>
 
     <dependencies>
@@ -104,6 +105,18 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <plugins>

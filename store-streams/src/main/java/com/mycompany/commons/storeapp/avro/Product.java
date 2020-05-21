@@ -5,12 +5,13 @@
  */
 package com.mycompany.commons.storeapp.avro;
 
+import org.apache.avro.generic.GenericArray;
 import org.apache.avro.specific.SpecificData;
+import org.apache.avro.util.Utf8;
 import org.apache.avro.message.BinaryMessageEncoder;
 import org.apache.avro.message.BinaryMessageDecoder;
 import org.apache.avro.message.SchemaStore;
 
-@SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
 public class Product extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
   private static final long serialVersionUID = -7043691455637012826L;
@@ -18,6 +19,9 @@ public class Product extends org.apache.avro.specific.SpecificRecordBase impleme
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static SpecificData MODEL$ = new SpecificData();
+static {
+    MODEL$.addLogicalTypeConversion(new org.apache.avro.data.TimeConversions.TimestampMillisConversion());
+  }
 
   private static final BinaryMessageEncoder<Product> ENCODER =
       new BinaryMessageEncoder<Product>(MODEL$, SCHEMA$);
@@ -26,7 +30,16 @@ public class Product extends org.apache.avro.specific.SpecificRecordBase impleme
       new BinaryMessageDecoder<Product>(MODEL$, SCHEMA$);
 
   /**
+   * Return the BinaryMessageEncoder instance used by this class.
+   * @return the message encoder used by this class
+   */
+  public static BinaryMessageEncoder<Product> getEncoder() {
+    return ENCODER;
+  }
+
+  /**
    * Return the BinaryMessageDecoder instance used by this class.
+   * @return the message decoder used by this class
    */
   public static BinaryMessageDecoder<Product> getDecoder() {
     return DECODER;
@@ -35,24 +48,34 @@ public class Product extends org.apache.avro.specific.SpecificRecordBase impleme
   /**
    * Create a new BinaryMessageDecoder instance for this class that uses the specified {@link SchemaStore}.
    * @param resolver a {@link SchemaStore} used to find schemas by fingerprint
+   * @return a BinaryMessageDecoder instance for this class backed by the given SchemaStore
    */
   public static BinaryMessageDecoder<Product> createDecoder(SchemaStore resolver) {
     return new BinaryMessageDecoder<Product>(MODEL$, SCHEMA$, resolver);
   }
 
-  /** Serializes this Product to a ByteBuffer. */
+  /**
+   * Serializes this Product to a ByteBuffer.
+   * @return a buffer holding the serialized data for this instance
+   * @throws java.io.IOException if this instance could not be serialized
+   */
   public java.nio.ByteBuffer toByteBuffer() throws java.io.IOException {
     return ENCODER.encode(this);
   }
 
-  /** Deserializes a Product from a ByteBuffer. */
+  /**
+   * Deserializes a Product from a ByteBuffer.
+   * @param b a byte buffer holding serialized data for an instance of this class
+   * @return a Product instance decoded from the given buffer
+   * @throws java.io.IOException if the given bytes could not be deserialized into an instance of this class
+   */
   public static Product fromByteBuffer(
       java.nio.ByteBuffer b) throws java.io.IOException {
     return DECODER.decode(b);
   }
 
   @Deprecated public long id;
-  @Deprecated public org.joda.time.DateTime created_at;
+  @Deprecated public java.time.Instant created_at;
   @Deprecated public java.lang.CharSequence name;
 
   /**
@@ -68,12 +91,13 @@ public class Product extends org.apache.avro.specific.SpecificRecordBase impleme
    * @param created_at The new value for created_at
    * @param name The new value for name
    */
-  public Product(java.lang.Long id, org.joda.time.DateTime created_at, java.lang.CharSequence name) {
+  public Product(java.lang.Long id, java.time.Instant created_at, java.lang.CharSequence name) {
     this.id = id;
-    this.created_at = created_at;
+    this.created_at = created_at.truncatedTo(java.time.temporal.ChronoUnit.MILLIS);
     this.name = name;
   }
 
+  public org.apache.avro.specific.SpecificData getSpecificData() { return MODEL$; }
   public org.apache.avro.Schema getSchema() { return SCHEMA$; }
   // Used by DatumWriter.  Applications should not call.
   public java.lang.Object get(int field$) {
@@ -85,15 +109,10 @@ public class Product extends org.apache.avro.specific.SpecificRecordBase impleme
     }
   }
 
-  protected static final org.apache.avro.data.TimeConversions.DateConversion DATE_CONVERSION = new org.apache.avro.data.TimeConversions.DateConversion();
-  protected static final org.apache.avro.data.TimeConversions.TimeConversion TIME_CONVERSION = new org.apache.avro.data.TimeConversions.TimeConversion();
-  protected static final org.apache.avro.data.TimeConversions.TimestampConversion TIMESTAMP_CONVERSION = new org.apache.avro.data.TimeConversions.TimestampConversion();
-  protected static final org.apache.avro.Conversions.DecimalConversion DECIMAL_CONVERSION = new org.apache.avro.Conversions.DecimalConversion();
-
   private static final org.apache.avro.Conversion<?>[] conversions =
       new org.apache.avro.Conversion<?>[] {
       null,
-      TIMESTAMP_CONVERSION,
+      new org.apache.avro.data.TimeConversions.TimestampMillisConversion(),
       null,
       null
   };
@@ -108,7 +127,7 @@ public class Product extends org.apache.avro.specific.SpecificRecordBase impleme
   public void put(int field$, java.lang.Object value$) {
     switch (field$) {
     case 0: id = (java.lang.Long)value$; break;
-    case 1: created_at = (org.joda.time.DateTime)value$; break;
+    case 1: created_at = (java.time.Instant)value$; break;
     case 2: name = (java.lang.CharSequence)value$; break;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
@@ -118,15 +137,16 @@ public class Product extends org.apache.avro.specific.SpecificRecordBase impleme
    * Gets the value of the 'id' field.
    * @return The value of the 'id' field.
    */
-  public java.lang.Long getId() {
+  public long getId() {
     return id;
   }
+
 
   /**
    * Sets the value of the 'id' field.
    * @param value the value to set.
    */
-  public void setId(java.lang.Long value) {
+  public void setId(long value) {
     this.id = value;
   }
 
@@ -134,16 +154,17 @@ public class Product extends org.apache.avro.specific.SpecificRecordBase impleme
    * Gets the value of the 'created_at' field.
    * @return The value of the 'created_at' field.
    */
-  public org.joda.time.DateTime getCreatedAt() {
+  public java.time.Instant getCreatedAt() {
     return created_at;
   }
+
 
   /**
    * Sets the value of the 'created_at' field.
    * @param value the value to set.
    */
-  public void setCreatedAt(org.joda.time.DateTime value) {
-    this.created_at = value;
+  public void setCreatedAt(java.time.Instant value) {
+    this.created_at = value.truncatedTo(java.time.temporal.ChronoUnit.MILLIS);
   }
 
   /**
@@ -153,6 +174,7 @@ public class Product extends org.apache.avro.specific.SpecificRecordBase impleme
   public java.lang.CharSequence getName() {
     return name;
   }
+
 
   /**
    * Sets the value of the 'name' field.
@@ -176,7 +198,11 @@ public class Product extends org.apache.avro.specific.SpecificRecordBase impleme
    * @return A new Product RecordBuilder
    */
   public static com.mycompany.commons.storeapp.avro.Product.Builder newBuilder(com.mycompany.commons.storeapp.avro.Product.Builder other) {
-    return new com.mycompany.commons.storeapp.avro.Product.Builder(other);
+    if (other == null) {
+      return new com.mycompany.commons.storeapp.avro.Product.Builder();
+    } else {
+      return new com.mycompany.commons.storeapp.avro.Product.Builder(other);
+    }
   }
 
   /**
@@ -185,17 +211,22 @@ public class Product extends org.apache.avro.specific.SpecificRecordBase impleme
    * @return A new Product RecordBuilder
    */
   public static com.mycompany.commons.storeapp.avro.Product.Builder newBuilder(com.mycompany.commons.storeapp.avro.Product other) {
-    return new com.mycompany.commons.storeapp.avro.Product.Builder(other);
+    if (other == null) {
+      return new com.mycompany.commons.storeapp.avro.Product.Builder();
+    } else {
+      return new com.mycompany.commons.storeapp.avro.Product.Builder(other);
+    }
   }
 
   /**
    * RecordBuilder for Product instances.
    */
+  @org.apache.avro.specific.AvroGenerated
   public static class Builder extends org.apache.avro.specific.SpecificRecordBuilderBase<Product>
     implements org.apache.avro.data.RecordBuilder<Product> {
 
     private long id;
-    private org.joda.time.DateTime created_at;
+    private java.time.Instant created_at;
     private java.lang.CharSequence name;
 
     /** Creates a new Builder */
@@ -211,15 +242,15 @@ public class Product extends org.apache.avro.specific.SpecificRecordBase impleme
       super(other);
       if (isValidValue(fields()[0], other.id)) {
         this.id = data().deepCopy(fields()[0].schema(), other.id);
-        fieldSetFlags()[0] = true;
+        fieldSetFlags()[0] = other.fieldSetFlags()[0];
       }
       if (isValidValue(fields()[1], other.created_at)) {
         this.created_at = data().deepCopy(fields()[1].schema(), other.created_at);
-        fieldSetFlags()[1] = true;
+        fieldSetFlags()[1] = other.fieldSetFlags()[1];
       }
       if (isValidValue(fields()[2], other.name)) {
         this.name = data().deepCopy(fields()[2].schema(), other.name);
-        fieldSetFlags()[2] = true;
+        fieldSetFlags()[2] = other.fieldSetFlags()[2];
       }
     }
 
@@ -228,7 +259,7 @@ public class Product extends org.apache.avro.specific.SpecificRecordBase impleme
      * @param other The existing instance to copy.
      */
     private Builder(com.mycompany.commons.storeapp.avro.Product other) {
-            super(SCHEMA$);
+      super(SCHEMA$);
       if (isValidValue(fields()[0], other.id)) {
         this.id = data().deepCopy(fields()[0].schema(), other.id);
         fieldSetFlags()[0] = true;
@@ -247,9 +278,10 @@ public class Product extends org.apache.avro.specific.SpecificRecordBase impleme
       * Gets the value of the 'id' field.
       * @return The value.
       */
-    public java.lang.Long getId() {
+    public long getId() {
       return id;
     }
+
 
     /**
       * Sets the value of the 'id' field.
@@ -285,18 +317,19 @@ public class Product extends org.apache.avro.specific.SpecificRecordBase impleme
       * Gets the value of the 'created_at' field.
       * @return The value.
       */
-    public org.joda.time.DateTime getCreatedAt() {
+    public java.time.Instant getCreatedAt() {
       return created_at;
     }
+
 
     /**
       * Sets the value of the 'created_at' field.
       * @param value The value of 'created_at'.
       * @return This builder.
       */
-    public com.mycompany.commons.storeapp.avro.Product.Builder setCreatedAt(org.joda.time.DateTime value) {
+    public com.mycompany.commons.storeapp.avro.Product.Builder setCreatedAt(java.time.Instant value) {
       validate(fields()[1], value);
-      this.created_at = value;
+      this.created_at = value.truncatedTo(java.time.temporal.ChronoUnit.MILLIS);
       fieldSetFlags()[1] = true;
       return this;
     }
@@ -326,6 +359,7 @@ public class Product extends org.apache.avro.specific.SpecificRecordBase impleme
     public java.lang.CharSequence getName() {
       return name;
     }
+
 
     /**
       * Sets the value of the 'name' field.
@@ -363,10 +397,12 @@ public class Product extends org.apache.avro.specific.SpecificRecordBase impleme
     public Product build() {
       try {
         Product record = new Product();
-        record.id = fieldSetFlags()[0] ? this.id : (java.lang.Long) defaultValue(fields()[0], record.getConversion(0));
-        record.created_at = fieldSetFlags()[1] ? this.created_at : (org.joda.time.DateTime) defaultValue(fields()[1], record.getConversion(1));
-        record.name = fieldSetFlags()[2] ? this.name : (java.lang.CharSequence) defaultValue(fields()[2], record.getConversion(2));
+        record.id = fieldSetFlags()[0] ? this.id : (java.lang.Long) defaultValue(fields()[0]);
+        record.created_at = fieldSetFlags()[1] ? this.created_at : (java.time.Instant) defaultValue(fields()[1]);
+        record.name = fieldSetFlags()[2] ? this.name : (java.lang.CharSequence) defaultValue(fields()[2]);
         return record;
+      } catch (org.apache.avro.AvroMissingFieldException e) {
+        throw e;
       } catch (java.lang.Exception e) {
         throw new org.apache.avro.AvroRuntimeException(e);
       }
@@ -392,3 +428,13 @@ public class Product extends org.apache.avro.specific.SpecificRecordBase impleme
   }
 
 }
+
+
+
+
+
+
+
+
+
+

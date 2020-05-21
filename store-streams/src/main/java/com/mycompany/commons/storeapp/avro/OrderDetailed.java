@@ -5,12 +5,13 @@
  */
 package com.mycompany.commons.storeapp.avro;
 
+import org.apache.avro.generic.GenericArray;
 import org.apache.avro.specific.SpecificData;
+import org.apache.avro.util.Utf8;
 import org.apache.avro.message.BinaryMessageEncoder;
 import org.apache.avro.message.BinaryMessageDecoder;
 import org.apache.avro.message.SchemaStore;
 
-@SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
 public class OrderDetailed extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
   private static final long serialVersionUID = -4247053473036058641L;
@@ -18,6 +19,9 @@ public class OrderDetailed extends org.apache.avro.specific.SpecificRecordBase i
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static SpecificData MODEL$ = new SpecificData();
+static {
+    MODEL$.addLogicalTypeConversion(new org.apache.avro.data.TimeConversions.TimestampMillisConversion());
+  }
 
   private static final BinaryMessageEncoder<OrderDetailed> ENCODER =
       new BinaryMessageEncoder<OrderDetailed>(MODEL$, SCHEMA$);
@@ -26,7 +30,16 @@ public class OrderDetailed extends org.apache.avro.specific.SpecificRecordBase i
       new BinaryMessageDecoder<OrderDetailed>(MODEL$, SCHEMA$);
 
   /**
+   * Return the BinaryMessageEncoder instance used by this class.
+   * @return the message encoder used by this class
+   */
+  public static BinaryMessageEncoder<OrderDetailed> getEncoder() {
+    return ENCODER;
+  }
+
+  /**
    * Return the BinaryMessageDecoder instance used by this class.
+   * @return the message decoder used by this class
    */
   public static BinaryMessageDecoder<OrderDetailed> getDecoder() {
     return DECODER;
@@ -35,24 +48,34 @@ public class OrderDetailed extends org.apache.avro.specific.SpecificRecordBase i
   /**
    * Create a new BinaryMessageDecoder instance for this class that uses the specified {@link SchemaStore}.
    * @param resolver a {@link SchemaStore} used to find schemas by fingerprint
+   * @return a BinaryMessageDecoder instance for this class backed by the given SchemaStore
    */
   public static BinaryMessageDecoder<OrderDetailed> createDecoder(SchemaStore resolver) {
     return new BinaryMessageDecoder<OrderDetailed>(MODEL$, SCHEMA$, resolver);
   }
 
-  /** Serializes this OrderDetailed to a ByteBuffer. */
+  /**
+   * Serializes this OrderDetailed to a ByteBuffer.
+   * @return a buffer holding the serialized data for this instance
+   * @throws java.io.IOException if this instance could not be serialized
+   */
   public java.nio.ByteBuffer toByteBuffer() throws java.io.IOException {
     return ENCODER.encode(this);
   }
 
-  /** Deserializes a OrderDetailed from a ByteBuffer. */
+  /**
+   * Deserializes a OrderDetailed from a ByteBuffer.
+   * @param b a byte buffer holding serialized data for an instance of this class
+   * @return a OrderDetailed instance decoded from the given buffer
+   * @throws java.io.IOException if the given bytes could not be deserialized into an instance of this class
+   */
   public static OrderDetailed fromByteBuffer(
       java.nio.ByteBuffer b) throws java.io.IOException {
     return DECODER.decode(b);
   }
 
   @Deprecated public java.lang.CharSequence id;
-  @Deprecated public org.joda.time.DateTime created_at;
+  @Deprecated public java.time.Instant created_at;
   @Deprecated public java.lang.CharSequence payment_type;
   @Deprecated public java.lang.CharSequence status;
   @Deprecated public long customer_id;
@@ -76,9 +99,9 @@ public class OrderDetailed extends org.apache.avro.specific.SpecificRecordBase i
    * @param customer_name The new value for customer_name
    * @param products The new value for products
    */
-  public OrderDetailed(java.lang.CharSequence id, org.joda.time.DateTime created_at, java.lang.CharSequence payment_type, java.lang.CharSequence status, java.lang.Long customer_id, java.lang.CharSequence customer_name, java.util.List<com.mycompany.commons.storeapp.avro.Product> products) {
+  public OrderDetailed(java.lang.CharSequence id, java.time.Instant created_at, java.lang.CharSequence payment_type, java.lang.CharSequence status, java.lang.Long customer_id, java.lang.CharSequence customer_name, java.util.List<com.mycompany.commons.storeapp.avro.Product> products) {
     this.id = id;
-    this.created_at = created_at;
+    this.created_at = created_at.truncatedTo(java.time.temporal.ChronoUnit.MILLIS);
     this.payment_type = payment_type;
     this.status = status;
     this.customer_id = customer_id;
@@ -86,6 +109,7 @@ public class OrderDetailed extends org.apache.avro.specific.SpecificRecordBase i
     this.products = products;
   }
 
+  public org.apache.avro.specific.SpecificData getSpecificData() { return MODEL$; }
   public org.apache.avro.Schema getSchema() { return SCHEMA$; }
   // Used by DatumWriter.  Applications should not call.
   public java.lang.Object get(int field$) {
@@ -101,15 +125,10 @@ public class OrderDetailed extends org.apache.avro.specific.SpecificRecordBase i
     }
   }
 
-  protected static final org.apache.avro.data.TimeConversions.DateConversion DATE_CONVERSION = new org.apache.avro.data.TimeConversions.DateConversion();
-  protected static final org.apache.avro.data.TimeConversions.TimeConversion TIME_CONVERSION = new org.apache.avro.data.TimeConversions.TimeConversion();
-  protected static final org.apache.avro.data.TimeConversions.TimestampConversion TIMESTAMP_CONVERSION = new org.apache.avro.data.TimeConversions.TimestampConversion();
-  protected static final org.apache.avro.Conversions.DecimalConversion DECIMAL_CONVERSION = new org.apache.avro.Conversions.DecimalConversion();
-
   private static final org.apache.avro.Conversion<?>[] conversions =
       new org.apache.avro.Conversion<?>[] {
       null,
-      TIMESTAMP_CONVERSION,
+      new org.apache.avro.data.TimeConversions.TimestampMillisConversion(),
       null,
       null,
       null,
@@ -128,7 +147,7 @@ public class OrderDetailed extends org.apache.avro.specific.SpecificRecordBase i
   public void put(int field$, java.lang.Object value$) {
     switch (field$) {
     case 0: id = (java.lang.CharSequence)value$; break;
-    case 1: created_at = (org.joda.time.DateTime)value$; break;
+    case 1: created_at = (java.time.Instant)value$; break;
     case 2: payment_type = (java.lang.CharSequence)value$; break;
     case 3: status = (java.lang.CharSequence)value$; break;
     case 4: customer_id = (java.lang.Long)value$; break;
@@ -146,6 +165,7 @@ public class OrderDetailed extends org.apache.avro.specific.SpecificRecordBase i
     return id;
   }
 
+
   /**
    * Sets the value of the 'id' field.
    * @param value the value to set.
@@ -158,16 +178,17 @@ public class OrderDetailed extends org.apache.avro.specific.SpecificRecordBase i
    * Gets the value of the 'created_at' field.
    * @return The value of the 'created_at' field.
    */
-  public org.joda.time.DateTime getCreatedAt() {
+  public java.time.Instant getCreatedAt() {
     return created_at;
   }
+
 
   /**
    * Sets the value of the 'created_at' field.
    * @param value the value to set.
    */
-  public void setCreatedAt(org.joda.time.DateTime value) {
-    this.created_at = value;
+  public void setCreatedAt(java.time.Instant value) {
+    this.created_at = value.truncatedTo(java.time.temporal.ChronoUnit.MILLIS);
   }
 
   /**
@@ -177,6 +198,7 @@ public class OrderDetailed extends org.apache.avro.specific.SpecificRecordBase i
   public java.lang.CharSequence getPaymentType() {
     return payment_type;
   }
+
 
   /**
    * Sets the value of the 'payment_type' field.
@@ -194,6 +216,7 @@ public class OrderDetailed extends org.apache.avro.specific.SpecificRecordBase i
     return status;
   }
 
+
   /**
    * Sets the value of the 'status' field.
    * @param value the value to set.
@@ -206,15 +229,16 @@ public class OrderDetailed extends org.apache.avro.specific.SpecificRecordBase i
    * Gets the value of the 'customer_id' field.
    * @return The value of the 'customer_id' field.
    */
-  public java.lang.Long getCustomerId() {
+  public long getCustomerId() {
     return customer_id;
   }
+
 
   /**
    * Sets the value of the 'customer_id' field.
    * @param value the value to set.
    */
-  public void setCustomerId(java.lang.Long value) {
+  public void setCustomerId(long value) {
     this.customer_id = value;
   }
 
@@ -225,6 +249,7 @@ public class OrderDetailed extends org.apache.avro.specific.SpecificRecordBase i
   public java.lang.CharSequence getCustomerName() {
     return customer_name;
   }
+
 
   /**
    * Sets the value of the 'customer_name' field.
@@ -241,6 +266,7 @@ public class OrderDetailed extends org.apache.avro.specific.SpecificRecordBase i
   public java.util.List<com.mycompany.commons.storeapp.avro.Product> getProducts() {
     return products;
   }
+
 
   /**
    * Sets the value of the 'products' field.
@@ -264,7 +290,11 @@ public class OrderDetailed extends org.apache.avro.specific.SpecificRecordBase i
    * @return A new OrderDetailed RecordBuilder
    */
   public static com.mycompany.commons.storeapp.avro.OrderDetailed.Builder newBuilder(com.mycompany.commons.storeapp.avro.OrderDetailed.Builder other) {
-    return new com.mycompany.commons.storeapp.avro.OrderDetailed.Builder(other);
+    if (other == null) {
+      return new com.mycompany.commons.storeapp.avro.OrderDetailed.Builder();
+    } else {
+      return new com.mycompany.commons.storeapp.avro.OrderDetailed.Builder(other);
+    }
   }
 
   /**
@@ -273,17 +303,22 @@ public class OrderDetailed extends org.apache.avro.specific.SpecificRecordBase i
    * @return A new OrderDetailed RecordBuilder
    */
   public static com.mycompany.commons.storeapp.avro.OrderDetailed.Builder newBuilder(com.mycompany.commons.storeapp.avro.OrderDetailed other) {
-    return new com.mycompany.commons.storeapp.avro.OrderDetailed.Builder(other);
+    if (other == null) {
+      return new com.mycompany.commons.storeapp.avro.OrderDetailed.Builder();
+    } else {
+      return new com.mycompany.commons.storeapp.avro.OrderDetailed.Builder(other);
+    }
   }
 
   /**
    * RecordBuilder for OrderDetailed instances.
    */
+  @org.apache.avro.specific.AvroGenerated
   public static class Builder extends org.apache.avro.specific.SpecificRecordBuilderBase<OrderDetailed>
     implements org.apache.avro.data.RecordBuilder<OrderDetailed> {
 
     private java.lang.CharSequence id;
-    private org.joda.time.DateTime created_at;
+    private java.time.Instant created_at;
     private java.lang.CharSequence payment_type;
     private java.lang.CharSequence status;
     private long customer_id;
@@ -303,31 +338,31 @@ public class OrderDetailed extends org.apache.avro.specific.SpecificRecordBase i
       super(other);
       if (isValidValue(fields()[0], other.id)) {
         this.id = data().deepCopy(fields()[0].schema(), other.id);
-        fieldSetFlags()[0] = true;
+        fieldSetFlags()[0] = other.fieldSetFlags()[0];
       }
       if (isValidValue(fields()[1], other.created_at)) {
         this.created_at = data().deepCopy(fields()[1].schema(), other.created_at);
-        fieldSetFlags()[1] = true;
+        fieldSetFlags()[1] = other.fieldSetFlags()[1];
       }
       if (isValidValue(fields()[2], other.payment_type)) {
         this.payment_type = data().deepCopy(fields()[2].schema(), other.payment_type);
-        fieldSetFlags()[2] = true;
+        fieldSetFlags()[2] = other.fieldSetFlags()[2];
       }
       if (isValidValue(fields()[3], other.status)) {
         this.status = data().deepCopy(fields()[3].schema(), other.status);
-        fieldSetFlags()[3] = true;
+        fieldSetFlags()[3] = other.fieldSetFlags()[3];
       }
       if (isValidValue(fields()[4], other.customer_id)) {
         this.customer_id = data().deepCopy(fields()[4].schema(), other.customer_id);
-        fieldSetFlags()[4] = true;
+        fieldSetFlags()[4] = other.fieldSetFlags()[4];
       }
       if (isValidValue(fields()[5], other.customer_name)) {
         this.customer_name = data().deepCopy(fields()[5].schema(), other.customer_name);
-        fieldSetFlags()[5] = true;
+        fieldSetFlags()[5] = other.fieldSetFlags()[5];
       }
       if (isValidValue(fields()[6], other.products)) {
         this.products = data().deepCopy(fields()[6].schema(), other.products);
-        fieldSetFlags()[6] = true;
+        fieldSetFlags()[6] = other.fieldSetFlags()[6];
       }
     }
 
@@ -336,7 +371,7 @@ public class OrderDetailed extends org.apache.avro.specific.SpecificRecordBase i
      * @param other The existing instance to copy.
      */
     private Builder(com.mycompany.commons.storeapp.avro.OrderDetailed other) {
-            super(SCHEMA$);
+      super(SCHEMA$);
       if (isValidValue(fields()[0], other.id)) {
         this.id = data().deepCopy(fields()[0].schema(), other.id);
         fieldSetFlags()[0] = true;
@@ -375,6 +410,7 @@ public class OrderDetailed extends org.apache.avro.specific.SpecificRecordBase i
       return id;
     }
 
+
     /**
       * Sets the value of the 'id' field.
       * @param value The value of 'id'.
@@ -410,18 +446,19 @@ public class OrderDetailed extends org.apache.avro.specific.SpecificRecordBase i
       * Gets the value of the 'created_at' field.
       * @return The value.
       */
-    public org.joda.time.DateTime getCreatedAt() {
+    public java.time.Instant getCreatedAt() {
       return created_at;
     }
+
 
     /**
       * Sets the value of the 'created_at' field.
       * @param value The value of 'created_at'.
       * @return This builder.
       */
-    public com.mycompany.commons.storeapp.avro.OrderDetailed.Builder setCreatedAt(org.joda.time.DateTime value) {
+    public com.mycompany.commons.storeapp.avro.OrderDetailed.Builder setCreatedAt(java.time.Instant value) {
       validate(fields()[1], value);
-      this.created_at = value;
+      this.created_at = value.truncatedTo(java.time.temporal.ChronoUnit.MILLIS);
       fieldSetFlags()[1] = true;
       return this;
     }
@@ -451,6 +488,7 @@ public class OrderDetailed extends org.apache.avro.specific.SpecificRecordBase i
     public java.lang.CharSequence getPaymentType() {
       return payment_type;
     }
+
 
     /**
       * Sets the value of the 'payment_type' field.
@@ -491,6 +529,7 @@ public class OrderDetailed extends org.apache.avro.specific.SpecificRecordBase i
       return status;
     }
 
+
     /**
       * Sets the value of the 'status' field.
       * @param value The value of 'status'.
@@ -526,9 +565,10 @@ public class OrderDetailed extends org.apache.avro.specific.SpecificRecordBase i
       * Gets the value of the 'customer_id' field.
       * @return The value.
       */
-    public java.lang.Long getCustomerId() {
+    public long getCustomerId() {
       return customer_id;
     }
+
 
     /**
       * Sets the value of the 'customer_id' field.
@@ -567,6 +607,7 @@ public class OrderDetailed extends org.apache.avro.specific.SpecificRecordBase i
     public java.lang.CharSequence getCustomerName() {
       return customer_name;
     }
+
 
     /**
       * Sets the value of the 'customer_name' field.
@@ -607,6 +648,7 @@ public class OrderDetailed extends org.apache.avro.specific.SpecificRecordBase i
       return products;
     }
 
+
     /**
       * Sets the value of the 'products' field.
       * @param value The value of 'products'.
@@ -643,14 +685,16 @@ public class OrderDetailed extends org.apache.avro.specific.SpecificRecordBase i
     public OrderDetailed build() {
       try {
         OrderDetailed record = new OrderDetailed();
-        record.id = fieldSetFlags()[0] ? this.id : (java.lang.CharSequence) defaultValue(fields()[0], record.getConversion(0));
-        record.created_at = fieldSetFlags()[1] ? this.created_at : (org.joda.time.DateTime) defaultValue(fields()[1], record.getConversion(1));
-        record.payment_type = fieldSetFlags()[2] ? this.payment_type : (java.lang.CharSequence) defaultValue(fields()[2], record.getConversion(2));
-        record.status = fieldSetFlags()[3] ? this.status : (java.lang.CharSequence) defaultValue(fields()[3], record.getConversion(3));
-        record.customer_id = fieldSetFlags()[4] ? this.customer_id : (java.lang.Long) defaultValue(fields()[4], record.getConversion(4));
-        record.customer_name = fieldSetFlags()[5] ? this.customer_name : (java.lang.CharSequence) defaultValue(fields()[5], record.getConversion(5));
-        record.products = fieldSetFlags()[6] ? this.products : (java.util.List<com.mycompany.commons.storeapp.avro.Product>) defaultValue(fields()[6], record.getConversion(6));
+        record.id = fieldSetFlags()[0] ? this.id : (java.lang.CharSequence) defaultValue(fields()[0]);
+        record.created_at = fieldSetFlags()[1] ? this.created_at : (java.time.Instant) defaultValue(fields()[1]);
+        record.payment_type = fieldSetFlags()[2] ? this.payment_type : (java.lang.CharSequence) defaultValue(fields()[2]);
+        record.status = fieldSetFlags()[3] ? this.status : (java.lang.CharSequence) defaultValue(fields()[3]);
+        record.customer_id = fieldSetFlags()[4] ? this.customer_id : (java.lang.Long) defaultValue(fields()[4]);
+        record.customer_name = fieldSetFlags()[5] ? this.customer_name : (java.lang.CharSequence) defaultValue(fields()[5]);
+        record.products = fieldSetFlags()[6] ? this.products : (java.util.List<com.mycompany.commons.storeapp.avro.Product>) defaultValue(fields()[6]);
         return record;
+      } catch (org.apache.avro.AvroMissingFieldException e) {
+        throw e;
       } catch (java.lang.Exception e) {
         throw new org.apache.avro.AvroRuntimeException(e);
       }
@@ -676,3 +720,13 @@ public class OrderDetailed extends org.apache.avro.specific.SpecificRecordBase i
   }
 
 }
+
+
+
+
+
+
+
+
+
+

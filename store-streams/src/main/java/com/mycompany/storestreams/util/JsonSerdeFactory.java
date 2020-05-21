@@ -21,7 +21,7 @@ public class JsonSerdeFactory {
     public static final Serde<Order> orderSerde;
     public static final Serde<OrderDetailed> orderDetailedSerde;
     public static final Serde<OrderProduct> orderProductSerde;
-    public static final Serde<Set> setSerde;
+    public static final Serde<Set<ProductDetail>> setProductDetailSerde;
 
     private JsonSerdeFactory() {
     }
@@ -51,9 +51,9 @@ public class JsonSerdeFactory {
         JsonDeserializer<OrderProduct> orderProductDeserializer = new JsonDeserializer<>(OrderProduct.class);
         orderProductSerde = Serdes.serdeFrom(orderProductSerializer, orderProductDeserializer);
 
-        JsonSerializer<Set> setSerializer = new JsonSerializer<>();
-        JsonDeserializer<Set> setDeserializer = new JsonDeserializer<>(Set.class);
-        setSerde = Serdes.serdeFrom(setSerializer, setDeserializer);
+        JsonSerializer<Set<ProductDetail>> setSerializer = new JsonSerializer<>();
+        JsonDeserializer<Set<ProductDetail>> setDeserializer = new JsonDeserializer<>(Set.class);
+        setProductDetailSerde = Serdes.serdeFrom(setSerializer, setDeserializer);
     }
 
 }

@@ -18,6 +18,7 @@ import org.apache.kafka.streams.kstream.Joined;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.KTable;
 import org.apache.kafka.streams.kstream.Materialized;
+import org.apache.kafka.streams.kstream.StreamJoined;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.Input;
 import org.springframework.cloud.stream.annotation.StreamListener;
@@ -98,28 +99,28 @@ public class StoreStreamsJson {
         // --
         // Aggregate (in a Set) ProductDetail by order
 
-        KTable<String, Set> orderIdKeyOrderProductDetailSetValueKTable = orderIdKeyProductDetailValueKStream
+        KTable<String, Set<ProductDetail>> orderIdKeyOrderProductDetailSetValueKTable = orderIdKeyProductDetailValueKStream
                 .groupByKey(Grouped.with(Serdes.String(), JsonSerdeFactory.productDetailSerde))
-                .aggregate(
-                        LinkedHashSet::new,
-                        (key, productDetail, set) -> {
-                            set.add(productDetail);
-                            return set;
-                        }, Materialized.with(Serdes.String(), JsonSerdeFactory.setSerde));
+                .aggregate(LinkedHashSet::new,
+                        (key, productDetail, productDetails) -> {
+                            productDetails.add(productDetail);
+                            return productDetails;
+                        }, Materialized.with(Serdes.String(), JsonSerdeFactory.setProductDetailSerde));
 
         // --
         // Stream ProductDetail Set by order
 
-        KStream<String, Set> orderIdKeyOrderProductDetailSetValueKStream = orderIdKeyOrderProductDetailSetValueKTable.toStream();
+        KStream<String, Set<ProductDetail>> orderIdKeyOrderProductDetailSetValueKStream = orderIdKeyOrderProductDetailSetValueKTable.toStream();
 
         // --
         // Add ProductDetail Set to OrderDetailed
 
         KStream<String, OrderDetailed> orderIdKeyOrderDetailedValueKStream = orderIdKeyOrderDetailedWithoutProductsSetValueKStream
-                .leftJoin(orderIdKeyOrderProductDetailSetValueKStream, (orderDetailed, set) -> {
-                    orderDetailed.setProducts(set);
-                    return orderDetailed;
-                }, JoinWindows.of(Duration.ofHours(1)), Joined.with(Serdes.String(), JsonSerdeFactory.orderDetailedSerde, JsonSerdeFactory.setSerde));
+                .leftJoin(orderIdKeyOrderProductDetailSetValueKStream,
+                        (orderDetailed, products) -> {
+                            orderDetailed.setProducts(products);
+                            return orderDetailed;
+                        }, JoinWindows.of(Duration.ofHours(1)), StreamJoined.with(Serdes.String(), JsonSerdeFactory.orderDetailedSerde, JsonSerdeFactory.setProductDetailSerde));
 
         orderIdKeyOrderDetailedValueKStream.foreach(this::logKeyValue);
 
