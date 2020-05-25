@@ -84,6 +84,7 @@ public class StoreStreamsJson {
                 .join(productKTable, (orderProduct, product) -> {
                     OrderProductDetail orderProductDetail = mapperFacade.map(orderProduct, OrderProductDetail.class);
                     orderProductDetail.setProduct_name(product.getName());
+                    orderProductDetail.setProduct_price(product.getPrice());
                     return orderProductDetail;
                 }, Joined.with(Serdes.String(), JsonSerdeFactory.orderProductSerde, JsonSerdeFactory.productSerde));
 

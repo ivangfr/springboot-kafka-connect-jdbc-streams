@@ -21,7 +21,7 @@
 
     "_comment": "--- Drop fields ---",
     "transforms.dropFields.type": "org.apache.kafka.connect.transforms.ReplaceField$Value",
-    "transforms.dropFields.blacklist": "updated_at, price",
+    "transforms.dropFields.blacklist": "updated_at",
 
     "_comment": "--- Add key to the message based on the entity id field ---",
     "transforms.createKey.type": "org.apache.kafka.connect.transforms.ValueToKey",
@@ -35,7 +35,7 @@
 
     "_comment": "--- numeric.mapping doesn't work for DECIMAL fields #563 ---",
     "_comment": "--- https://github.com/confluentinc/kafka-connect-jdbc/issues/563 ---",
-    "_comment": "--- price field dropped for now ---",
+    "_comment": "--- using String as type for price field for now ---",
     "numeric.mapping": "best_fit"
   }
 }

@@ -212,7 +212,7 @@ Steps to create the connectors:
              "products" : [
                {
                   "unit" : 1,
-                  "price" : null,
+                  "price" : 900,
                   "name" : "iPhone Xr",
                   "id" : 15
                }
@@ -317,7 +317,7 @@ Steps to create the connectors:
 
 ## Issues
 
-- Product `price` field, [numeric.mapping doesn't work for DECIMAL fields #563](https://github.com/confluentinc/kafka-connect-jdbc/issues/563)
+- Product `price` field, [numeric.mapping doesn't work for DECIMAL fields #563](https://github.com/confluentinc/kafka-connect-jdbc/issues/563). For now, the workaround is using `String` instead of `BigDecimal` as type for this field.
 
 ## References
 

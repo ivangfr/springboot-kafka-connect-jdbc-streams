@@ -26,7 +26,10 @@ public class Product {
     private String name;
 
     @Column(nullable = false)
-    private BigDecimal price;
+    // Using String as type for price field for now due to the issue below
+    // numeric.mapping doesn't work for DECIMAL fields #563: https://github.com/confluentinc/kafka-connect-jdbc/issues/563
+    // private BigDecimal price;
+    private String price;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;

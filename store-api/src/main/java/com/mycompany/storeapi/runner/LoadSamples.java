@@ -18,10 +18,10 @@ import java.util.List;
 public class LoadSamples implements CommandLineRunner {
 
     @Value("${load-samples.customers.enabled}")
-    private boolean customerSamples;
+    private boolean loadCustomersEnabled;
 
     @Value("${load-samples.products.enabled}")
-    private boolean productSamples;
+    private boolean loadProductsEnabled;
 
     private final CustomerService customerService;
     private final ProductService productService;
@@ -34,13 +34,13 @@ public class LoadSamples implements CommandLineRunner {
     @Override
     public void run(String... args) {
 
-        if (customerSamples || productSamples) {
+        if (loadCustomersEnabled || loadProductsEnabled) {
 
             log.info("## Start loading samples of customers and products ...");
 
-            if (customerSamples) {
+            if (loadCustomersEnabled) {
                 if (customerService.getAllCustomers().isEmpty()) {
-                    customerRecords.forEach(customerRecord -> {
+                    customers.forEach(customerRecord -> {
                         String[] customerArr = customerRecord.split(";");
                         Customer customer = new Customer();
                         customer.setName(customerArr[0]);
@@ -48,7 +48,6 @@ public class LoadSamples implements CommandLineRunner {
                         customer.setAddress(customerArr[2]);
                         customer.setPhone(customerArr[3]);
                         customerService.saveCustomer(customer);
-
                         log.info("Customer created: {}", customer);
                     });
                 } else {
@@ -56,27 +55,25 @@ public class LoadSamples implements CommandLineRunner {
                 }
             }
 
-            if (productSamples) {
+            if (loadProductsEnabled) {
                 if (productService.getAllProducts().isEmpty()) {
-                    productsRecords.forEach(productsRecord -> {
+                    products.forEach(productsRecord -> {
                         String[] productArr = productsRecord.split(";");
                         Product product = new Product();
                         product.setName(productArr[0]);
-                        product.setPrice(new BigDecimal(productArr[1]));
+                        product.setPrice(new BigDecimal(productArr[1]).toString());
                         productService.saveProduct(product);
-
                         log.info("Product created: {}", product);
                     });
                 } else {
                     log.info("Sample of products already created");
                 }
             }
-
             log.info("## Finished successfully loading samples of customers and products!");
         }
     }
 
-    private static final List<String> customerRecords = Arrays.asList(
+    private static final List<String> customers = Arrays.asList(
             "John Gates;john.gates@test.com;street 1;112233",
             "Mark Bacon;mark.bacon@test.com;street 2;112244",
             "Alex Stone;alex.stone@test.com;street 3;112255",
@@ -92,7 +89,7 @@ public class LoadSamples implements CommandLineRunner {
             "Kyo Lo;kyo.lo@test.com;street 13;113355",
             "David Cube;david.cube@test.com;street 14;113366");
 
-    private static final List<String> productsRecords = Arrays.asList(
+    private static final List<String> products = Arrays.asList(
             "iPhone Xr;900", "iPhone Xs;1100", "iPhone X;1000", "iPhone 8;700", "iPhone 7;600", "iPhone SE;500",
             "iPad Pro;800", "iPad Air 2;700", "iPad Mini 4;600",
             "MacBook Pro;2500", "MacBook Air;2000", "Mac Mini;1000", "iMac;1500", "iMac Pro;2000",
