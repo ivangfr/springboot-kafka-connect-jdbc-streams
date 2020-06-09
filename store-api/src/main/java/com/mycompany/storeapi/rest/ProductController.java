@@ -1,13 +1,14 @@
 package com.mycompany.storeapi.rest;
 
+import com.mycompany.storeapi.mapper.ProductMapper;
+import com.mycompany.storeapi.model.Product;
 import com.mycompany.storeapi.rest.dto.AddProductDto;
 import com.mycompany.storeapi.rest.dto.ProductDto;
 import com.mycompany.storeapi.rest.dto.UpdateProductDto;
-import com.mycompany.storeapi.model.Product;
 import com.mycompany.storeapi.service.ProductService;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import ma.glasnost.orika.MapperFacade;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,17 +24,13 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
 
     private final ProductService productService;
-    private final MapperFacade mapperFacade;
-
-    public ProductController(ProductService productService, MapperFacade mapperFacade) {
-        this.productService = productService;
-        this.mapperFacade = mapperFacade;
-    }
+    private final ProductMapper productMapper;
 
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK"),
@@ -43,7 +40,7 @@ public class ProductController {
     public List<ProductDto> getAllProducts() {
         return productService.getAllProducts()
                 .stream()
-                .map(product -> mapperFacade.map(product, ProductDto.class))
+                .map(productMapper::toProductDto)
                 .collect(Collectors.toList());
     }
 
@@ -55,7 +52,7 @@ public class ProductController {
     @GetMapping("/{id}")
     public ProductDto getProduct(@PathVariable Long id) {
         Product product = productService.validateAndGetProductById(id);
-        return mapperFacade.map(product, ProductDto.class);
+        return productMapper.toProductDto(product);
     }
 
     @ApiResponses(value = {
@@ -65,9 +62,9 @@ public class ProductController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public ProductDto addProduct(@Valid @RequestBody AddProductDto addProductDto) {
-        Product product = mapperFacade.map(addProductDto, Product.class);
+        Product product = productMapper.toProduct(addProductDto);
         product = productService.saveProduct(product);
-        return mapperFacade.map(product, ProductDto.class);
+        return productMapper.toProductDto(product);
     }
 
     @ApiResponses(value = {
@@ -78,9 +75,9 @@ public class ProductController {
     @PatchMapping("/{id}")
     public ProductDto updateProduct(@PathVariable Long id, @Valid @RequestBody UpdateProductDto updateProductDto) {
         Product product = productService.validateAndGetProductById(id);
-        mapperFacade.map(updateProductDto, product);
+        productMapper.updateProductFromDto(updateProductDto, product);
         product = productService.saveProduct(product);
-        return mapperFacade.map(product, ProductDto.class);
+        return productMapper.toProductDto(product);
     }
 
     @ApiResponses(value = {
@@ -93,7 +90,7 @@ public class ProductController {
     public ProductDto deleteProduct(@PathVariable Long id) {
         Product product = productService.validateAndGetProductById(id);
         productService.deleteProduct(product);
-        return mapperFacade.map(product, ProductDto.class);
+        return productMapper.toProductDto(product);
     }
 
 }

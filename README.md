@@ -16,6 +16,12 @@ The main goal of this project is to play with [`Kafka`](https://kafka.apache.org
 
   `Spring Boot` application that connects to `Kafka` and uses `Kafka Streams API` to transform some _"input"_ topics into a new _"output"_ topic in `Kafka`.
 
+## Prerequisites
+
+- `Java 11+`
+- `Docker`
+- `Docker-Compose`
+
 ## (De)Serialization formats
 
 In order to run this project, you can use [`JSON`](https://www.json.org) or [`Avro`](http://avro.apache.org/docs/current/gettingstartedjava.html) format to serialize/deserialize data to/from the `binary` format used by Kafka. The default format is `JSON`. Throughout this document, I will point out what to do if you want to use `Avro`.
@@ -28,7 +34,7 @@ In order to run this project, you can use [`JSON`](https://www.json.org) or [`Av
   ```
   docker-compose up -d
   ```
-  > **Note:** During the first run, an image for `kafka-connect` will be built, whose name is `springboot-kafka-connect-streams_kafka-connect`. To rebuild this image run
+  > **Note:** During the first run, an image for `kafka-connect` will be built, whose name is `springboot-kafka-connect-streams_kafka-connect`. Run the command below to rebuild it
   > ```
   > docker-compose build
   > ```
@@ -37,22 +43,20 @@ In order to run this project, you can use [`JSON`](https://www.json.org) or [`Av
   ```
   docker-compose ps
   ```
+  
+## Create Kafka Topics
 
-## Run store-api
-
-**Important**: run `store-api` first because it will initialize the `MySQL` database.
+In order to have topics in `Kafka` with more than `1` partition, we must create them manually and not wait for the connectors to create for us. So, for it:
 
 - Open a new terminal and make sure you are in `springboot-kafka-connect-streams` root folder
 
-- Run the command below to start the application
+- Run the script below
   ```
-  ./mvnw clean spring-boot:run --projects store-api
+  ./create-kafka-topics.sh
   ```
-  > **Note:** It will create some customers and products. If you don't want it, just set to `false` the properties `load-samples.customers.enabled` and `load-samples.products.enabled` in `application.yml`.
+  > **Note:** you can ignore the warnings
 
-- The Swagger link is http://localhost:9080/swagger-ui.html
-
-  ![store-api-swagger](images/store-api-swagger.png)
+  It will create the topics `mysql.storedb.customers`, `mysql.storedb.products`, `mysql.storedb.orders`, `mysql.storedb.orders_products` with `5` partitions.
 
 ## Create connectors
 
@@ -97,8 +101,25 @@ Steps to create the connectors:
 
 - If there is any problem, you can check `kafka-connect` container logs
   ```
-  docker logs kafka-connect -f
+  docker logs kafka-connect
   ```
+
+## Run store-api
+
+- Open a new terminal and make sure you are in `springboot-kafka-connect-streams` root folder
+
+- Run the command below to start the application
+  ```
+  ./mvnw clean spring-boot:run --projects store-api -Dspring-boot.run.jvmArguments="-Dserver.port=9080"
+  ```
+
+  > **Note 1:** It will create all tables, such as: `customers`, `products`, `orders` and `orders_products`. We are using `spring.jpa.hibernate.ddl-auto=update` configuration.
+
+  > **Note 2:** It will also insert some customers and products. If you don't want it, just set to `false` the properties `load-samples.customers.enabled` and `load-samples.products.enabled` in `application.yml`.
+
+- The Swagger link is http://localhost:9080/swagger-ui.html
+
+  ![store-api-swagger](images/store-api-swagger.png)
 
 ## Run store-streams
 
@@ -108,7 +129,7 @@ Steps to create the connectors:
 
   - **For JSON (de)serialization**
     ```
-    ./mvnw clean spring-boot:run --projects store-streams
+    ./mvnw clean spring-boot:run --projects store-streams -Dspring-boot.run.jvmArguments="-Dserver.port=9081"
     ```
   - **For Avro (de)serialization (NOT READY!)**
     ```
@@ -125,7 +146,7 @@ Steps to create the connectors:
 
 1. Let's check the orders we have in `Elasticsearch`. For it, run the following command in a terminal
    ```
-   curl http://localhost:9200/store.streams.orders/_search?pretty
+   curl "localhost:9200/store.streams.orders/_search?pretty"
    ```
    
    The response should be no orders
@@ -158,7 +179,7 @@ Steps to create the connectors:
 
    The `curl` command is
    ```
-   curl -i -X POST http://localhost:9080/api/orders \
+   curl -i -X POST localhost:9080/api/orders \
      -H 'Content-Type: application/json' \
      -d '{"customerId": 1, "paymentType": "BITCOIN", "status": "OPEN", "products": [{"id": 15, "unit": 1}]}'
    ```
@@ -179,7 +200,7 @@ Steps to create the connectors:
 
 1. Now, if we check `Elasticsearch` again
    ```
-   curl http://localhost:9200/store.streams.orders/_search?pretty
+   curl "localhost:9200/store.streams.orders/_search?pretty"
    ```
    
    We should have one order with a customer and products names.
@@ -226,7 +247,7 @@ Steps to create the connectors:
 
 1. In order to create random orders, we can use also the `simulation` endpoint of `store-api`
    ```
-   curl -i -X POST http://localhost:9080/api/simulation/orders \
+   curl -i -X POST localhost:9080/api/simulation/orders \
      -H 'Content-Type: application/json' \
      -d '{"total": 10, "sleep": 100}'
    ```
@@ -255,7 +276,7 @@ Steps to create the connectors:
     ```
   - Get the latest version of the subject `mysql.storedb.customers-value`
     ```
-    curl http://localhost:8081/subjects/mysql.storedb.customers-value/versions/latest
+    curl localhost:8081/subjects/mysql.storedb.customers-value/versions/latest
     ```
 
 - **Kibana**
@@ -279,13 +300,13 @@ Steps to create the connectors:
 
   - Get all indices
     ```
-    curl http://localhost:9200/_cat/indices?v
+    curl "localhost:9200/_cat/indices?v"
     ```
   - Search for documents
     ```
-    curl http://localhost:9200/mysql.storedb.customers/_search?pretty
-    curl http://localhost:9200/mysql.storedb.products/_search?pretty
-    curl http://localhost:9200/store.streams.orders/_search?pretty
+    curl "localhost:9200/mysql.storedb.customers/_search?pretty"
+    curl "localhost:9200/mysql.storedb.products/_search?pretty"
+    curl "localhost:9200/store.streams.orders/_search?pretty"
     ```
 
 - **MySQL**

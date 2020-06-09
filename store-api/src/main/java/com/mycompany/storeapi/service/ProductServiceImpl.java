@@ -4,19 +4,17 @@ import com.mycompany.storeapi.exception.ProductDeletionException;
 import com.mycompany.storeapi.exception.ProductNotFoundException;
 import com.mycompany.storeapi.model.Product;
 import com.mycompany.storeapi.repository.ProductRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
-
-    public ProductServiceImpl(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
 
     @Override
     public List<Product> getAllProducts() {

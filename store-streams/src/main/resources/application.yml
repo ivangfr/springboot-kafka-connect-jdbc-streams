@@ -1,13 +1,3 @@
-server.port: 9081
-
-management:
-  endpoints:
-    web:
-      exposure.include: "*"
-  endpoint:
-    health:
-      show-details: always
-
 spring:
   application:
     name: store-streams
@@ -69,6 +59,14 @@ spring:
               commit.interval.ms: 1000
               default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
               default.value.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+
+management:
+  endpoints:
+    web:
+      exposure.include: "*"
+  endpoint:
+    health:
+      show-details: always
 
 ---
 spring:

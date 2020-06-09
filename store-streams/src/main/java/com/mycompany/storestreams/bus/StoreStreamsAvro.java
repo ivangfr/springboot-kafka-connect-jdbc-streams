@@ -5,7 +5,6 @@ import com.mycompany.commons.storeapp.avro.Order;
 import com.mycompany.commons.storeapp.avro.OrderProduct;
 import com.mycompany.commons.storeapp.avro.Product;
 import lombok.extern.slf4j.Slf4j;
-import ma.glasnost.orika.MapperFacade;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.KTable;
@@ -21,12 +20,6 @@ import org.springframework.stereotype.Component;
 @Profile("avro")
 @EnableBinding(StoreKafkaStreamsProcessor.class)
 public class StoreStreamsAvro {
-
-    private final MapperFacade mapperFacade;
-
-    public StoreStreamsAvro(MapperFacade mapperFacade) {
-        this.mapperFacade = mapperFacade;
-    }
 
     @StreamListener
     @SendTo(StoreKafkaStreamsProcessor.ORDER_OUTPUT)

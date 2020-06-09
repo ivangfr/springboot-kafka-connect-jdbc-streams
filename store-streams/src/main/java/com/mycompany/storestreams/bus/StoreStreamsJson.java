@@ -7,9 +7,10 @@ import com.mycompany.commons.storeapp.events.OrderProduct;
 import com.mycompany.commons.storeapp.events.OrderProductDetail;
 import com.mycompany.commons.storeapp.events.Product;
 import com.mycompany.commons.storeapp.events.ProductDetail;
+import com.mycompany.storestreams.mapper.OrderProductMapper;
 import com.mycompany.storestreams.util.JsonSerdeFactory;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import ma.glasnost.orika.MapperFacade;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.kstream.Grouped;
@@ -31,16 +32,13 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Slf4j
+@RequiredArgsConstructor
 @Component
 @Profile("!avro")
 @EnableBinding(StoreKafkaStreamsProcessor.class)
 public class StoreStreamsJson {
 
-    private final MapperFacade mapperFacade;
-
-    public StoreStreamsJson(MapperFacade mapperFacade) {
-        this.mapperFacade = mapperFacade;
-    }
+    private final OrderProductMapper orderProductMapper;
 
     @StreamListener
     @SendTo(StoreKafkaStreamsProcessor.ORDER_OUTPUT)
@@ -66,7 +64,7 @@ public class StoreStreamsJson {
 
         KStream<String, OrderDetailed> customerIdKeyOrderDetailedValueKStream = customerIdKeyOrderValueKStream
                 .join(customerKTable, (order, customer) -> {
-                    OrderDetailed orderDetailed = mapperFacade.map(order, OrderDetailed.class);
+                    OrderDetailed orderDetailed = orderProductMapper.toOrderDetailed(order);
                     orderDetailed.setCustomer_name(customer.getName());
                     return orderDetailed;
                 }, Joined.with(Serdes.String(), JsonSerdeFactory.orderSerde, JsonSerdeFactory.customerSerde));
@@ -82,7 +80,7 @@ public class StoreStreamsJson {
 
         KStream<String, OrderProductDetail> productIdKeyOrderProductDetailValueKStream = productIdKeyOrderProductValueKStream
                 .join(productKTable, (orderProduct, product) -> {
-                    OrderProductDetail orderProductDetail = mapperFacade.map(orderProduct, OrderProductDetail.class);
+                    OrderProductDetail orderProductDetail = orderProductMapper.toOrderProductDetail(orderProduct);
                     orderProductDetail.setProduct_name(product.getName());
                     orderProductDetail.setProduct_price(product.getPrice());
                     return orderProductDetail;
@@ -95,7 +93,7 @@ public class StoreStreamsJson {
         // Extract OrderProductDetail to ProductDetail
 
         KStream<String, ProductDetail> orderIdKeyProductDetailValueKStream = orderIdKeyOrderProductDetailValueKStream
-                .mapValues(orderProductDetail -> mapperFacade.map(orderProductDetail, ProductDetail.class));
+                .mapValues(orderProductMapper::toProductDetail);
 
         // --
         // Aggregate (in a Set) ProductDetail by order

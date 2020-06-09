@@ -13,10 +13,10 @@ public class OrderDto {
     private Long customerId;
     private PaymentType paymentType;
     private OrderStatus status;
-    private List<ProductIdUnit> products;
+    private List<ProductDto> products;
 
     @Data
-    public static final class ProductIdUnit {
+    public static final class ProductDto {
         private Long id;
         private Integer unit;
     }

@@ -4,19 +4,17 @@ import com.mycompany.storeapi.exception.CustomerDeletionException;
 import com.mycompany.storeapi.exception.CustomerNotFoundException;
 import com.mycompany.storeapi.model.Customer;
 import com.mycompany.storeapi.repository.CustomerRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
-
-    public CustomerServiceImpl(CustomerRepository customerRepository) {
-        this.customerRepository = customerRepository;
-    }
 
     @Override
     public List<Customer> getAllCustomers() {

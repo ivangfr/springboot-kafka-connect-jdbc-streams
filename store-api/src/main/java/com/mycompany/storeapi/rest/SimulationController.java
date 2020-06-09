@@ -1,15 +1,16 @@
 package com.mycompany.storeapi.rest;
 
-import com.mycompany.storeapi.rest.dto.RandomOrdersDto;
 import com.mycompany.storeapi.model.Customer;
 import com.mycompany.storeapi.model.Order;
 import com.mycompany.storeapi.model.OrderProduct;
 import com.mycompany.storeapi.model.OrderStatus;
 import com.mycompany.storeapi.model.PaymentType;
 import com.mycompany.storeapi.model.Product;
+import com.mycompany.storeapi.rest.dto.RandomOrdersDto;
 import com.mycompany.storeapi.service.CustomerService;
 import com.mycompany.storeapi.service.OrderService;
 import com.mycompany.storeapi.service.ProductService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -26,6 +28,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Slf4j
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/simulation")
 public class SimulationController {
@@ -36,17 +39,9 @@ public class SimulationController {
     @Value("${simulation.orders.sleep}")
     private Integer sleep;
 
-    private static final Random random = new Random();
-
     private final CustomerService customerService;
     private final ProductService productService;
     private final OrderService orderService;
-
-    public SimulationController(CustomerService customerService, ProductService productService, OrderService orderService) {
-        this.customerService = customerService;
-        this.productService = productService;
-        this.orderService = orderService;
-    }
 
     @PostMapping("/orders")
     public List<String> createRandomOrders(@RequestBody RandomOrdersDto randomOrdersDto) throws InterruptedException {
@@ -102,5 +97,7 @@ public class SimulationController {
 
         return orderIds;
     }
+
+    private static final Random random = new SecureRandom();
 
 }

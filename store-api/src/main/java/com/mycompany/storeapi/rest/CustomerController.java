@@ -1,13 +1,14 @@
 package com.mycompany.storeapi.rest;
 
+import com.mycompany.storeapi.mapper.CustomerMapper;
+import com.mycompany.storeapi.model.Customer;
 import com.mycompany.storeapi.rest.dto.AddCustomerDto;
 import com.mycompany.storeapi.rest.dto.CustomerDto;
 import com.mycompany.storeapi.rest.dto.UpdateCustomerDto;
-import com.mycompany.storeapi.model.Customer;
 import com.mycompany.storeapi.service.CustomerService;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import ma.glasnost.orika.MapperFacade;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,17 +24,13 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/customers")
 public class CustomerController {
 
     private final CustomerService customerService;
-    private final MapperFacade mapperFacade;
-
-    public CustomerController(CustomerService customerService, MapperFacade mapperFacade) {
-        this.customerService = customerService;
-        this.mapperFacade = mapperFacade;
-    }
+    private final CustomerMapper customerMapper;
 
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK"),
@@ -43,7 +40,7 @@ public class CustomerController {
     public List<CustomerDto> getAllCustomers() {
         return customerService.getAllCustomers()
                 .stream()
-                .map(customer -> mapperFacade.map(customer, CustomerDto.class))
+                .map(customerMapper::toCustomerDto)
                 .collect(Collectors.toList());
     }
 
@@ -55,7 +52,7 @@ public class CustomerController {
     @GetMapping("/{id}")
     public CustomerDto getCustomer(@PathVariable Long id) {
         Customer customer = customerService.validateAndGetCustomerById(id);
-        return mapperFacade.map(customer, CustomerDto.class);
+        return customerMapper.toCustomerDto(customer);
     }
 
     @ApiResponses(value = {
@@ -65,9 +62,9 @@ public class CustomerController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public CustomerDto addCustomer(@Valid @RequestBody AddCustomerDto addCustomerDto) {
-        Customer customer = mapperFacade.map(addCustomerDto, Customer.class);
+        Customer customer = customerMapper.toCustomer(addCustomerDto);
         customer = customerService.saveCustomer(customer);
-        return mapperFacade.map(customer, CustomerDto.class);
+        return customerMapper.toCustomerDto(customer);
     }
 
     @ApiResponses(value = {
@@ -78,9 +75,9 @@ public class CustomerController {
     @PatchMapping("/{id}")
     public CustomerDto updateCustomer(@PathVariable Long id, @Valid @RequestBody UpdateCustomerDto updateCustomerDto) {
         Customer customer = customerService.validateAndGetCustomerById(id);
-        mapperFacade.map(updateCustomerDto, customer);
+        customerMapper.updateCustomerFromDto(updateCustomerDto, customer);
         customer = customerService.saveCustomer(customer);
-        return mapperFacade.map(customer, CustomerDto.class);
+        return customerMapper.toCustomerDto(customer);
     }
 
     @ApiResponses(value = {
@@ -93,7 +90,7 @@ public class CustomerController {
     public CustomerDto deleteCustomer(@PathVariable Long id) {
         Customer customer = customerService.validateAndGetCustomerById(id);
         customerService.deleteCustomer(customer);
-        return mapperFacade.map(customer, CustomerDto.class);
+        return customerMapper.toCustomerDto(customer);
     }
 
 }

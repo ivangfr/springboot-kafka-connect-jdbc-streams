@@ -4,6 +4,7 @@ import com.mycompany.storeapi.model.Customer;
 import com.mycompany.storeapi.model.Product;
 import com.mycompany.storeapi.service.CustomerService;
 import com.mycompany.storeapi.service.ProductService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -14,6 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
+@RequiredArgsConstructor
 @Component
 public class LoadSamples implements CommandLineRunner {
 
@@ -25,11 +27,6 @@ public class LoadSamples implements CommandLineRunner {
 
     private final CustomerService customerService;
     private final ProductService productService;
-
-    public LoadSamples(CustomerService customerService, ProductService productService) {
-        this.customerService = customerService;
-        this.productService = productService;
-    }
 
     @Override
     public void run(String... args) {

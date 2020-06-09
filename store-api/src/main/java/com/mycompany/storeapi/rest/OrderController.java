@@ -1,13 +1,14 @@
 package com.mycompany.storeapi.rest;
 
+import com.mycompany.storeapi.mapper.OrderMapper;
+import com.mycompany.storeapi.model.Order;
 import com.mycompany.storeapi.rest.dto.CreateOrderDto;
 import com.mycompany.storeapi.rest.dto.OrderDto;
 import com.mycompany.storeapi.rest.dto.UpdateOrderDto;
-import com.mycompany.storeapi.model.Order;
 import com.mycompany.storeapi.service.OrderService;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import ma.glasnost.orika.MapperFacade;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -23,17 +24,13 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/orders")
 public class OrderController {
 
     private final OrderService orderService;
-    private final MapperFacade mapperFacade;
-
-    public OrderController(OrderService orderService, MapperFacade mapperFacade) {
-        this.orderService = orderService;
-        this.mapperFacade = mapperFacade;
-    }
+    private final OrderMapper orderMapper;
 
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK"),
@@ -43,7 +40,7 @@ public class OrderController {
     public List<OrderDto> getAllOrders() {
         return orderService.getAllOrders()
                 .stream()
-                .map(order -> mapperFacade.map(order, OrderDto.class))
+                .map(orderMapper::toOrderDto)
                 .collect(Collectors.toList());
     }
 
@@ -55,7 +52,7 @@ public class OrderController {
     @GetMapping("/{id}")
     public OrderDto getOrder(@PathVariable UUID id) {
         Order order = orderService.validateAndGetOrderById(id.toString());
-        return mapperFacade.map(order, OrderDto.class);
+        return orderMapper.toOrderDto(order);
     }
 
     @ApiResponses(value = {
@@ -65,10 +62,10 @@ public class OrderController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public OrderDto createOrder(@Valid @RequestBody CreateOrderDto createOrderDto) {
-        Order order = mapperFacade.map(createOrderDto, Order.class);
+        Order order = orderMapper.toOrder(createOrderDto);
         order.setId(UUID.randomUUID().toString());
         order = orderService.saveOrder(order);
-        return mapperFacade.map(order, OrderDto.class);
+        return orderMapper.toOrderDto(order);
     }
 
     @ApiResponses(value = {
@@ -79,9 +76,9 @@ public class OrderController {
     @PatchMapping("/{id}")
     public OrderDto updateOrder(@PathVariable UUID id, @Valid @RequestBody UpdateOrderDto updateOrderDto) {
         Order order = orderService.validateAndGetOrderById(id.toString());
-        mapperFacade.map(updateOrderDto, order);
+        orderMapper.updateOrderFromDto(updateOrderDto, order);
         order = orderService.saveOrder(order);
-        return mapperFacade.map(order, OrderDto.class);
+        return orderMapper.toOrderDto(order);
     }
 
 }
