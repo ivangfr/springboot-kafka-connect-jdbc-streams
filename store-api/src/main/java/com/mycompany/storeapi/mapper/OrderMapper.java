@@ -32,7 +32,6 @@ public abstract class OrderMapper {
     @Mapping(source = "orderProducts", target = "products")
     public abstract OrderDto toOrderDto(Order order);
 
-    // It's used in the mapping from Order to OrderDto
     @Mapping(source = "product.id", target = "id")
     public abstract OrderDto.ProductDto toOrderDtoProductDto(OrderProduct orderProduct);
 

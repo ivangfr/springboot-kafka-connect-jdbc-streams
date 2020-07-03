@@ -55,6 +55,7 @@ services:
   schema-registry-ui:
     image: landoop/schema-registry-ui:0.9.5
     container_name: kafka-schema-registry-ui
+    restart: unless-stopped
     depends_on:
       - schema-registry
     ports:
@@ -105,6 +106,7 @@ services:
   kafka-connect:
     build: docker/kafka-connect
     container_name: kafka-connect
+    restart: unless-stopped
     depends_on:
       - schema-registry
     ports:
