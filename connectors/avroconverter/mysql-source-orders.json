@@ -2,7 +2,7 @@
   "name": "mysql-source-orders",
   "config": {
     "connector.class": "io.confluent.connect.jdbc.JdbcSourceConnector",
-    "connection.url": "jdbc:mysql://mysql:3306/storedb?autoReconnect=true&useSSL=false&useUnicode=yes&characterEncoding=UTF-8&useLegacyDatetimeCode=false&serverTimezone=UTC",
+    "connection.url": "jdbc:mysql://mysql:3306/storedb?characterEncoding=UTF-8&serverTimezone=UTC",
     "connection.user": "root",
     "connection.password": "secret",
     "table.whitelist": "orders",

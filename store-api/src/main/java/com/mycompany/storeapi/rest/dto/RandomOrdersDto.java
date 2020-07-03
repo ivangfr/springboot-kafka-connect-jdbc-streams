@@ -1,6 +1,6 @@
 package com.mycompany.storeapi.rest.dto;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -8,10 +8,10 @@ import lombok.Data;
 @AllArgsConstructor
 public class RandomOrdersDto {
 
-    @ApiModelProperty(example = "10")
+    @Schema(example = "10")
     private Integer total;
 
-    @ApiModelProperty(position = 1, example = "100")
+    @Schema(example = "100")
     private Integer sleep;
 
 }

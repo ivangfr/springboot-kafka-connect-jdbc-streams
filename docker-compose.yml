@@ -40,11 +40,11 @@ services:
     container_name: schema-registry
     restart: unless-stopped
     depends_on:
-      - zookeeper
+      - kafka
     ports:
       - "8081:8081"
     environment:
-      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: zookeeper:2181
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka:9092
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
       SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
       TZ: "${TZ-Europe/Berlin}"

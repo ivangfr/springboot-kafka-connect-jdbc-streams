@@ -1,6 +1,6 @@
 package com.mycompany.storeapi.rest.dto;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import javax.validation.constraints.Positive;
@@ -9,10 +9,10 @@ import java.math.BigDecimal;
 @Data
 public class UpdateProductDto {
 
-    @ApiModelProperty(example = "MacBook Air")
+    @Schema(example = "MacBook Air")
     private String name;
 
-    @ApiModelProperty(position = 1, example = "2450")
+    @Schema(example = "2450")
     @Positive
     private BigDecimal price;
 

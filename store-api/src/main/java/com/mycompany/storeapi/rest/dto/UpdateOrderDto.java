@@ -2,16 +2,16 @@ package com.mycompany.storeapi.rest.dto;
 
 import com.mycompany.storeapi.model.OrderStatus;
 import com.mycompany.storeapi.model.PaymentType;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
 public class UpdateOrderDto {
 
-    @ApiModelProperty(example = "CASH")
+    @Schema(example = "CASH")
     private PaymentType paymentType;
 
-    @ApiModelProperty(position = 1, example = "PAYED")
+    @Schema(example = "PAYED")
     private OrderStatus status;
 
 }

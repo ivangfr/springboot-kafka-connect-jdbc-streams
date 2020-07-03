@@ -5,7 +5,7 @@ spring:
     hibernate:
       ddl-auto: update
   datasource:
-    url: jdbc:mysql://${MYSQL_ADDR:localhost}:3306/storedb?autoReconnect=true&useSSL=false&useUnicode=yes&characterEncoding=UTF-8&useLegacyDatetimeCode=false&serverTimezone=UTC
+    url: jdbc:mysql://${MYSQL_ADDR:localhost}:3306/storedb?characterEncoding=UTF-8&serverTimezone=UTC
     username: root
     password: secret
 
@@ -17,10 +17,15 @@ logging.level:
 management:
   endpoints:
     web:
-      exposure.include: "*"
+      exposure.include: beans, env, health, info, metrics, mappings
   endpoint:
     health:
       show-details: always
+
+springdoc:
+  show-actuator: true
+  swagger-ui:
+    groups-order: DESC
 
 load-samples:
   customers.enabled: true

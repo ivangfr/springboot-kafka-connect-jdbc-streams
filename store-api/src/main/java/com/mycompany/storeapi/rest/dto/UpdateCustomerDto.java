@@ -1,6 +1,6 @@
 package com.mycompany.storeapi.rest.dto;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
@@ -8,17 +8,17 @@ import javax.validation.constraints.Email;
 @Data
 public class UpdateCustomerDto {
 
-    @ApiModelProperty(example = "Ivan Franchin Jr.")
+    @Schema(example = "Ivan Franchin 2")
     private String name;
 
-    @ApiModelProperty(position = 1, example = "ivan.franchin.jr@test.com")
+    @Schema(example = "ivan.franchin.2@test.com")
     @Email
     private String email;
 
-    @ApiModelProperty(position = 2, example = "Street Bronx 456")
+    @Schema(example = "Street Bronx 456")
     private String address;
 
-    @ApiModelProperty(position = 3, example = "778899")
+    @Schema(example = "778899")
     private String phone;
 
 }

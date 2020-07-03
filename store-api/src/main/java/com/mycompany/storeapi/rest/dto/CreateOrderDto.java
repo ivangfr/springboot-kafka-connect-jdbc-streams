@@ -2,7 +2,7 @@ package com.mycompany.storeapi.rest.dto;
 
 import com.mycompany.storeapi.model.OrderStatus;
 import com.mycompany.storeapi.model.PaymentType;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import javax.validation.Valid;
@@ -13,30 +13,29 @@ import java.util.List;
 @Data
 public class CreateOrderDto {
 
-    @ApiModelProperty(example = "1")
+    @Schema(example = "1")
     @NotNull
     private Long customerId;
 
-    @ApiModelProperty(position = 1, example = "BITCOIN")
+    @Schema(example = "BITCOIN")
     @NotNull
     private PaymentType paymentType;
 
-    @ApiModelProperty(position = 2, example = "OPEN")
+    @Schema(example = "OPEN")
     @NotNull
     private OrderStatus status;
 
-    @ApiModelProperty(position = 3)
     @Valid
     private List<CreateOrderProductDto> products;
 
     @Data
     public static class CreateOrderProductDto {
 
-        @ApiModelProperty(example = "15")
+        @Schema(example = "15")
         @NotNull
         private Long id;
 
-        @ApiModelProperty(position = 1, example = "1")
+        @Schema(example = "1")
         @NotNull
         @Positive
         private Integer unit;

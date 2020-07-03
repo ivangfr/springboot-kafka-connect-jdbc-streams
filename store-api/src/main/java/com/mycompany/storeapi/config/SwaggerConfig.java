@@ -1,38 +1,32 @@
 package com.mycompany.storeapi.config;
 
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import org.springdoc.core.GroupedOpenApi;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
-
-import java.util.Collections;
-
-import static springfox.documentation.builders.PathSelectors.regex;
 
 @Configuration
-@EnableSwagger2
 public class SwaggerConfig {
 
     @Value("${spring.application.name}")
-    private String appName;
+    private String applicationName;
 
     @Bean
-    Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .useDefaultResponseMessages(false)
-                .select()
-                .apis(RequestHandlerSelectors.any())
-                .paths(regex("/api/.*"))
-                .build()
-                .apiInfo(getApiInfo());
+    public OpenAPI customOpenAPI() {
+        return new OpenAPI().components(new Components()).info(new Info().title(applicationName));
     }
 
-    private ApiInfo getApiInfo() {
-        return new ApiInfo(appName, null, null, null, null, null, null, Collections.emptyList());
+    @Bean
+    public GroupedOpenApi customApi() {
+        return GroupedOpenApi.builder().group("api").pathsToMatch("/api/**").build();
+    }
+
+    @Bean
+    public GroupedOpenApi actuatorApi() {
+        return GroupedOpenApi.builder().group("actuator").pathsToMatch("/actuator/**").build();
     }
 
 }
