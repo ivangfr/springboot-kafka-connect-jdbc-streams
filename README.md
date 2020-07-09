@@ -56,7 +56,7 @@ In order to have topics in `Kafka` with more than `1` partition, we must create 
   ```
   ./create-kafka-topics.sh
   ```
-  > **Note:** you can ignore the warnings
+  > **Note:** You can ignore the warnings
 
   It will create the topics `mysql.storedb.customers`, `mysql.storedb.products`, `mysql.storedb.orders`, `mysql.storedb.orders_products` with `5` partitions.
 
@@ -319,7 +319,7 @@ Steps to create the connectors:
 
   ```
   docker run --tty --interactive --rm --network=springboot-kafka-connect-streams_default \
-    confluentinc/cp-kafkacat:5.4.1 kafkacat -b kafka:9092\
+    confluentinc/cp-kafkacat:5.5.1 kafkacat -b kafka:9092\
     -f '\nKey (%K bytes): %k\t\nValue (%S bytes): %s\n\Partition: %p\tOffset: %o\n--\n' \
     -t mysql.storedb.customers -C -c1
   ```
