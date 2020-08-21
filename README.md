@@ -8,13 +8,13 @@ The main goal of this project is to play with [`Kafka`](https://kafka.apache.org
 
 ## Applications
 
-- **store-api**
+- ### store-api
 
   Monolithic [`Spring Boot`](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/) application that exposes a REST API to manage `Customers`, `Products` and `Orders`. The data is stored in `MySQL`.
   
   ![store-api-swagger](images/store-api-swagger.png)
 
-- **store-streams**
+- ### store-streams
 
   `Spring Boot` application that connects to `Kafka` and uses `Kafka Streams API` to transform some _"input"_ topics into a new _"output"_ topic in `Kafka`.
 
