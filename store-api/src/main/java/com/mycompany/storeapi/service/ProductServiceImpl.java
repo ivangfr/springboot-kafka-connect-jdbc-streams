@@ -31,13 +31,12 @@ public class ProductServiceImpl implements ProductService {
         try {
             productRepository.delete(product);
         } catch (DataIntegrityViolationException e) {
-            throw new ProductDeletionException(String.format("Product with id '%s' cannot be deleted", product.getId()));
+            throw new ProductDeletionException(product.getId());
         }
     }
 
     @Override
     public Product validateAndGetProductById(Long id) {
-        return productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(String.format("Product with id '%s' not found", id)));
+        return productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
     }
 }

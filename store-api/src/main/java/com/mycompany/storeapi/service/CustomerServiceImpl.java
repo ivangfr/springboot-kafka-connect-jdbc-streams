@@ -31,13 +31,12 @@ public class CustomerServiceImpl implements CustomerService {
         try {
             customerRepository.delete(customer);
         } catch (DataIntegrityViolationException e) {
-            throw new CustomerDeletionException(String.format("Customer with id '%s' cannot be deleted", customer.getId()));
+            throw new CustomerDeletionException(customer.getId());
         }
     }
 
     @Override
     public Customer validateAndGetCustomerById(Long id) {
-        return customerRepository.findById(id)
-                .orElseThrow(() -> new CustomerNotFoundException(String.format("Customer with id '%s' not found", id)));
+        return customerRepository.findById(id).orElseThrow(() -> new CustomerNotFoundException(id));
     }
 }

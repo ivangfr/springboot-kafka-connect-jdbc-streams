@@ -41,7 +41,7 @@ In order to run this project, you can use [`JSON`](https://www.json.org) or [`Av
   > docker-compose build
   > ```
 
-- Wait a little bit until all containers are `Up (healthy)`. To check the status of the containers run the command
+- Wait a bit until all containers are `Up (healthy)`. To check the status of the containers run
   ```
   docker-compose ps
   ```

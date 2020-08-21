@@ -26,7 +26,6 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order validateAndGetOrderById(String id) {
-        return orderRepository.findById(id)
-                .orElseThrow(() -> new OrderNotFoundException(String.format("Order with id '%s' not found", id)));
+        return orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException(id));
     }
 }
