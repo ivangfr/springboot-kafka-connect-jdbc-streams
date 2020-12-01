@@ -152,16 +152,19 @@ Steps to create the connectors:
    The response should be no orders
    ```
    {
-     "took" : 93,
+     "took" : 91,
      "timed_out" : false,
      "_shards" : {
-       "total" : 5,
-       "successful" : 5,
+       "total" : 1,
+       "successful" : 1,
        "skipped" : 0,
        "failed" : 0
      },
      "hits" : {
-       "total" : 0,
+       "total" : {
+         "value" : 0,
+         "relation" : "eq"
+       },
        "max_score" : null,
        "hits" : [ ]
      }
@@ -188,12 +191,15 @@ Steps to create the connectors:
    ```
    HTTP/1.1 201
    {
-     "id": "7daefa93-4b96-4174-bc20-5890e3e788cb",
+     "id": "47675629-4f0d-440d-b6df-c829874ee2a6",
      "customerId": 1,
      "paymentType": "BITCOIN",
      "status": "OPEN",
      "products": [
-       {"id": 15, "unit": 1}
+       {
+         "id": 15,
+         "unit": 1
+       }
      ]
    }
    ```
@@ -206,36 +212,39 @@ Steps to create the connectors:
    We should have one order with a customer and products names.
    ```
    {
-     "took" : 12,
+     "took" : 844,
      "timed_out" : false,
      "_shards" : {
-       "total" : 5,
-       "successful" : 5,
+       "total" : 1,
+       "successful" : 1,
        "skipped" : 0,
        "failed" : 0
      },
      "hits" : {
-       "total" : 1,
+       "total" : {
+         "value" : 1,
+         "relation" : "eq"
+       },
        "max_score" : 1.0,
        "hits" : [
          {
            "_index" : "store.streams.orders",
            "_type" : "order",
-           "_id" : "7daefa93-4b96-4174-bc20-5890e3e788cb",
+           "_id" : "47675629-4f0d-440d-b6df-c829874ee2a6",
            "_score" : 1.0,
            "_source" : {
              "payment_type" : "BITCOIN",
-             "created_at" : 1583066621332,
-             "id" : "7daefa93-4b96-4174-bc20-5890e3e788cb",
+             "created_at" : 1606821792360,
+             "id" : "47675629-4f0d-440d-b6df-c829874ee2a6",
              "customer_name" : "John Gates",
              "customer_id" : 1,
              "status" : "OPEN",
              "products" : [
                {
-                  "unit" : 1,
-                  "price" : 900,
-                  "name" : "iPhone Xr",
-                  "id" : 15
+                 "unit" : 1,
+                 "price" : 900,
+                 "name" : "iPhone Xr",
+                 "id" : 15
                }
              ]
            }

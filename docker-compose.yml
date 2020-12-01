@@ -166,7 +166,7 @@ services:
 
   mysql:
     container_name: mysql
-    image: mysql:5.7.31
+    image: mysql:5.7.32
     restart: unless-stopped
     ports:
       - "3306:3306"
@@ -178,7 +178,7 @@ services:
       start_period: 30s
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.8.0
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.9.3
     container_name: elasticsearch
     restart: unless-stopped
     ports:
