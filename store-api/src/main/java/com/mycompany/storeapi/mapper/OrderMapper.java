@@ -1,9 +1,7 @@
 package com.mycompany.storeapi.mapper;
 
-import com.mycompany.storeapi.model.Customer;
 import com.mycompany.storeapi.model.Order;
 import com.mycompany.storeapi.model.OrderProduct;
-import com.mycompany.storeapi.model.Product;
 import com.mycompany.storeapi.rest.dto.CreateOrderDto;
 import com.mycompany.storeapi.rest.dto.OrderDto;
 import com.mycompany.storeapi.rest.dto.UpdateOrderDto;
@@ -38,22 +36,21 @@ public abstract class OrderMapper {
     public abstract void updateOrderFromDto(UpdateOrderDto updateOrderDto, @MappingTarget Order order);
 
     public Order toOrder(CreateOrderDto createOrderDto) {
+        if (createOrderDto == null) {
+            return null;
+        }
         Order order = new Order();
         order.setPaymentType(createOrderDto.getPaymentType());
         order.setStatus(createOrderDto.getStatus());
+        order.setCustomer(customerService.validateAndGetCustomerById(createOrderDto.getCustomerId()));
 
-        Customer customer = customerService.validateAndGetCustomerById(createOrderDto.getCustomerId());
-        order.setCustomer(customer);
-
-        createOrderDto.getProducts().forEach(p -> {
-            Product product = productService.validateAndGetProductById(p.getId());
+        for (CreateOrderDto.CreateOrderProductDto p : createOrderDto.getProducts()) {
             OrderProduct orderProduct = new OrderProduct();
             orderProduct.setOrder(order);
-            orderProduct.setProduct(product);
+            orderProduct.setProduct(productService.validateAndGetProductById(p.getId()));
             orderProduct.setUnit(p.getUnit());
             order.getOrderProducts().add(orderProduct);
-        });
-
+        }
         return order;
     }
 
