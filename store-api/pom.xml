@@ -16,7 +16,7 @@
 
     <properties>
         <org.mapstruct.version>1.4.1.Final</org.mapstruct.version>
-        <springdoc.openapi.version>1.5.0</springdoc.openapi.version>
+        <springdoc.openapi.version>1.5.1</springdoc.openapi.version>
     </properties>
 
     <dependencies>

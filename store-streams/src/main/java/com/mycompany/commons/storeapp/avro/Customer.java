@@ -74,12 +74,12 @@ static {
     return DECODER.decode(b);
   }
 
-  @Deprecated public long id;
-  @Deprecated public java.lang.CharSequence address;
-  @Deprecated public java.time.Instant created_at;
-  @Deprecated public java.lang.CharSequence email;
-  @Deprecated public java.lang.CharSequence name;
-  @Deprecated public java.lang.CharSequence phone;
+   private long id;
+   private java.lang.CharSequence address;
+   private java.time.Instant created_at;
+   private java.lang.CharSequence email;
+   private java.lang.CharSequence name;
+   private java.lang.CharSequence phone;
 
   /**
    * Default constructor.  Note that this does not initialize fields
@@ -117,7 +117,7 @@ static {
     case 3: return email;
     case 4: return name;
     case 5: return phone;
-    default: throw new org.apache.avro.AvroRuntimeException("Bad index");
+    default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
 
@@ -147,7 +147,7 @@ static {
     case 3: email = (java.lang.CharSequence)value$; break;
     case 4: name = (java.lang.CharSequence)value$; break;
     case 5: phone = (java.lang.CharSequence)value$; break;
-    default: throw new org.apache.avro.AvroRuntimeException("Bad index");
+    default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
 

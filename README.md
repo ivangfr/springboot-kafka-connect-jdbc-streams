@@ -26,7 +26,7 @@ The main goal of this project is to play with [`Kafka`](https://kafka.apache.org
 
 ## (De)Serialization formats
 
-In order to run this project, you can use [`JSON`](https://www.json.org) or [`Avro`](http://avro.apache.org/docs/current/gettingstartedjava.html) format to serialize/deserialize data to/from the `binary` format used by Kafka. The default format is `JSON`. Throughout this document, I will point out what to do if you want to use `Avro`.
+In order to run this project, you can use [`JSON`](https://www.json.org) or [`Avro`](https://avro.apache.org/docs/current/gettingstartedjava.html) format to serialize/deserialize data to/from the `binary` format used by Kafka. The default format is `JSON`. Throughout this document, I will point out what to do if you want to use `Avro`.
 
 **P.S. Avro (de)serialization is not completely implemented!**
 
@@ -41,7 +41,7 @@ In order to run this project, you can use [`JSON`](https://www.json.org) or [`Av
   > docker-compose build
   > ```
 
-- Wait a bit until all containers are `Up (healthy)`. To check the status of the containers run
+- Wait until all containers are `Up (healthy)`. To check the status of the containers run
   ```
   docker-compose ps
   ```
@@ -328,9 +328,9 @@ Steps to create the connectors:
 
   ```
   docker run --tty --interactive --rm --network=springboot-kafka-connect-jdbc-streams_default \
-    confluentinc/cp-kafkacat:5.5.1 kafkacat -b kafka:9092\
+    confluentinc/cp-kafkacat:5.5.1 kafkacat -b kafka:9092 \
     -f '\nKey (%K bytes): %k\t\nValue (%S bytes): %s\n\Partition: %p\tOffset: %o\n--\n' \
-    -t mysql.storedb.customers -C -c1
+    -t store.streams.orders -C -c1
   ```
   
 ## Shutdown

@@ -74,13 +74,13 @@ static {
     return DECODER.decode(b);
   }
 
-  @Deprecated public java.lang.CharSequence id;
-  @Deprecated public java.time.Instant created_at;
-  @Deprecated public java.lang.CharSequence payment_type;
-  @Deprecated public java.lang.CharSequence status;
-  @Deprecated public long customer_id;
-  @Deprecated public java.lang.CharSequence customer_name;
-  @Deprecated public java.util.List<com.mycompany.commons.storeapp.avro.Product> products;
+   private java.lang.CharSequence id;
+   private java.time.Instant created_at;
+   private java.lang.CharSequence payment_type;
+   private java.lang.CharSequence status;
+   private long customer_id;
+   private java.lang.CharSequence customer_name;
+   private java.util.List<com.mycompany.commons.storeapp.avro.Product> products;
 
   /**
    * Default constructor.  Note that this does not initialize fields
@@ -121,7 +121,7 @@ static {
     case 4: return customer_id;
     case 5: return customer_name;
     case 6: return products;
-    default: throw new org.apache.avro.AvroRuntimeException("Bad index");
+    default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
 
@@ -153,7 +153,7 @@ static {
     case 4: customer_id = (java.lang.Long)value$; break;
     case 5: customer_name = (java.lang.CharSequence)value$; break;
     case 6: products = (java.util.List<com.mycompany.commons.storeapp.avro.Product>)value$; break;
-    default: throw new org.apache.avro.AvroRuntimeException("Bad index");
+    default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
 

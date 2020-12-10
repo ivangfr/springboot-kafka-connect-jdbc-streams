@@ -74,9 +74,9 @@ static {
     return DECODER.decode(b);
   }
 
-  @Deprecated public long id;
-  @Deprecated public java.time.Instant created_at;
-  @Deprecated public java.lang.CharSequence name;
+   private long id;
+   private java.time.Instant created_at;
+   private java.lang.CharSequence name;
 
   /**
    * Default constructor.  Note that this does not initialize fields
@@ -105,7 +105,7 @@ static {
     case 0: return id;
     case 1: return created_at;
     case 2: return name;
-    default: throw new org.apache.avro.AvroRuntimeException("Bad index");
+    default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
 
@@ -129,7 +129,7 @@ static {
     case 0: id = (java.lang.Long)value$; break;
     case 1: created_at = (java.time.Instant)value$; break;
     case 2: name = (java.lang.CharSequence)value$; break;
-    default: throw new org.apache.avro.AvroRuntimeException("Bad index");
+    default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
 

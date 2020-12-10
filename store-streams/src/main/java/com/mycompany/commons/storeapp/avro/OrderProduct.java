@@ -71,9 +71,9 @@ public class OrderProduct extends org.apache.avro.specific.SpecificRecordBase im
     return DECODER.decode(b);
   }
 
-  @Deprecated public java.lang.CharSequence order_id;
-  @Deprecated public long product_id;
-  @Deprecated public int unit;
+   private java.lang.CharSequence order_id;
+   private long product_id;
+   private int unit;
 
   /**
    * Default constructor.  Note that this does not initialize fields
@@ -102,7 +102,7 @@ public class OrderProduct extends org.apache.avro.specific.SpecificRecordBase im
     case 0: return order_id;
     case 1: return product_id;
     case 2: return unit;
-    default: throw new org.apache.avro.AvroRuntimeException("Bad index");
+    default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
 
@@ -113,7 +113,7 @@ public class OrderProduct extends org.apache.avro.specific.SpecificRecordBase im
     case 0: order_id = (java.lang.CharSequence)value$; break;
     case 1: product_id = (java.lang.Long)value$; break;
     case 2: unit = (java.lang.Integer)value$; break;
-    default: throw new org.apache.avro.AvroRuntimeException("Bad index");
+    default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
 
