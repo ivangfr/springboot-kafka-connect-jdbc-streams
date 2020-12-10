@@ -1,4 +1,4 @@
-# springboot-kafka-connect-streams
+# springboot-kafka-connect-jdbc-streams
 
 The main goal of this project is to play with [`Kafka`](https://kafka.apache.org), [`Kafka Connect`](https://docs.confluent.io/current/connect/index.html) and [`Kafka Streams`](https://docs.confluent.io/current/streams/index.html). For this, we have: `store-api` that inserts/updates records in [`MySQL`](https://www.mysql.com); `Source Connectors` that monitor inserted/updated records in `MySQL` and push messages related to those changes to `Kafka`; `Sink Connectors` that listen messages from `Kafka` and insert/update documents in [`Elasticsearch`](https://www.elastic.co); finally, `store-streams` that listens messages from `Kafka`, treats them using `Kafka Streams` and push new messages back to `Kafka`.
 
@@ -32,11 +32,11 @@ In order to run this project, you can use [`JSON`](https://www.json.org) or [`Av
 
 ## Start Environment
 
-- Open a terminal and inside `springboot-kafka-connect-streams` root folder run
+- Open a terminal and inside `springboot-kafka-connect-jdbc-streams` root folder run
   ```
   docker-compose up -d
   ```
-  > **Note:** During the first run, an image for `kafka-connect` will be built, whose name is `springboot-kafka-connect-streams_kafka-connect`. Run the command below to rebuild it
+  > **Note:** During the first run, an image for `kafka-connect` will be built, whose name is `springboot-kafka-connect-jdbc-streams_kafka-connect`. Run the command below to rebuild it
   > ```
   > docker-compose build
   > ```
@@ -50,7 +50,7 @@ In order to run this project, you can use [`JSON`](https://www.json.org) or [`Av
 
 In order to have topics in `Kafka` with more than `1` partition, we must create them manually and not wait for the connectors to create for us. So, for it:
 
-- Open a new terminal and make sure you are in `springboot-kafka-connect-streams` root folder
+- Open a new terminal and make sure you are in `springboot-kafka-connect-jdbc-streams` root folder
 
 - Run the script below
   ```
@@ -68,7 +68,7 @@ Connectors use `Converters` for data serialization and deserialization. If you a
 
 Steps to create the connectors:
 
-- In a terminal, navigate to `springboot-kafka-connect-streams` root folder
+- In a terminal, navigate to `springboot-kafka-connect-jdbc-streams` root folder
 
 - Run the following script to create the connectors on `kafka-connect`
 
@@ -108,7 +108,7 @@ Steps to create the connectors:
 
 ## Run store-api
 
-- Open a new terminal and make sure you are in `springboot-kafka-connect-streams` root folder
+- Open a new terminal and make sure you are in `springboot-kafka-connect-jdbc-streams` root folder
 
 - Run the command below to start the application
   ```
@@ -123,7 +123,7 @@ Steps to create the connectors:
 
 ## Run store-streams
 
-- Open a new terminal and inside `springboot-kafka-connect-streams` root folder, run
+- Open a new terminal and inside `springboot-kafka-connect-jdbc-streams` root folder, run
 
 - To start application, run
 
@@ -327,7 +327,7 @@ Steps to create the connectors:
 - **Kafkacat**
 
   ```
-  docker run --tty --interactive --rm --network=springboot-kafka-connect-streams_default \
+  docker run --tty --interactive --rm --network=springboot-kafka-connect-jdbc-streams_default \
     confluentinc/cp-kafkacat:5.5.1 kafkacat -b kafka:9092\
     -f '\nKey (%K bytes): %k\t\nValue (%S bytes): %s\n\Partition: %p\tOffset: %o\n--\n' \
     -t mysql.storedb.customers -C -c1
@@ -336,7 +336,7 @@ Steps to create the connectors:
 ## Shutdown
 
 - Go to the terminals where `store-api` and `store-streams` are running and press `Ctrl+C` to stop them 
-- In a terminal and inside `springboot-kafka-connect-streams`, run the command below to stop and remove Docker containers, networks and volumes
+- In a terminal and inside `springboot-kafka-connect-jdbc-streams`, run the command below to stop and remove Docker containers, networks and volumes
   ```
   docker-compose down -v
   ```

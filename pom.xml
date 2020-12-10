@@ -11,10 +11,10 @@
     </parent>
 
     <groupId>com.mycompany</groupId>
-    <artifactId>springboot-kafka-connect-streams</artifactId>
+    <artifactId>springboot-kafka-connect-jdbc-streams</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>springboot-kafka-connect-streams</name>
+    <name>springboot-kafka-connect-jdbc-streams</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
