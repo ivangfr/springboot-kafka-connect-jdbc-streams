@@ -1,4 +1,4 @@
-package com.mycompany.commons.storeapp.events;
+package com.mycompany.commons.storeapp.json;
 
 import lombok.Data;
 

@@ -30,14 +30,16 @@
     },
     {
       "name": "customer_name",
-      "type": "string"
+      "type": ["null", "string"],
+      "default": null
     },
     {
       "name": "products",
       "type": {
         "type": "array",
-        "items": "com.mycompany.commons.storeapp.avro.Product"
-      }
+        "items": "com.mycompany.commons.storeapp.avro.ProductDetail"
+      },
+      "default": []
     }
   ],
   "connect.name": "com.mycompany.commons.storeapp.avro.OrderDetailed"

@@ -1,35 +1,33 @@
 package com.mycompany.storestreams.bus;
 
-import com.mycompany.commons.storeapp.events.Customer;
-import com.mycompany.commons.storeapp.events.Order;
-import com.mycompany.commons.storeapp.events.OrderDetailed;
-import com.mycompany.commons.storeapp.events.OrderProduct;
-import com.mycompany.commons.storeapp.events.OrderProductDetail;
-import com.mycompany.commons.storeapp.events.Product;
-import com.mycompany.commons.storeapp.events.ProductDetail;
-import com.mycompany.storestreams.mapper.OrderProductMapper;
-import com.mycompany.storestreams.util.JsonSerdeFactory;
+import com.mycompany.commons.storeapp.json.Customer;
+import com.mycompany.commons.storeapp.json.Order;
+import com.mycompany.commons.storeapp.json.OrderDetailed;
+import com.mycompany.commons.storeapp.json.OrderProduct;
+import com.mycompany.commons.storeapp.json.Product;
+import com.mycompany.commons.storeapp.json.ProductDetail;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
-import org.apache.kafka.streams.KeyValue;
-import org.apache.kafka.streams.kstream.Grouped;
+import org.apache.kafka.streams.kstream.GlobalKTable;
 import org.apache.kafka.streams.kstream.JoinWindows;
-import org.apache.kafka.streams.kstream.Joined;
 import org.apache.kafka.streams.kstream.KStream;
-import org.apache.kafka.streams.kstream.KTable;
 import org.apache.kafka.streams.kstream.Materialized;
 import org.apache.kafka.streams.kstream.StreamJoined;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.Input;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.context.annotation.Profile;
+import org.springframework.kafka.support.serializer.JsonDeserializer;
+import org.springframework.kafka.support.serializer.JsonSerializer;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -38,92 +36,73 @@ import java.util.Set;
 @EnableBinding(StoreKafkaStreamsProcessor.class)
 public class StoreStreamsJson {
 
-    private final OrderProductMapper orderProductMapper;
+    public static final Serde<List<ProductDetail>> productDetailListSerde;
+    public static final Serde<OrderDetailed> orderDetailedSerde;
+
+    static {
+        JsonSerializer<List<ProductDetail>> setSerializer = new JsonSerializer<>();
+        JsonDeserializer<List<ProductDetail>> setDeserializer = new JsonDeserializer<>(List.class);
+        productDetailListSerde = Serdes.serdeFrom(setSerializer, setDeserializer);
+
+        JsonSerializer<OrderDetailed> orderDetailedSerializer = new JsonSerializer<>();
+        JsonDeserializer<OrderDetailed> orderDetailedDeserializer = new JsonDeserializer<>(OrderDetailed.class);
+        orderDetailedSerde = Serdes.serdeFrom(orderDetailedSerializer, orderDetailedDeserializer);
+    }
 
     @StreamListener
     @SendTo(StoreKafkaStreamsProcessor.ORDER_OUTPUT)
     public KStream<String, OrderDetailed> process(
-            @Input(StoreKafkaStreamsProcessor.CUSTOMER_INPUT) KTable<String, Customer> customerKTable,
-            @Input(StoreKafkaStreamsProcessor.PRODUCT_INPUT) KTable<String, Product> productKTable,
+            @Input(StoreKafkaStreamsProcessor.CUSTOMER_INPUT) GlobalKTable<String, Customer> customerGlobalKTable,
+            @Input(StoreKafkaStreamsProcessor.PRODUCT_INPUT) GlobalKTable<String, Product> productGlobalKTable,
             @Input(StoreKafkaStreamsProcessor.ORDER_INPUT) KStream<String, Order> orderIdKeyOrderValueKStream,
             @Input(StoreKafkaStreamsProcessor.ORDER_PRODUCT_INPUT) KStream<String, OrderProduct> orderIdKeyOrderProductValueKStream) {
 
-        //--
-        // Useful for logging
-        //
-        customerKTable.toStream().foreach(this::logKeyValue);
-        productKTable.toStream().foreach(this::logKeyValue);
         orderIdKeyOrderValueKStream.foreach(this::logKeyValue);
         orderIdKeyOrderProductValueKStream.foreach(this::logKeyValue);
 
-        // --
-        // Add customer info to OrderDetailed
-
-        KStream<String, Order> customerIdKeyOrderValueKStream = orderIdKeyOrderValueKStream
-                .map((key, order) -> new KeyValue<>(order.getCustomer_id().toString(), order));
-
-        KStream<String, OrderDetailed> customerIdKeyOrderDetailedValueKStream = customerIdKeyOrderValueKStream
-                .join(customerKTable, (order, customer) -> {
-                    OrderDetailed orderDetailed = orderProductMapper.toOrderDetailed(order);
-                    orderDetailed.setCustomer_name(customer.getName());
-                    return orderDetailed;
-                }, Joined.with(Serdes.String(), JsonSerdeFactory.orderSerde, JsonSerdeFactory.customerSerde));
-
-        KStream<String, OrderDetailed> orderIdKeyOrderDetailedWithoutProductsSetValueKStream = customerIdKeyOrderDetailedValueKStream
-                .map((key, orderDetailed) -> new KeyValue<>(orderDetailed.getId(), orderDetailed));
-
-        // --
-        // Add product info to OrderProductDetail
-
-        KStream<String, OrderProduct> productIdKeyOrderProductValueKStream = orderIdKeyOrderProductValueKStream
-                .map((key, orderProduct) -> new KeyValue<>(orderProduct.getProduct_id().toString(), orderProduct));
-
-        KStream<String, OrderProductDetail> productIdKeyOrderProductDetailValueKStream = productIdKeyOrderProductValueKStream
-                .join(productKTable, (orderProduct, product) -> {
-                    OrderProductDetail orderProductDetail = orderProductMapper.toOrderProductDetail(orderProduct);
-                    orderProductDetail.setProduct_name(product.getName());
-                    orderProductDetail.setProduct_price(product.getPrice());
-                    return orderProductDetail;
-                }, Joined.with(Serdes.String(), JsonSerdeFactory.orderProductSerde, JsonSerdeFactory.productSerde));
-
-        KStream<String, OrderProductDetail> orderIdKeyOrderProductDetailValueKStream = productIdKeyOrderProductDetailValueKStream
-                .map((key, orderProductDetail) -> new KeyValue<>(orderProductDetail.getOrder_id(), orderProductDetail));
-
-        // --
-        // Extract OrderProductDetail to ProductDetail
-
-        KStream<String, ProductDetail> orderIdKeyProductDetailValueKStream = orderIdKeyOrderProductDetailValueKStream
-                .mapValues(orderProductMapper::toProductDetail);
-
-        // --
-        // Aggregate (in a Set) ProductDetail by order
-
-        KTable<String, Set<ProductDetail>> orderIdKeyOrderProductDetailSetValueKTable = orderIdKeyProductDetailValueKStream
-                .groupByKey(Grouped.with(Serdes.String(), JsonSerdeFactory.productDetailSerde))
-                .aggregate(LinkedHashSet::new,
-                        (key, productDetail, productDetails) -> {
+        KStream<String, List<ProductDetail>> orderIdKeyListOfProductDetailValueKStream = orderIdKeyOrderProductValueKStream
+                .join(productGlobalKTable, (s, orderProduct) -> String.valueOf(orderProduct.getProductId()), this::toProductDetail)
+                .groupByKey()
+                .aggregate(LinkedList::new, (key, productDetail, productDetails) -> {
                             productDetails.add(productDetail);
                             return productDetails;
-                        }, Materialized.with(Serdes.String(), JsonSerdeFactory.setProductDetailSerde));
+                        },
+                        Materialized.with(Serdes.String(), productDetailListSerde))
+                .toStream();
 
-        // --
-        // Stream ProductDetail Set by order
-
-        KStream<String, Set<ProductDetail>> orderIdKeyOrderProductDetailSetValueKStream = orderIdKeyOrderProductDetailSetValueKTable.toStream();
-
-        // --
-        // Add ProductDetail Set to OrderDetailed
-
-        KStream<String, OrderDetailed> orderIdKeyOrderDetailedValueKStream = orderIdKeyOrderDetailedWithoutProductsSetValueKStream
-                .leftJoin(orderIdKeyOrderProductDetailSetValueKStream,
-                        (orderDetailed, products) -> {
+        KStream<String, OrderDetailed> orderIdKeyOrderDetailedValueKStream = orderIdKeyOrderValueKStream
+                .join(customerGlobalKTable, (s, order) -> order.getCustomerId().toString(), this::toOrderDetailed)
+                .join(orderIdKeyListOfProductDetailValueKStream, (orderDetailed, products) -> {
                             orderDetailed.setProducts(products);
                             return orderDetailed;
-                        }, JoinWindows.of(Duration.ofHours(1)), StreamJoined.with(Serdes.String(), JsonSerdeFactory.orderDetailedSerde, JsonSerdeFactory.setProductDetailSerde));
+                        },
+                        JoinWindows.of(Duration.ofMinutes(1)),
+                        StreamJoined.with(Serdes.String(), orderDetailedSerde, productDetailListSerde));
 
         orderIdKeyOrderDetailedValueKStream.foreach(this::logKeyValue);
 
         return orderIdKeyOrderDetailedValueKStream;
+    }
+
+    private ProductDetail toProductDetail(OrderProduct orderProduct, Product product) {
+        ProductDetail productDetail = new ProductDetail();
+        productDetail.setId(orderProduct.getProductId());
+        productDetail.setName(product.getName());
+        productDetail.setPrice(product.getPrice());
+        productDetail.setUnit(orderProduct.getUnit());
+        return productDetail;
+    }
+
+    private OrderDetailed toOrderDetailed(Order order, Customer customer) {
+        OrderDetailed orderDetailed = new OrderDetailed();
+        orderDetailed.setId(order.getId());
+        orderDetailed.setCustomerId(order.getCustomerId());
+        orderDetailed.setCustomerName(customer.getName());
+        orderDetailed.setStatus(order.getStatus());
+        orderDetailed.setPaymentType(order.getPaymentType());
+        orderDetailed.setCreatedAt(order.getCreatedAt());
+        orderDetailed.setProducts(Collections.emptyList());
+        return orderDetailed;
     }
 
     private void logKeyValue(String key, Object value) {

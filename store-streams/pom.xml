@@ -19,7 +19,6 @@
         <avro.version>1.10.1</avro.version>
         <confluent.version>5.5.1</confluent.version>
         <joda-time.version>2.10.8</joda-time.version>
-        <org.mapstruct.version>1.4.1.Final</org.mapstruct.version>
         <springdoc.openapi.version>1.5.1</springdoc.openapi.version>
     </properties>
 
@@ -61,13 +60,6 @@
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
             <version>${joda-time.version}</version>
-        </dependency>
-
-        <!-- MapStruct -->
-        <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct</artifactId>
-            <version>${org.mapstruct.version}</version>
         </dependency>
 
         <!-- SpringDoc OpenApi -->
@@ -115,26 +107,6 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <annotationProcessorPaths>
-                        <!-- Lombok -->
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                            <version>${lombok.version}</version>
-                        </path>
-                        <!-- MapStruct -->
-                        <path>
-                            <groupId>org.mapstruct</groupId>
-                            <artifactId>mapstruct-processor</artifactId>
-                            <version>${org.mapstruct.version}</version>
-                        </path>
-                    </annotationProcessorPaths>
-                </configuration>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.avro</groupId>
                 <artifactId>avro-maven-plugin</artifactId>
                 <version>${avro.version}</version>
@@ -145,9 +117,10 @@
                             <goal>schema</goal>
                         </goals>
                         <configuration>
-                            <!-- This import is needed so that Product can be referenced inside OrderDetailed -->
+                            <!-- This import is needed so that ProductDetail can be referenced inside OrderDetailed
+                                 and ProductDetailList -->
                             <imports>
-                                <import>${project.basedir}/src/main/resources/avro/product-message.avsc</import>
+                                <import>${project.basedir}/src/main/resources/avro/product-detail-message.avsc</import>
                             </imports>
                             <sourceDirectory>${project.basedir}/src/main/resources/avro</sourceDirectory>
                             <outputDirectory>${project.basedir}/src/main/java</outputDirectory>

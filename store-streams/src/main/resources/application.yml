@@ -76,6 +76,9 @@ spring:
     stream:
       kafka:
         streams:
+          binder:
+            configuration:
+              schema.registry.url: http://localhost:8081
           bindings:
             customer-input:
               consumer:
@@ -91,7 +94,4 @@ spring:
                 valueSerde: com.mycompany.storestreams.serde.avro.OrderProductAvroSerde
             order-output:
               producer:
-                valueSerde: org.apache.kafka.common.serialization.Serdes$StringSerde
-          binder:
-            configuration:
-              schema.registry.url: http://localhost:8081
+                valueSerde: com.mycompany.storestreams.serde.avro.OrderDetailedAvroSerde

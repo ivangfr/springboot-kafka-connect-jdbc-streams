@@ -14,8 +14,8 @@ import org.apache.avro.message.SchemaStore;
 
 @org.apache.avro.specific.AvroGenerated
 public class OrderDetailed extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = -4247053473036058641L;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"OrderDetailed\",\"namespace\":\"com.mycompany.commons.storeapp.avro\",\"fields\":[{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"created_at\",\"type\":{\"type\":\"long\",\"connect.version\":1,\"connect.name\":\"org.apache.kafka.connect.data.Timestamp\",\"logicalType\":\"timestamp-millis\"}},{\"name\":\"payment_type\",\"type\":\"string\"},{\"name\":\"status\",\"type\":\"string\"},{\"name\":\"customer_id\",\"type\":\"long\"},{\"name\":\"customer_name\",\"type\":\"string\"},{\"name\":\"products\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"Product\",\"fields\":[{\"name\":\"id\",\"type\":\"long\"},{\"name\":\"created_at\",\"type\":{\"type\":\"long\",\"connect.version\":1,\"connect.name\":\"org.apache.kafka.connect.data.Timestamp\",\"logicalType\":\"timestamp-millis\"}},{\"name\":\"name\",\"type\":\"string\"}],\"connect.name\":\"com.mycompany.commons.storeapp.avro.Product\"}}}],\"connect.name\":\"com.mycompany.commons.storeapp.avro.OrderDetailed\"}");
+  private static final long serialVersionUID = -293856184690800085L;
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"OrderDetailed\",\"namespace\":\"com.mycompany.commons.storeapp.avro\",\"fields\":[{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"created_at\",\"type\":{\"type\":\"long\",\"connect.version\":1,\"connect.name\":\"org.apache.kafka.connect.data.Timestamp\",\"logicalType\":\"timestamp-millis\"}},{\"name\":\"payment_type\",\"type\":\"string\"},{\"name\":\"status\",\"type\":\"string\"},{\"name\":\"customer_id\",\"type\":\"long\"},{\"name\":\"customer_name\",\"type\":[\"null\",\"string\"],\"default\":null},{\"name\":\"products\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"ProductDetail\",\"fields\":[{\"name\":\"id\",\"type\":\"long\"},{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"price\",\"type\":\"string\"},{\"name\":\"unit\",\"type\":\"int\"}],\"connect.name\":\"com.mycompany.commons.storeapp.avro.ProductDetail\"}},\"default\":[]}],\"connect.name\":\"com.mycompany.commons.storeapp.avro.OrderDetailed\"}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static SpecificData MODEL$ = new SpecificData();
@@ -80,7 +80,7 @@ static {
    private java.lang.CharSequence status;
    private long customer_id;
    private java.lang.CharSequence customer_name;
-   private java.util.List<com.mycompany.commons.storeapp.avro.Product> products;
+   private java.util.List<com.mycompany.commons.storeapp.avro.ProductDetail> products;
 
   /**
    * Default constructor.  Note that this does not initialize fields
@@ -99,7 +99,7 @@ static {
    * @param customer_name The new value for customer_name
    * @param products The new value for products
    */
-  public OrderDetailed(java.lang.CharSequence id, java.time.Instant created_at, java.lang.CharSequence payment_type, java.lang.CharSequence status, java.lang.Long customer_id, java.lang.CharSequence customer_name, java.util.List<com.mycompany.commons.storeapp.avro.Product> products) {
+  public OrderDetailed(java.lang.CharSequence id, java.time.Instant created_at, java.lang.CharSequence payment_type, java.lang.CharSequence status, java.lang.Long customer_id, java.lang.CharSequence customer_name, java.util.List<com.mycompany.commons.storeapp.avro.ProductDetail> products) {
     this.id = id;
     this.created_at = created_at.truncatedTo(java.time.temporal.ChronoUnit.MILLIS);
     this.payment_type = payment_type;
@@ -152,7 +152,7 @@ static {
     case 3: status = (java.lang.CharSequence)value$; break;
     case 4: customer_id = (java.lang.Long)value$; break;
     case 5: customer_name = (java.lang.CharSequence)value$; break;
-    case 6: products = (java.util.List<com.mycompany.commons.storeapp.avro.Product>)value$; break;
+    case 6: products = (java.util.List<com.mycompany.commons.storeapp.avro.ProductDetail>)value$; break;
     default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
@@ -263,7 +263,7 @@ static {
    * Gets the value of the 'products' field.
    * @return The value of the 'products' field.
    */
-  public java.util.List<com.mycompany.commons.storeapp.avro.Product> getProducts() {
+  public java.util.List<com.mycompany.commons.storeapp.avro.ProductDetail> getProducts() {
     return products;
   }
 
@@ -272,7 +272,7 @@ static {
    * Sets the value of the 'products' field.
    * @param value the value to set.
    */
-  public void setProducts(java.util.List<com.mycompany.commons.storeapp.avro.Product> value) {
+  public void setProducts(java.util.List<com.mycompany.commons.storeapp.avro.ProductDetail> value) {
     this.products = value;
   }
 
@@ -323,7 +323,7 @@ static {
     private java.lang.CharSequence status;
     private long customer_id;
     private java.lang.CharSequence customer_name;
-    private java.util.List<com.mycompany.commons.storeapp.avro.Product> products;
+    private java.util.List<com.mycompany.commons.storeapp.avro.ProductDetail> products;
 
     /** Creates a new Builder */
     private Builder() {
@@ -644,7 +644,7 @@ static {
       * Gets the value of the 'products' field.
       * @return The value.
       */
-    public java.util.List<com.mycompany.commons.storeapp.avro.Product> getProducts() {
+    public java.util.List<com.mycompany.commons.storeapp.avro.ProductDetail> getProducts() {
       return products;
     }
 
@@ -654,7 +654,7 @@ static {
       * @param value The value of 'products'.
       * @return This builder.
       */
-    public com.mycompany.commons.storeapp.avro.OrderDetailed.Builder setProducts(java.util.List<com.mycompany.commons.storeapp.avro.Product> value) {
+    public com.mycompany.commons.storeapp.avro.OrderDetailed.Builder setProducts(java.util.List<com.mycompany.commons.storeapp.avro.ProductDetail> value) {
       validate(fields()[6], value);
       this.products = value;
       fieldSetFlags()[6] = true;
@@ -691,7 +691,7 @@ static {
         record.status = fieldSetFlags()[3] ? this.status : (java.lang.CharSequence) defaultValue(fields()[3]);
         record.customer_id = fieldSetFlags()[4] ? this.customer_id : (java.lang.Long) defaultValue(fields()[4]);
         record.customer_name = fieldSetFlags()[5] ? this.customer_name : (java.lang.CharSequence) defaultValue(fields()[5]);
-        record.products = fieldSetFlags()[6] ? this.products : (java.util.List<com.mycompany.commons.storeapp.avro.Product>) defaultValue(fields()[6]);
+        record.products = fieldSetFlags()[6] ? this.products : (java.util.List<com.mycompany.commons.storeapp.avro.ProductDetail>) defaultValue(fields()[6]);
         return record;
       } catch (org.apache.avro.AvroMissingFieldException e) {
         throw e;

@@ -1,12 +1,7 @@
 package com.mycompany.storestreams.bus;
 
-import com.mycompany.commons.storeapp.events.Customer;
-import com.mycompany.commons.storeapp.events.Order;
-import com.mycompany.commons.storeapp.events.OrderDetailed;
-import com.mycompany.commons.storeapp.events.OrderProduct;
-import com.mycompany.commons.storeapp.events.Product;
+import org.apache.kafka.streams.kstream.GlobalKTable;
 import org.apache.kafka.streams.kstream.KStream;
-import org.apache.kafka.streams.kstream.KTable;
 import org.springframework.cloud.stream.annotation.Input;
 import org.springframework.cloud.stream.annotation.Output;
 
@@ -19,18 +14,18 @@ public interface StoreKafkaStreamsProcessor {
     String ORDER_OUTPUT = "order-output";
 
     @Input(CUSTOMER_INPUT)
-    KTable<String, Customer> customerInput();
+    GlobalKTable<?, ?> customerInput();
 
     @Input(PRODUCT_INPUT)
-    KTable<String, Product> productInput();
+    GlobalKTable<?, ?> productInput();
 
     @Input(ORDER_INPUT)
-    KStream<String, Order> orderInput();
+    KStream<?, ?> orderInput();
 
     @Input(ORDER_PRODUCT_INPUT)
-    KStream<String, OrderProduct> orderProductInput();
+    KStream<?, ?> orderProductInput();
 
     @Output(ORDER_OUTPUT)
-    KStream<String, OrderDetailed> orderOutput();
+    KStream<?, ?> orderOutput();
 
 }

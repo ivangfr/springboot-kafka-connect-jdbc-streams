@@ -1,0 +1,24 @@
+{
+  "type": "record",
+  "name": "ProductDetail",
+  "namespace": "com.mycompany.commons.storeapp.avro",
+  "fields": [
+    {
+      "name": "id",
+      "type": "long"
+    },
+    {
+      "name": "name",
+      "type": "string"
+    },
+    {
+      "name": "price",
+      "type": "string"
+    },
+    {
+      "name": "unit",
+      "type": "int"
+    }
+  ],
+  "connect.name": "com.mycompany.commons.storeapp.avro.ProductDetail"
+}

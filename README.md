@@ -28,15 +28,13 @@ The main goal of this project is to play with [`Kafka`](https://kafka.apache.org
 
 In order to run this project, you can use [`JSON`](https://www.json.org) or [`Avro`](https://avro.apache.org/docs/current/gettingstartedjava.html) format to serialize/deserialize data to/from the `binary` format used by Kafka. The default format is `JSON`. Throughout this document, I will point out what to do if you want to use `Avro`.
 
-**P.S. Avro (de)serialization is not completely implemented!**
-
 ## Start Environment
 
 - Open a terminal and inside `springboot-kafka-connect-jdbc-streams` root folder run
   ```
   docker-compose up -d
   ```
-  > **Note:** During the first run, an image for `kafka-connect` will be built, whose name is `springboot-kafka-connect-jdbc-streams_kafka-connect`. Run the command below to rebuild it
+  > **Note:** During the first run, an image for `kafka-connect` will be built, whose name is `springboot-kafka-connect-jdbc-streams_kafka-connect`. Run the command below to rebuild it.
   > ```
   > docker-compose build
   > ```
@@ -48,7 +46,7 @@ In order to run this project, you can use [`JSON`](https://www.json.org) or [`Av
   
 ## Create Kafka Topics
 
-In order to have topics in `Kafka` with more than `1` partition, we must create them manually and not wait for the connectors to create for us. So, for it:
+In order to have topics in `Kafka` with more than `1` partition, we have to create them manually and not let the connectors to create them for us. So, for it:
 
 - Open a new terminal and make sure you are in `springboot-kafka-connect-jdbc-streams` root folder
 
@@ -76,7 +74,7 @@ Steps to create the connectors:
     ```
     ./create-connectors-jsonconverter.sh
     ```
-  - **For Avro (de)serialization (NOT READY!)**
+  - **For Avro (de)serialization**
     ```
     ./create-connectors-avroconverter.sh
     ```
@@ -131,9 +129,9 @@ Steps to create the connectors:
     ```
     ./mvnw clean spring-boot:run --projects store-streams -Dspring-boot.run.jvmArguments="-Dserver.port=9081"
     ```
-  - **For Avro (de)serialization (NOT READY!)**
+  - **For Avro (de)serialization**
     ```
-    ./mvnw clean spring-boot:run --projects store-streams -Dspring-boot.run.profiles=avro
+    ./mvnw clean spring-boot:run --projects store-streams -Dspring-boot.run.jvmArguments="-Dserver.port=9081" -Dspring-boot.run.profiles=avro
     ```
     > The command below generates Java classes from Avro files
     > ```
@@ -319,6 +317,7 @@ Steps to create the connectors:
     ```
 
 - **MySQL**
+
   ```
   docker exec -it mysql mysql -uroot -psecret --database storedb
   select * from orders;
@@ -341,15 +340,13 @@ Steps to create the connectors:
   docker-compose down -v
   ```
 
-## TODO
-
-- implement, inside `StoreStreamsAvro`, the logic to join `KTables` and `KStreams` to produce `OrderDetailed` output using `Avro`
-
 ## Issues
 
 - Product `price` field, [numeric.mapping doesn't work for DECIMAL fields #563](https://github.com/confluentinc/kafka-connect-jdbc/issues/563). For now, the workaround is using `String` instead of `BigDecimal` as type for this field.
 
 ## References
 
+- https://github.com/spring-cloud/spring-cloud-stream-samples/tree/master/schema-registry-samples
+- https://cloud.spring.io/spring-cloud-stream-binder-kafka/spring-cloud-stream-binder-kafka.html#_kafka_streams_binder
 - https://www.confluent.io/blog/simplest-useful-kafka-connect-data-pipeline-world-thereabouts-part-1 (2 and 3)
 - https://www.confluent.io/blog/kafka-connect-deep-dive-converters-serialization-explained

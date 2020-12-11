@@ -14,8 +14,8 @@ import org.apache.avro.message.SchemaStore;
 
 @org.apache.avro.specific.AvroGenerated
 public class Product extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = -7043691455637012826L;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Product\",\"namespace\":\"com.mycompany.commons.storeapp.avro\",\"fields\":[{\"name\":\"id\",\"type\":\"long\"},{\"name\":\"created_at\",\"type\":{\"type\":\"long\",\"connect.version\":1,\"connect.name\":\"org.apache.kafka.connect.data.Timestamp\",\"logicalType\":\"timestamp-millis\"}},{\"name\":\"name\",\"type\":\"string\"}],\"connect.name\":\"com.mycompany.commons.storeapp.avro.Product\"}");
+  private static final long serialVersionUID = -2878141064242392667L;
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Product\",\"namespace\":\"com.mycompany.commons.storeapp.avro\",\"fields\":[{\"name\":\"id\",\"type\":\"long\"},{\"name\":\"created_at\",\"type\":{\"type\":\"long\",\"connect.version\":1,\"connect.name\":\"org.apache.kafka.connect.data.Timestamp\",\"logicalType\":\"timestamp-millis\"}},{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"price\",\"type\":\"string\"}],\"connect.name\":\"com.mycompany.commons.storeapp.avro.Product\"}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static SpecificData MODEL$ = new SpecificData();
@@ -77,6 +77,7 @@ static {
    private long id;
    private java.time.Instant created_at;
    private java.lang.CharSequence name;
+   private java.lang.CharSequence price;
 
   /**
    * Default constructor.  Note that this does not initialize fields
@@ -90,11 +91,13 @@ static {
    * @param id The new value for id
    * @param created_at The new value for created_at
    * @param name The new value for name
+   * @param price The new value for price
    */
-  public Product(java.lang.Long id, java.time.Instant created_at, java.lang.CharSequence name) {
+  public Product(java.lang.Long id, java.time.Instant created_at, java.lang.CharSequence name, java.lang.CharSequence price) {
     this.id = id;
     this.created_at = created_at.truncatedTo(java.time.temporal.ChronoUnit.MILLIS);
     this.name = name;
+    this.price = price;
   }
 
   public org.apache.avro.specific.SpecificData getSpecificData() { return MODEL$; }
@@ -105,6 +108,7 @@ static {
     case 0: return id;
     case 1: return created_at;
     case 2: return name;
+    case 3: return price;
     default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
@@ -113,6 +117,7 @@ static {
       new org.apache.avro.Conversion<?>[] {
       null,
       new org.apache.avro.data.TimeConversions.TimestampMillisConversion(),
+      null,
       null,
       null
   };
@@ -129,6 +134,7 @@ static {
     case 0: id = (java.lang.Long)value$; break;
     case 1: created_at = (java.time.Instant)value$; break;
     case 2: name = (java.lang.CharSequence)value$; break;
+    case 3: price = (java.lang.CharSequence)value$; break;
     default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
@@ -185,6 +191,23 @@ static {
   }
 
   /**
+   * Gets the value of the 'price' field.
+   * @return The value of the 'price' field.
+   */
+  public java.lang.CharSequence getPrice() {
+    return price;
+  }
+
+
+  /**
+   * Sets the value of the 'price' field.
+   * @param value the value to set.
+   */
+  public void setPrice(java.lang.CharSequence value) {
+    this.price = value;
+  }
+
+  /**
    * Creates a new Product RecordBuilder.
    * @return A new Product RecordBuilder
    */
@@ -228,6 +251,7 @@ static {
     private long id;
     private java.time.Instant created_at;
     private java.lang.CharSequence name;
+    private java.lang.CharSequence price;
 
     /** Creates a new Builder */
     private Builder() {
@@ -252,6 +276,10 @@ static {
         this.name = data().deepCopy(fields()[2].schema(), other.name);
         fieldSetFlags()[2] = other.fieldSetFlags()[2];
       }
+      if (isValidValue(fields()[3], other.price)) {
+        this.price = data().deepCopy(fields()[3].schema(), other.price);
+        fieldSetFlags()[3] = other.fieldSetFlags()[3];
+      }
     }
 
     /**
@@ -271,6 +299,10 @@ static {
       if (isValidValue(fields()[2], other.name)) {
         this.name = data().deepCopy(fields()[2].schema(), other.name);
         fieldSetFlags()[2] = true;
+      }
+      if (isValidValue(fields()[3], other.price)) {
+        this.price = data().deepCopy(fields()[3].schema(), other.price);
+        fieldSetFlags()[3] = true;
       }
     }
 
@@ -392,6 +424,46 @@ static {
       return this;
     }
 
+    /**
+      * Gets the value of the 'price' field.
+      * @return The value.
+      */
+    public java.lang.CharSequence getPrice() {
+      return price;
+    }
+
+
+    /**
+      * Sets the value of the 'price' field.
+      * @param value The value of 'price'.
+      * @return This builder.
+      */
+    public com.mycompany.commons.storeapp.avro.Product.Builder setPrice(java.lang.CharSequence value) {
+      validate(fields()[3], value);
+      this.price = value;
+      fieldSetFlags()[3] = true;
+      return this;
+    }
+
+    /**
+      * Checks whether the 'price' field has been set.
+      * @return True if the 'price' field has been set, false otherwise.
+      */
+    public boolean hasPrice() {
+      return fieldSetFlags()[3];
+    }
+
+
+    /**
+      * Clears the value of the 'price' field.
+      * @return This builder.
+      */
+    public com.mycompany.commons.storeapp.avro.Product.Builder clearPrice() {
+      price = null;
+      fieldSetFlags()[3] = false;
+      return this;
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public Product build() {
@@ -400,6 +472,7 @@ static {
         record.id = fieldSetFlags()[0] ? this.id : (java.lang.Long) defaultValue(fields()[0]);
         record.created_at = fieldSetFlags()[1] ? this.created_at : (java.time.Instant) defaultValue(fields()[1]);
         record.name = fieldSetFlags()[2] ? this.name : (java.lang.CharSequence) defaultValue(fields()[2]);
+        record.price = fieldSetFlags()[3] ? this.price : (java.lang.CharSequence) defaultValue(fields()[3]);
         return record;
       } catch (org.apache.avro.AvroMissingFieldException e) {
         throw e;
