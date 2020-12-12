@@ -54,7 +54,6 @@ In order to have topics in `Kafka` with more than `1` partition, we have to crea
   ```
   ./create-kafka-topics.sh
   ```
-  > **Note:** You can ignore the warnings
 
   It will create the topics `mysql.storedb.customers`, `mysql.storedb.products`, `mysql.storedb.orders`, `mysql.storedb.orders_products` with `5` partitions.
 
@@ -103,42 +102,92 @@ Steps to create the connectors:
   ```
   docker logs kafka-connect
   ```
+## Running Applications with Maven
 
-## Run store-api
+- **store-api**
 
-- Open a new terminal and make sure you are in `springboot-kafka-connect-jdbc-streams` root folder
+  - Open a new terminal and make sure you are in `springboot-kafka-connect-jdbc-streams` root folder.
+  
+  - Run the command below to start the application
+    ```
+    ./mvnw clean spring-boot:run --projects store-api -Dspring-boot.run.jvmArguments="-Dserver.port=9080"
+    ```
+    > **Note**
+    >
+    > It will create all tables, such as: `customers`, `products`, `orders` and `orders_products`. We are using `spring.jpa.hibernate.ddl-auto=update` configuration.
+    > 
+    > It will also insert some customers and products. If you don't want it, just set to `false` the properties `load-samples.customers.enabled` and `load-samples.products.enabled` in `application.yml`.
 
-- Run the command below to start the application
+- **store-streams**
+
+  - Open a new terminal and inside `springboot-kafka-connect-jdbc-streams` root folder, run
+
+  - To start application, run
+
+    - **For JSON (de)serialization**
+      ```
+      ./mvnw clean spring-boot:run --projects store-streams -Dspring-boot.run.jvmArguments="-Dserver.port=9081"
+      ```
+    - **For Avro (de)serialization**
+      ```
+      ./mvnw clean spring-boot:run --projects store-streams -Dspring-boot.run.jvmArguments="-Dserver.port=9081" -Dspring-boot.run.profiles=avro
+      ```
+      > The command below generates Java classes from Avro files
+      > ```
+      > ./mvnw generate-sources --projects store-streams
+      > ```
+
+## Running Applications as Docker containers
+
+### Build Application’s Docker Image
+
+- In a terminal, make sure you are inside `springboot-kafka-connect-jdbc-streams` root folder
+
+- Run the following script to build the application's docker image
   ```
-  ./mvnw clean spring-boot:run --projects store-api -Dspring-boot.run.jvmArguments="-Dserver.port=9080"
+  ./build-apps.sh
   ```
 
-  > **Note 1:** It will create all tables, such as: `customers`, `products`, `orders` and `orders_products`. We are using `spring.jpa.hibernate.ddl-auto=update` configuration.
+### Application’s Environment Variables
 
-  > **Note 2:** It will also insert some customers and products. If you don't want it, just set to `false` the properties `load-samples.customers.enabled` and `load-samples.products.enabled` in `application.yml`.
+- **store-api**
 
-- The Swagger link is http://localhost:9080/swagger-ui.html
+  | Environment Variable   | Description                                                       |
+  | ---------------------- | ----------------------------------------------------------------- |
+  | `MYSQL_HOST`           | Specify host of the `MySQL` database to use (default `localhost`) |
+  | `MYSQL_PORT`           | Specify port of the `MySQL` database to use (default `3306`)      |
 
-## Run store-streams
+- **store-streams**
 
-- Open a new terminal and inside `springboot-kafka-connect-jdbc-streams` root folder, run
+  | Environment Variable   | Description                                                             |
+  | ---------------------- | ----------------------------------------------------------------------- |
+  | `KAFKA_HOST`           | Specify host of the `Kafka` message broker to use (default `localhost`) |
+  | `KAFKA_PORT`           | Specify port of the `Kafka` message broker to use (default `29092`)     |
+  | `SCHEMA_REGISTRY_HOST` | Specify host of the `Schema Registry` to use (default `localhost`)      |
+  | `SCHEMA_REGISTRY_PORT` | Specify port of the `Schema Registry` to use (default `8081`)           |
 
-- To start application, run
+### Start Application’s Docker Container
+
+- In a terminal, make sure you are inside `springboot-kafka-connect-jdbc-streams` root folder
+
+- In order to run the application's docker containers, you can pick between `JSON` or `Avro`
 
   - **For JSON (de)serialization**
     ```
-    ./mvnw clean spring-boot:run --projects store-streams -Dspring-boot.run.jvmArguments="-Dserver.port=9081"
+    ./start-apps.sh
     ```
+    
   - **For Avro (de)serialization**
     ```
-    ./mvnw clean spring-boot:run --projects store-streams -Dspring-boot.run.jvmArguments="-Dserver.port=9081" -Dspring-boot.run.profiles=avro
+    ./start-apps.sh avro
     ```
-    > The command below generates Java classes from Avro files
-    > ```
-    > ./mvnw generate-sources --projects store-streams
-    > ```
 
-- This service runs on port `9081`. The `health` endpoint is http://localhost:9081/actuator/health
+## Applications URLs
+
+| Application   | URL                                   |
+| ------------- | ------------------------------------- |
+| store-api     | http://localhost:9080/swagger-ui.html |
+| store-streams | http://localhost:9081/actuator/health |
 
 ## Testing
 
@@ -334,8 +383,14 @@ Steps to create the connectors:
   
 ## Shutdown
 
-- Go to the terminals where `store-api` and `store-streams` are running and press `Ctrl+C` to stop them 
-- In a terminal and inside `springboot-kafka-connect-jdbc-streams`, run the command below to stop and remove Docker containers, networks and volumes
+- Stop applications
+  - If they were started with `Maven`, go to the terminals where they are running and press `Ctrl+C`
+  - If they were started as Docker container, run the script below
+    ```
+    ./stop-apps.sh
+    ```
+
+- To stop and remove docker-compose containers, networks and volumes, make sure you are inside `springboot-kafka-connect-jdbc-streams` root folder and run
   ```
   docker-compose down -v
   ```

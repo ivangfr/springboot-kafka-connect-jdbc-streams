@@ -12,18 +12,39 @@
 
     <groupId>com.mycompany</groupId>
     <artifactId>springboot-kafka-connect-jdbc-streams</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>pom</packaging>
     <name>springboot-kafka-connect-jdbc-streams</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
         <java.version>11</java.version>
+        <jib.maven-plugin.version>2.7.0</jib.maven-plugin.version>
+        <docker.image.prefix>docker.mycompany.com</docker.image.prefix>
     </properties>
 
     <modules>
         <module>store-api</module>
         <module>store-streams</module>
     </modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>${jib.maven-plugin.version}</version>
+                <configuration>
+                    <to>
+                        <image>${docker.image.prefix}/${project.artifactId}:${project.version}</image>
+                    </to>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

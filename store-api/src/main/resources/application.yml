@@ -5,7 +5,7 @@ spring:
     hibernate:
       ddl-auto: update
   datasource:
-    url: jdbc:mysql://${MYSQL_ADDR:localhost}:3306/storedb?characterEncoding=UTF-8&serverTimezone=UTC
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/storedb?characterEncoding=UTF-8&serverTimezone=UTC
     username: root
     password: secret
 

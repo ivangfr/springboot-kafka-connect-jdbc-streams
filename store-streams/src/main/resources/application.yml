@@ -30,6 +30,12 @@ spring:
             useNativeEncoding: true
       kafka:
         streams:
+          binder:
+            brokers: ${KAFKA_HOST:localhost}:${KAFKA_PORT:29092}
+            configuration:
+              commit.interval.ms: 1000
+              default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+              default.value.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
           bindings:
             customer-input:
               consumer:
@@ -53,12 +59,6 @@ spring:
               producer:
                 keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
                 valueSerde: com.mycompany.storestreams.serde.json.OrderDetailedJsonSerde
-          binder:
-            brokers: localhost:29092
-            configuration:
-              commit.interval.ms: 1000
-              default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
-              default.value.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
 
 management:
   endpoints:
@@ -78,7 +78,7 @@ spring:
         streams:
           binder:
             configuration:
-              schema.registry.url: http://localhost:8081
+              schema.registry.url: http://${SCHEMA_REGISTRY_HOST:localhost}:${SCHEMA_REGISTRY_PORT:8081}
           bindings:
             customer-input:
               consumer:
