@@ -10,7 +10,6 @@ import com.mycompany.commons.storeapp.avro.ProductDetailList;
 import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig;
 import io.confluent.kafka.streams.serdes.avro.SpecificAvroDeserializer;
 import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerializer;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
@@ -35,7 +34,6 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-@RequiredArgsConstructor
 @Component
 @Profile("avro")
 @EnableBinding(StoreKafkaStreamsProcessor.class)
@@ -67,49 +65,37 @@ public class StoreStreamsAvro {
     public KStream<String, OrderDetailed> process(
             @Input(StoreKafkaStreamsProcessor.CUSTOMER_INPUT) GlobalKTable<String, Customer> customerGlobalKTable,
             @Input(StoreKafkaStreamsProcessor.PRODUCT_INPUT) GlobalKTable<String, Product> productGlobalKTable,
-            @Input(StoreKafkaStreamsProcessor.ORDER_INPUT) KStream<String, Order> orderIdKeyOrderValueKStream,
-            @Input(StoreKafkaStreamsProcessor.ORDER_PRODUCT_INPUT) KStream<String, OrderProduct> orderIdKeyOrderProductValueKStream) {
+            @Input(StoreKafkaStreamsProcessor.ORDER_INPUT) KStream<String, Order> orderKStream,
+            @Input(StoreKafkaStreamsProcessor.ORDER_PRODUCT_INPUT) KStream<String, OrderProduct> orderProductKStream) {
 
-        orderIdKeyOrderValueKStream.foreach(this::logKeyValue);
-        orderIdKeyOrderProductValueKStream.foreach(this::logKeyValue);
-
-        KStream<String, ProductDetailList> orderIdKeyProductDetailListValueKStream = orderIdKeyOrderProductValueKStream
-                .join(productGlobalKTable, (s, orderProduct) -> String.valueOf(orderProduct.getProductId()), this::toProductDetail)
-                .groupByKey()
-                .aggregate(ProductDetailList::new, (key, productDetail, productDetailList) -> {
-                            List<ProductDetail> products = productDetailList.getProducts();
-                            if (products == null) {
-                                products = new LinkedList<>();
-                                productDetailList.setProducts(products);
-                            }
-                            products.add(productDetail);
-                            return productDetailList;
-                        },
-                        Materialized.with(Serdes.String(), productDetailListSerde))
-                .toStream();
-
-        KStream<String, OrderDetailed> orderIdKeyOrderDetailedValueKStream = orderIdKeyOrderValueKStream
-                .join(customerGlobalKTable, (s, order) -> String.valueOf(order.getCustomerId()), this::toOrderDetailed)
-                .join(orderIdKeyProductDetailListValueKStream,
-                        (orderDetailed, productDetailList) -> {
-                            orderDetailed.setProducts(productDetailList.getProducts());
-                            return orderDetailed;
-                        },
+        return orderKStream
+                .peek(this::logKeyValue)
+                .join(
+                        customerGlobalKTable,
+                        (s, order) -> String.valueOf(order.getCustomerId()),
+                        this::toOrderDetailed
+                )
+                .join(
+                        orderProductKStream
+                                .peek(this::logKeyValue)
+                                .join(
+                                        productGlobalKTable,
+                                        (s, orderProduct) -> String.valueOf(orderProduct.getProductId()),
+                                        this::toProductDetail
+                                )
+                                .groupByKey()
+                                .aggregate(
+                                        ProductDetailList::new,
+                                        (key, productDetail, productDetailList) -> addProductDetail(productDetail, productDetailList),
+                                        Materialized.with(Serdes.String(), productDetailListSerde)
+                                )
+                                .toStream()
+                                .peek(this::logKeyValue),
+                        (orderDetailed, productDetailList) -> setProductDetailList(productDetailList, orderDetailed),
                         JoinWindows.of(Duration.ofMinutes(1)),
-                        StreamJoined.with(Serdes.String(), orderDetailedSerde, productDetailListSerde));
-
-        orderIdKeyOrderDetailedValueKStream.foreach(this::logKeyValue);
-
-        return orderIdKeyOrderDetailedValueKStream;
-    }
-
-    private ProductDetail toProductDetail(OrderProduct orderProduct, Product product) {
-        ProductDetail productDetail = new ProductDetail();
-        productDetail.setId(orderProduct.getProductId());
-        productDetail.setName(product.getName());
-        productDetail.setPrice(product.getPrice());
-        productDetail.setUnit(orderProduct.getUnit());
-        return productDetail;
+                        StreamJoined.with(Serdes.String(), orderDetailedSerde, productDetailListSerde)
+                )
+                .peek(this::logKeyValue);
     }
 
     private OrderDetailed toOrderDetailed(Order order, Customer customer) {
@@ -121,6 +107,30 @@ public class StoreStreamsAvro {
         orderDetailed.setPaymentType(order.getPaymentType());
         orderDetailed.setCreatedAt(order.getCreatedAt());
         orderDetailed.setProducts(Collections.emptyList());
+        return orderDetailed;
+    }
+
+    private ProductDetail toProductDetail(OrderProduct orderProduct, Product product) {
+        ProductDetail productDetail = new ProductDetail();
+        productDetail.setId(orderProduct.getProductId());
+        productDetail.setName(product.getName());
+        productDetail.setPrice(product.getPrice());
+        productDetail.setUnit(orderProduct.getUnit());
+        return productDetail;
+    }
+
+    private ProductDetailList addProductDetail(ProductDetail productDetail, ProductDetailList productDetailList) {
+        List<ProductDetail> products = productDetailList.getProducts();
+        if (products == null) {
+            products = new LinkedList<>();
+            productDetailList.setProducts(products);
+        }
+        products.add(productDetail);
+        return productDetailList;
+    }
+
+    private OrderDetailed setProductDetailList(ProductDetailList productDetailList, OrderDetailed orderDetailed) {
+        orderDetailed.setProducts(productDetailList.getProducts());
         return orderDetailed;
     }
 
