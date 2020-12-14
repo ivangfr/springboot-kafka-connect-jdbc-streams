@@ -19,11 +19,8 @@ import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.Materialized;
 import org.apache.kafka.streams.kstream.StreamJoined;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.stream.annotation.EnableBinding;
-import org.springframework.cloud.stream.annotation.Input;
-import org.springframework.cloud.stream.annotation.StreamListener;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -32,11 +29,11 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 @Slf4j
 @Component
 @Profile("avro")
-@EnableBinding(StoreKafkaStreamsProcessor.class)
 public class StoreStreamsAvro {
 
     @Value("${spring.cloud.stream.kafka.streams.binder.configuration.schema.registry.url}")
@@ -60,42 +57,48 @@ public class StoreStreamsAvro {
         orderDetailedSerde.configure(serdeConfig, false);
     }
 
-    @StreamListener
-    @SendTo(StoreKafkaStreamsProcessor.ORDER_OUTPUT)
-    public KStream<String, OrderDetailed> process(
-            @Input(StoreKafkaStreamsProcessor.CUSTOMER_INPUT) GlobalKTable<String, Customer> customerGlobalKTable,
-            @Input(StoreKafkaStreamsProcessor.PRODUCT_INPUT) GlobalKTable<String, Product> productGlobalKTable,
-            @Input(StoreKafkaStreamsProcessor.ORDER_INPUT) KStream<String, Order> orderKStream,
-            @Input(StoreKafkaStreamsProcessor.ORDER_PRODUCT_INPUT) KStream<String, OrderProduct> orderProductKStream) {
-
-        return orderKStream
-                .peek(this::logKeyValue)
-                .join(
-                        customerGlobalKTable,
-                        (s, order) -> String.valueOf(order.getCustomerId()),
-                        this::toOrderDetailed
-                )
-                .join(
-                        orderProductKStream
-                                .peek(this::logKeyValue)
-                                .join(
-                                        productGlobalKTable,
-                                        (s, orderProduct) -> String.valueOf(orderProduct.getProductId()),
-                                        this::toProductDetail
+    @Bean
+    public Function<KStream<String, Order>,
+            Function<GlobalKTable<String, Customer>,
+                    Function<KStream<String, OrderProduct>,
+                            Function<GlobalKTable<String, Product>,
+                                    KStream<String, OrderDetailed>>>>> process() {
+        return orderKStream -> (
+                customerGlobalKTable -> (
+                        orderProductKStream -> (
+                                productGlobalKTable -> (
+                                        orderKStream
+                                                .peek(this::logKeyValue)
+                                                .join(
+                                                        customerGlobalKTable,
+                                                        (s, order) -> String.valueOf(order.getCustomerId()),
+                                                        this::toOrderDetailed
+                                                )
+                                                .join(
+                                                        orderProductKStream
+                                                                .peek(this::logKeyValue)
+                                                                .join(
+                                                                        productGlobalKTable,
+                                                                        (s, orderProduct) -> String.valueOf(orderProduct.getProductId()),
+                                                                        this::toProductDetail
+                                                                )
+                                                                .groupByKey()
+                                                                .aggregate(
+                                                                        ProductDetailList::new,
+                                                                        (key, productDetail, productDetailList) -> addProductDetail(productDetail, productDetailList),
+                                                                        Materialized.with(Serdes.String(), productDetailListSerde)
+                                                                )
+                                                                .toStream()
+                                                                .peek(this::logKeyValue),
+                                                        (orderDetailed, productDetailList) -> setProductDetailList(productDetailList, orderDetailed),
+                                                        JoinWindows.of(Duration.ofMinutes(1)),
+                                                        StreamJoined.with(Serdes.String(), orderDetailedSerde, productDetailListSerde)
+                                                )
+                                                .peek(this::logKeyValue)
                                 )
-                                .groupByKey()
-                                .aggregate(
-                                        ProductDetailList::new,
-                                        (key, productDetail, productDetailList) -> addProductDetail(productDetail, productDetailList),
-                                        Materialized.with(Serdes.String(), productDetailListSerde)
-                                )
-                                .toStream()
-                                .peek(this::logKeyValue),
-                        (orderDetailed, productDetailList) -> setProductDetailList(productDetailList, orderDetailed),
-                        JoinWindows.of(Duration.ofMinutes(1)),
-                        StreamJoined.with(Serdes.String(), orderDetailedSerde, productDetailListSerde)
+                        )
                 )
-                .peek(this::logKeyValue);
+        );
     }
 
     private OrderDetailed toOrderDetailed(Order order, Customer customer) {

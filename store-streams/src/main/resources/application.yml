@@ -4,27 +4,27 @@ spring:
   cloud:
     stream:
       bindings:
-        customer-input:
-          destination: mysql.storedb.customers
-          group: storeStreamsGroup
-          consumer:
-            useNativeDecoding: true
-        product-input:
-          destination: mysql.storedb.products
-          group: storeStreamsGroup
-          consumer:
-            useNativeDecoding: true
-        order-input:
+        process-in-0:
           destination: mysql.storedb.orders
           group: storeStreamsGroup
           consumer:
             useNativeDecoding: true
-        order-product-input:
+        process-in-1:
+          destination: mysql.storedb.customers
+          group: storeStreamsGroup
+          consumer:
+            useNativeDecoding: true
+        process-in-2:
           destination: mysql.storedb.orders_products
           group: storeStreamsGroup
           consumer:
             useNativeDecoding: true
-        order-output:
+        process-in-3:
+          destination: mysql.storedb.products
+          group: storeStreamsGroup
+          consumer:
+            useNativeDecoding: true
+        process-out-0:
           destination: store.streams.orders
           producer:
             useNativeEncoding: true
@@ -37,25 +37,25 @@ spring:
               default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
               default.value.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
           bindings:
-            customer-input:
+            process-in-0:
+              consumer:
+                keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
+                valueSerde: com.mycompany.storestreams.serde.json.OrderJsonSerde
+            process-in-1:
               consumer:
                 keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
                 valueSerde: com.mycompany.storestreams.serde.json.CustomerJsonSerde
                 materializedAs: ktable.customers
-            product-input:
+            process-in-2:
+              consumer:
+                keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
+                valueSerde: com.mycompany.storestreams.serde.json.OrderProductJsonSerde
+            process-in-3:
               consumer:
                 keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
                 valueSerde: com.mycompany.storestreams.serde.json.ProductJsonSerde
                 materializedAs: ktable.products
-            order-input:
-              consumer:
-                keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
-                valueSerde: com.mycompany.storestreams.serde.json.OrderJsonSerde
-            order-product-input:
-              consumer:
-                keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
-                valueSerde: com.mycompany.storestreams.serde.json.OrderProductJsonSerde
-            order-output:
+            process-out-0:
               producer:
                 keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
                 valueSerde: com.mycompany.storestreams.serde.json.OrderDetailedJsonSerde
@@ -80,18 +80,18 @@ spring:
             configuration:
               schema.registry.url: http://${SCHEMA_REGISTRY_HOST:localhost}:${SCHEMA_REGISTRY_PORT:8081}
           bindings:
-            customer-input:
-              consumer:
-                valueSerde: com.mycompany.storestreams.serde.avro.CustomerAvroSerde
-            product-input:
-              consumer:
-                valueSerde: com.mycompany.storestreams.serde.avro.ProductAvroSerde
-            order-input:
+            process-in-0:
               consumer:
                 valueSerde: com.mycompany.storestreams.serde.avro.OrderAvroSerde
-            order-product-input:
+            process-in-1:
+              consumer:
+                valueSerde: com.mycompany.storestreams.serde.avro.CustomerAvroSerde
+            process-in-2:
               consumer:
                 valueSerde: com.mycompany.storestreams.serde.avro.OrderProductAvroSerde
-            order-output:
+            process-in-3:
+              consumer:
+                valueSerde: com.mycompany.storestreams.serde.avro.ProductAvroSerde
+            process-out-0:
               producer:
                 valueSerde: com.mycompany.storestreams.serde.avro.OrderDetailedAvroSerde

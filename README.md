@@ -401,7 +401,7 @@ Steps to create the connectors:
 
 ## References
 
+- https://cloud.spring.io/spring-cloud-static/spring-cloud-stream-binder-kafka/current/reference/html/spring-cloud-stream-binder-kafka.html#_kafka_streams_binder
 - https://github.com/spring-cloud/spring-cloud-stream-samples/tree/master/schema-registry-samples
-- https://cloud.spring.io/spring-cloud-stream-binder-kafka/spring-cloud-stream-binder-kafka.html#_kafka_streams_binder
 - https://www.confluent.io/blog/simplest-useful-kafka-connect-data-pipeline-world-thereabouts-part-1 (2 and 3)
 - https://www.confluent.io/blog/kafka-connect-deep-dive-converters-serialization-explained
