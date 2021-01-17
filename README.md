@@ -132,7 +132,7 @@ Steps to create the connectors:
       ```
       ./mvnw clean spring-boot:run --projects store-streams -Dspring-boot.run.jvmArguments="-Dserver.port=9081" -Dspring-boot.run.profiles=avro
       ```
-      > The command below generates Java classes from Avro files
+      > The command below generates Java classes from Avro files present in `src/main/resources/avro`
       > ```
       > ./mvnw generate-sources --projects store-streams
       > ```

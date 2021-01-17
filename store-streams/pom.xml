@@ -15,11 +15,10 @@
     <description>Demo project for Spring Boot</description>
 
     <properties>
-        <spring-cloud.version>2020.0.0-M6</spring-cloud.version>
+        <spring-cloud.version>2020.0.0</spring-cloud.version>
         <avro.version>1.10.1</avro.version>
         <confluent.version>5.5.1</confluent.version>
-        <joda-time.version>2.10.8</joda-time.version>
-        <springdoc.openapi.version>1.5.1</springdoc.openapi.version>
+        <springdoc.openapi.version>1.5.2</springdoc.openapi.version>
     </properties>
 
     <dependencies>
@@ -30,6 +29,14 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-streams</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-stream</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -53,13 +60,6 @@
             <groupId>io.confluent</groupId>
             <artifactId>kafka-avro-serializer</artifactId>
             <version>${confluent.version}</version>
-        </dependency>
-
-        <!-- Joda Time -->
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-            <version>${joda-time.version}</version>
         </dependency>
 
         <!-- SpringDoc OpenApi -->
@@ -128,11 +128,6 @@
     </build>
 
     <repositories>
-        <repository>
-            <id>spring-milestones</id>
-            <name>Spring Milestones</name>
-            <url>https://repo.spring.io/milestone</url>
-        </repository>
         <repository>
             <id>confluent</id>
             <url>https://packages.confluent.io/maven/</url>
