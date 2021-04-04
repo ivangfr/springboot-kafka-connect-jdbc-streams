@@ -145,7 +145,7 @@ Steps to create the connectors:
 
 - Run the following script to build the application's docker image
   ```
-  ./build-apps.sh
+  ./docker-build.sh
   ```
 
 ### Application’s Environment Variables
