@@ -191,33 +191,6 @@ Steps to create the connectors:
 
 ## Testing
 
-1. Let's check the orders we have in `Elasticsearch`. For it, run the following command in a terminal
-   ```
-   curl "localhost:9200/store.streams.orders/_search?pretty"
-   ```
-   
-   The response should be no orders
-   ```
-   {
-     "took" : 91,
-     "timed_out" : false,
-     "_shards" : {
-       "total" : 1,
-       "successful" : 1,
-       "skipped" : 0,
-       "failed" : 0
-     },
-     "hits" : {
-       "total" : {
-         "value" : 0,
-         "relation" : "eq"
-       },
-       "max_score" : null,
-       "hits" : [ ]
-     }
-   }
-   ```
-
 1. Let's simulate an order creation. In this example, customer with id `1`
    ```
    {"id":1, "name":"John Gates", "email":"john.gates@test.com", "address":"street 1", "phone":"112233"}
@@ -376,7 +349,7 @@ Steps to create the connectors:
 
   ```
   docker run --tty --interactive --rm --network=springboot-kafka-connect-jdbc-streams_default \
-    confluentinc/cp-kafkacat:5.5.1 kafkacat -b kafka:9092 \
+    confluentinc/cp-kafkacat:6.1.1 kafkacat -b kafka:9092 \
     -f '\nKey (%K bytes): %k\t\nValue (%S bytes): %s\n\Partition: %p\tOffset: %o\n--\n' \
     -t store.streams.orders -C -c1
   ```

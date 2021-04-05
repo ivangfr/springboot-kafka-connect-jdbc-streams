@@ -1,10 +1,18 @@
 #!/usr/bin/env bash
 
+echo
+echo "Starting store-api ..."
 docker run -d --rm --name store-api -p 9080:8080 \
   -e MYSQL_HOST=mysql \
   --network springboot-kafka-connect-jdbc-streams_default \
   docker.mycompany.com/store-api:1.0.0
 
+echo
+echo "Waiting 10 seconds before starting store-streams ..."
+sleep 10
+
+echo
+echo "Starting store-streams ..."
 docker run -d --rm --name store-streams -p 9081:8080 \
   -e SPRING_PROFILES_ACTIVE=${1:-default} \
   -e KAFKA_HOST=kafka -e KAFKA_PORT=9092 \
