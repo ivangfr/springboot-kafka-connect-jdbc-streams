@@ -166,7 +166,7 @@ Steps to create the connectors:
   | `SCHEMA_REGISTRY_HOST` | Specify host of the `Schema Registry` to use (default `localhost`)      |
   | `SCHEMA_REGISTRY_PORT` | Specify port of the `Schema Registry` to use (default `8081`)           |
 
-### Start Application’s Docker Container
+### Run Application’s Docker Container
 
 - In a terminal, make sure you are inside `springboot-kafka-connect-jdbc-streams` root folder
 
@@ -182,7 +182,7 @@ Steps to create the connectors:
     ./start-apps.sh avro
     ```
 
-## Applications URLs
+## Application's URL
 
 | Application   | URL                                   |
 | ------------- | ------------------------------------- |
@@ -200,7 +200,7 @@ Steps to create the connectors:
    {"id":15, "name":"iPhone Xr", "price":900.00}
    ```
 
-   The `curl` command is
+   In a terminal, run the following `curl` command
    ```
    curl -i -X POST localhost:9080/api/orders \
      -H 'Content-Type: application/json' \
@@ -215,12 +215,7 @@ Steps to create the connectors:
      "customerId": 1,
      "paymentType": "BITCOIN",
      "status": "OPEN",
-     "products": [
-       {
-         "id": 15,
-         "unit": 1
-       }
-     ]
+     "products": [{"id": 15, "unit": 1}]
    }
    ```
 
