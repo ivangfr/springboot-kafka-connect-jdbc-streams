@@ -48,5 +48,5 @@ curl -i -X POST http://localhost:8083/connectors \
 
 echo
 echo "--------------------------------------------------------------"
-echo "Check state of connectors and their tasks by running script check-connectors-state.sh or at Kafka Connect UI, link http://localhost:8086"
+echo "Check state of connectors and their tasks by running script ./check-connectors-state.sh or at Kafka Connect UI, link http://localhost:8086"
 echo "--------------------------------------------------------------"

@@ -137,6 +137,8 @@ Steps to create the connectors:
       > ./mvnw generate-sources --projects store-streams
       > ```
 
+  - If you get an exception saying `Unexpected state transition from ERROR to REBALANCING`, rerun `store-streams`
+
 ## Running Applications as Docker containers
 
 ### Build Application’s Docker Image

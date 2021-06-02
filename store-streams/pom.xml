@@ -14,10 +14,10 @@
     <description>Demo project for Spring Boot</description>
 
     <properties>
-        <spring-cloud.version>2020.0.3-SNAPSHOT</spring-cloud.version>
+        <spring-cloud.version>2020.0.3</spring-cloud.version>
         <avro.version>1.10.2</avro.version>
         <confluent.version>6.1.1</confluent.version>
-        <springdoc-openapi.version>1.5.8</springdoc-openapi.version>
+        <springdoc-openapi.version>1.5.9</springdoc-openapi.version>
     </properties>
 
     <dependencies>
