@@ -357,20 +357,23 @@ Steps to create the connectors:
   
 ## Shutdown
 
-- Stop applications
+- To stop applications
   - If they were started with `Maven`, go to the terminals where they are running and press `Ctrl+C`
-  - If they were started as Docker containers, run the script below
+  - If they were started as Docker containers, go to a terminal and, inside `springboot-kafka-connect-jdbc-streams` root folder, run the script below
     ```
     ./stop-apps.sh
     ```
-- To stop and remove docker-compose containers, network and volumes, make sure you are inside `springboot-kafka-connect-jdbc-streams` root folder and run
+- To stop and remove docker-compose containers, network and volumes, go to a terminal and, inside `springboot-kafka-connect-jdbc-streams` root folder, run the following command
   ```
   docker-compose down -v
   ```
-- To remove the Docker images created by this project, make sure you are inside `springboot-kafka-connect-jdbc-streams` root folder and run the following script
-  ```
-  ./remove-docker-images.sh
-  ```
+
+## Cleanup
+
+To remove the Docker images created by this project, go to a terminal and, inside `springboot-kafka-connect-jdbc-streams` root folder, run the script below
+```
+./remove-docker-images.sh
+```
 
 ## Issues
 
