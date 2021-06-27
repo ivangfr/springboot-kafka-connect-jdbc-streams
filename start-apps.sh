@@ -5,6 +5,7 @@ echo "Starting store-api ..."
 docker run -d --rm --name store-api -p 9080:8080 \
   -e MYSQL_HOST=mysql \
   --network springboot-kafka-connect-jdbc-streams_default \
+  --health-cmd="curl -f http://localhost:8080/actuator/health || exit 1" --health-start-period=20s \
   ivanfranchin/store-api:1.0.0
 
 echo
@@ -18,6 +19,7 @@ docker run -d --rm --name store-streams -p 9081:8080 \
   -e KAFKA_HOST=kafka -e KAFKA_PORT=9092 \
   -e SCHEMA_REGISTRY_HOST=schema-registry \
   --network springboot-kafka-connect-jdbc-streams_default \
+  --health-cmd="curl -f http://localhost:8080/actuator/health || exit 1" --health-start-period=20s \
   ivanfranchin/store-streams:1.0.0
 
 # In case you want 2 instances of store-streams running, uncomment the `docker run` below
@@ -27,4 +29,5 @@ docker run -d --rm --name store-streams -p 9081:8080 \
 #  -e KAFKA_HOST=kafka -e KAFKA_PORT=9092 \
 #  -e SCHEMA_REGISTRY_HOST=schema-registry \
 #  --network springboot-kafka-connect-jdbc-streams_default \
+#  --health-cmd="curl -f http://localhost:8080/actuator/health || exit 1" --health-start-period=1m \
 #  ivanfranchin/store-streams:1.0.0

@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.5.0</version>
+        <version>2.5.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -18,7 +18,8 @@
 
     <properties>
         <java.version>11</java.version>
-        <jib-maven-plugin.version>3.0.0</jib-maven-plugin.version>
+        <jib-maven-plugin.version>3.1.1</jib-maven-plugin.version>
+        <openjdk-image.version>11.0.11</openjdk-image.version>
         <docker-image.prefix>ivanfranchin</docker-image.prefix>
     </properties>
 
@@ -34,6 +35,9 @@
                 <artifactId>jib-maven-plugin</artifactId>
                 <version>${jib-maven-plugin.version}</version>
                 <configuration>
+                    <from>
+                        <image>openjdk:${openjdk-image.version}</image>
+                    </from>
                     <to>
                         <image>${docker-image.prefix}/${project.artifactId}:${project.version}</image>
                     </to>

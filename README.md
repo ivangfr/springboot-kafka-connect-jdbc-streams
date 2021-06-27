@@ -178,11 +178,15 @@ Steps to create the connectors:
     ```
     ./start-apps.sh
     ```
-    
   - **For Avro (de)serialization**
     ```
     ./start-apps.sh avro
     ```
+
+- Wait for application's Docker containers `STATUS` to be `Up (healthy)`. You can check by running
+  ```
+  docker ps -f name=store-api -f name=store-streams
+  ```
 
 ## Application's URL
 
@@ -355,14 +359,17 @@ Steps to create the connectors:
 
 - Stop applications
   - If they were started with `Maven`, go to the terminals where they are running and press `Ctrl+C`
-  - If they were started as Docker container, run the script below
+  - If they were started as Docker containers, run the script below
     ```
     ./stop-apps.sh
     ```
-
-- To stop and remove docker-compose containers, networks and volumes, make sure you are inside `springboot-kafka-connect-jdbc-streams` root folder and run
+- To stop and remove docker-compose containers, network and volumes, make sure you are inside `springboot-kafka-connect-jdbc-streams` root folder and run
   ```
   docker-compose down -v
+  ```
+- To remove the Docker images created by this project, make sure you are inside `springboot-kafka-connect-jdbc-streams` root folder and run the following script
+  ```
+  ./remove-docker-images.sh
   ```
 
 ## Issues
