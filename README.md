@@ -309,10 +309,6 @@ Steps to create the connectors:
     curl localhost:8081/subjects/mysql.storedb.customers-value/versions/latest
     ```
 
-- **Kibana**
-
-  `Kibana` can be accessed at http://localhost:5601
-
 - **Kafka Manager**
 
   `Kafka Manager` can be accessed at http://localhost:9000
