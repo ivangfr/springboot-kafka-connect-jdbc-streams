@@ -13,5 +13,4 @@ public class OrderProduct {
     private Long productId;
 
     private Integer unit;
-
 }

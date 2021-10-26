@@ -2,9 +2,9 @@ package com.mycompany.storeapi.rest;
 
 import com.mycompany.storeapi.mapper.CustomerMapper;
 import com.mycompany.storeapi.model.Customer;
-import com.mycompany.storeapi.rest.dto.AddCustomerDto;
-import com.mycompany.storeapi.rest.dto.CustomerDto;
-import com.mycompany.storeapi.rest.dto.UpdateCustomerDto;
+import com.mycompany.storeapi.rest.dto.AddCustomerRequest;
+import com.mycompany.storeapi.rest.dto.CustomerResponse;
+import com.mycompany.storeapi.rest.dto.UpdateCustomerRequest;
 import com.mycompany.storeapi.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,40 +31,39 @@ public class CustomerController {
     private final CustomerMapper customerMapper;
 
     @GetMapping
-    public List<CustomerDto> getAllCustomers() {
+    public List<CustomerResponse> getAllCustomers() {
         return customerService.getAllCustomers()
                 .stream()
-                .map(customerMapper::toCustomerDto)
+                .map(customerMapper::toCustomerResponse)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public CustomerDto getCustomer(@PathVariable Long id) {
+    public CustomerResponse getCustomer(@PathVariable Long id) {
         Customer customer = customerService.validateAndGetCustomerById(id);
-        return customerMapper.toCustomerDto(customer);
+        return customerMapper.toCustomerResponse(customer);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public CustomerDto addCustomer(@Valid @RequestBody AddCustomerDto addCustomerDto) {
-        Customer customer = customerMapper.toCustomer(addCustomerDto);
+    public CustomerResponse addCustomer(@Valid @RequestBody AddCustomerRequest addCustomerRequest) {
+        Customer customer = customerMapper.toCustomer(addCustomerRequest);
         customer = customerService.saveCustomer(customer);
-        return customerMapper.toCustomerDto(customer);
+        return customerMapper.toCustomerResponse(customer);
     }
 
     @PatchMapping("/{id}")
-    public CustomerDto updateCustomer(@PathVariable Long id, @Valid @RequestBody UpdateCustomerDto updateCustomerDto) {
+    public CustomerResponse updateCustomer(@PathVariable Long id, @Valid @RequestBody UpdateCustomerRequest updateCustomerRequest) {
         Customer customer = customerService.validateAndGetCustomerById(id);
-        customerMapper.updateCustomerFromDto(updateCustomerDto, customer);
+        customerMapper.updateCustomerFromRequest(updateCustomerRequest, customer);
         customer = customerService.saveCustomer(customer);
-        return customerMapper.toCustomerDto(customer);
+        return customerMapper.toCustomerResponse(customer);
     }
 
     @DeleteMapping("/{id}")
-    public CustomerDto deleteCustomer(@PathVariable Long id) {
+    public CustomerResponse deleteCustomer(@PathVariable Long id) {
         Customer customer = customerService.validateAndGetCustomerById(id);
         customerService.deleteCustomer(customer);
-        return customerMapper.toCustomerDto(customer);
+        return customerMapper.toCustomerResponse(customer);
     }
-
 }

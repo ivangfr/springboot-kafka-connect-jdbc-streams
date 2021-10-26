@@ -26,5 +26,4 @@ public class OrderDetailed {
     private Date createdAt;
 
     private List<ProductDetail> products;
-
 }

@@ -11,7 +11,7 @@ import javax.validation.constraints.Positive;
 import java.util.List;
 
 @Data
-public class CreateOrderDto {
+public class CreateOrderRequest {
 
     @Schema(example = "1")
     @NotNull
@@ -26,10 +26,10 @@ public class CreateOrderDto {
     private OrderStatus status;
 
     @Valid
-    private List<CreateOrderProductDto> products;
+    private List<CreateOrderProductRequest> products;
 
     @Data
-    public static class CreateOrderProductDto {
+    public static class CreateOrderProductRequest {
 
         @Schema(example = "15")
         @NotNull
@@ -39,7 +39,5 @@ public class CreateOrderDto {
         @NotNull
         @Positive
         private Integer unit;
-
     }
-
 }

@@ -1,9 +1,9 @@
 package com.mycompany.storeapi.mapper;
 
 import com.mycompany.storeapi.model.Product;
-import com.mycompany.storeapi.rest.dto.AddProductDto;
-import com.mycompany.storeapi.rest.dto.ProductDto;
-import com.mycompany.storeapi.rest.dto.UpdateProductDto;
+import com.mycompany.storeapi.rest.dto.AddProductRequest;
+import com.mycompany.storeapi.rest.dto.ProductResponse;
+import com.mycompany.storeapi.rest.dto.UpdateProductRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
@@ -14,10 +14,9 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 )
 public interface ProductMapper {
 
-    Product toProduct(AddProductDto addProductDto);
+    Product toProduct(AddProductRequest addProductRequest);
 
-    ProductDto toProductDto(Product product);
+    ProductResponse toProductResponse(Product product);
 
-    void updateProductFromDto(UpdateProductDto updateProductDto, @MappingTarget Product product);
-
+    void updateProductFromRequest(UpdateProductRequest updateProductRequest, @MappingTarget Product product);
 }

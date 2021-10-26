@@ -7,7 +7,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 @Data
-public class AddCustomerDto {
+public class AddCustomerRequest {
 
     @Schema(example = "Ivan Franchin")
     @NotBlank
@@ -25,5 +25,4 @@ public class AddCustomerDto {
     @Schema(example = "445566")
     @NotBlank
     private String phone;
-
 }

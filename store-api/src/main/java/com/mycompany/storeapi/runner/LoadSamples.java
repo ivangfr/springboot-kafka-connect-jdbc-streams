@@ -91,5 +91,4 @@ public class LoadSamples implements CommandLineRunner {
             "iPad Pro;800", "iPad Air 2;700", "iPad Mini 4;600",
             "MacBook Pro;2500", "MacBook Air;2000", "Mac Mini;1000", "iMac;1500", "iMac Pro;2000",
             "Apple Watch Series 3;350", "Apple Watch Series 4;400", "Apple TV;350");
-
 }

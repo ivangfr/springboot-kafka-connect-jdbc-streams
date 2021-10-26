@@ -140,5 +140,4 @@ public class StoreStreamsAvro {
     private void logKeyValue(String key, Object value) {
         log.info("==> key: {}, value: {}", key, value);
     }
-
 }

@@ -11,6 +11,4 @@ class StoreApiApplicationTests {
     @Test
     void contextLoads() {
     }
-
 }
-

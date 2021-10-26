@@ -13,5 +13,4 @@ public interface CustomerService {
     void deleteCustomer(Customer customer);
 
     Customer validateAndGetCustomerById(Long id);
-
 }

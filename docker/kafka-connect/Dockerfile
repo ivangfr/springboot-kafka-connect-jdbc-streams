@@ -2,7 +2,7 @@ FROM confluentinc/cp-kafka-connect:6.1.1
 
 LABEL maintainer="ivangfr@yahoo.com.br"
 
-USER 0
+USER root
 RUN yum install unzip -y
 
 COPY jars/*.jar /etc/kafka-connect/jars

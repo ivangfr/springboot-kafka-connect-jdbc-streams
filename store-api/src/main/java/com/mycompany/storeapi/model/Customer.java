@@ -48,5 +48,4 @@ public class Customer {
     public void onPreUpdate() {
         updatedAt = LocalDateTime.now();
     }
-
 }

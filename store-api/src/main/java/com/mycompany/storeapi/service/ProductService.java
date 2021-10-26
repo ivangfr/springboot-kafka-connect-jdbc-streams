@@ -13,5 +13,4 @@ public interface ProductService {
     void deleteProduct(Product product);
 
     Product validateAndGetProductById(Long id);
-
 }

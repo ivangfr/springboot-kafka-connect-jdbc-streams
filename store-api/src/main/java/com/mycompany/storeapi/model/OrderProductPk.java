@@ -9,5 +9,4 @@ public class OrderProductPk implements Serializable {
 
     private String order;
     private Long product;
-
 }

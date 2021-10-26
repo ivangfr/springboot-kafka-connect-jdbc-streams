@@ -48,5 +48,4 @@ public class OrderProduct {
     public void onPreUpdate() {
         updatedAt = LocalDateTime.now();
     }
-
 }

@@ -13,7 +13,6 @@ services:
       - MYSQL_DATABASE=storedb
     healthcheck:
       test: "mysqladmin ping -u root -p$${MYSQL_ROOT_PASSWORD}"
-      start_period: 30s
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.14.0
@@ -33,7 +32,6 @@ services:
         hard: -1
     healthcheck:
       test: "curl -f http://localhost:9200 || exit 1"
-      start_period: 30s
 
   zookeeper:
     image: confluentinc/cp-zookeeper:6.1.1
@@ -45,7 +43,6 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
     healthcheck:
       test: "echo stat | nc localhost $$ZOOKEEPER_CLIENT_PORT"
-      start_period: 30s
 
   kafka:
     image: confluentinc/cp-kafka:6.1.1
@@ -64,7 +61,6 @@ services:
       KAFKA_DELETE_TOPIC_ENABLE: "true"
     healthcheck:
       test: [ "CMD", "nc", "-z", "localhost", "9092" ]
-      start_period: 30s
 
   schema-registry:
     image: confluentinc/cp-schema-registry:6.1.1
@@ -80,7 +76,6 @@ services:
       SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
     healthcheck:
       test: "curl -f http://localhost:8081 || exit 1"
-      start_period: 1m
 
   schema-registry-ui:
     image: landoop/schema-registry-ui:0.9.5
@@ -95,7 +90,6 @@ services:
       PROXY: "true"
     healthcheck:
       test: "wget --quiet --tries=1 --spider http://localhost:8000 || exit 1"
-      start_period: 30s
 
   kafka-rest-proxy:
     image: confluentinc/cp-kafka-rest:6.1.1
@@ -115,7 +109,6 @@ services:
       KAFKA_REST_CONSUMER_REQUEST_TIMEOUT_MS: 30000
     healthcheck:
       test: "curl -f http://localhost:8082 || exit 1"
-      start_period: 30s
 
   kafka-topics-ui:
     image: landoop/kafka-topics-ui:0.9.4
@@ -129,8 +122,7 @@ services:
       KAFKA_REST_PROXY_URL: http://kafka-rest-proxy:8082
       PROXY: "true"
     healthcheck:
-      test: "wget --quiet --tries=1 --spider http://localhost:8000 || exit 1"
-      start_period: 30s
+      test: "wget --quiet --tries=1 --spider http://localhost:8000 || exit 1"
 
   kafka-connect:
     build: docker/kafka-connect
@@ -164,7 +156,6 @@ services:
       CONNECT_PLUGIN_PATH: "/usr/share/java"
     healthcheck:
       test: "curl -f http://localhost:$$CONNECT_REST_PORT || exit 1"
-      start_period: 30s
 
   kafka-connect-ui:
     image: landoop/kafka-connect-ui:0.9.7
@@ -179,7 +170,6 @@ services:
       PROXY: "true"
     healthcheck:
       test: "wget --quiet --tries=1 --spider http://localhost:8000 || exit 1"
-      start_period: 30s
 
   kafka-manager:
     image: hlebalbau/kafka-manager:3.0.0.5
@@ -195,4 +185,3 @@ services:
     command: -Dpidfile.path=/dev/null
     healthcheck:
       test: "curl -f http://localhost:9000 || exit 1"
-      start_period: 30s

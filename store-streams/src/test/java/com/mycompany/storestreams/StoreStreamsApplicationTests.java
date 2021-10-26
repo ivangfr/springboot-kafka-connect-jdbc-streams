@@ -11,6 +11,4 @@ class StoreStreamsApplicationTests {
     @Test
     void contextLoads() {
     }
-
 }
-

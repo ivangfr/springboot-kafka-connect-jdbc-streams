@@ -2,9 +2,9 @@ package com.mycompany.storeapi.rest;
 
 import com.mycompany.storeapi.mapper.ProductMapper;
 import com.mycompany.storeapi.model.Product;
-import com.mycompany.storeapi.rest.dto.AddProductDto;
-import com.mycompany.storeapi.rest.dto.ProductDto;
-import com.mycompany.storeapi.rest.dto.UpdateProductDto;
+import com.mycompany.storeapi.rest.dto.AddProductRequest;
+import com.mycompany.storeapi.rest.dto.ProductResponse;
+import com.mycompany.storeapi.rest.dto.UpdateProductRequest;
 import com.mycompany.storeapi.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,40 +31,39 @@ public class ProductController {
     private final ProductMapper productMapper;
 
     @GetMapping
-    public List<ProductDto> getAllProducts() {
+    public List<ProductResponse> getAllProducts() {
         return productService.getAllProducts()
                 .stream()
-                .map(productMapper::toProductDto)
+                .map(productMapper::toProductResponse)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public ProductDto getProduct(@PathVariable Long id) {
+    public ProductResponse getProduct(@PathVariable Long id) {
         Product product = productService.validateAndGetProductById(id);
-        return productMapper.toProductDto(product);
+        return productMapper.toProductResponse(product);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public ProductDto addProduct(@Valid @RequestBody AddProductDto addProductDto) {
-        Product product = productMapper.toProduct(addProductDto);
+    public ProductResponse addProduct(@Valid @RequestBody AddProductRequest addProductRequest) {
+        Product product = productMapper.toProduct(addProductRequest);
         product = productService.saveProduct(product);
-        return productMapper.toProductDto(product);
+        return productMapper.toProductResponse(product);
     }
 
     @PatchMapping("/{id}")
-    public ProductDto updateProduct(@PathVariable Long id, @Valid @RequestBody UpdateProductDto updateProductDto) {
+    public ProductResponse updateProduct(@PathVariable Long id, @Valid @RequestBody UpdateProductRequest updateProductRequest) {
         Product product = productService.validateAndGetProductById(id);
-        productMapper.updateProductFromDto(updateProductDto, product);
+        productMapper.updateProductFromRequest(updateProductRequest, product);
         product = productService.saveProduct(product);
-        return productMapper.toProductDto(product);
+        return productMapper.toProductResponse(product);
     }
 
     @DeleteMapping("/{id}")
-    public ProductDto deleteProduct(@PathVariable Long id) {
+    public ProductResponse deleteProduct(@PathVariable Long id) {
         Product product = productService.validateAndGetProductById(id);
         productService.deleteProduct(product);
-        return productMapper.toProductDto(product);
+        return productMapper.toProductResponse(product);
     }
-
 }

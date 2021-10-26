@@ -4,7 +4,7 @@ The main goal of this project is to play with [`Kafka`](https://kafka.apache.org
 
 ## Project Diagram
 
-![project-diagram](images/project-diagram.png)
+![project-diagram](documentation/project-diagram.png)
 
 ## Applications
 
@@ -12,7 +12,7 @@ The main goal of this project is to play with [`Kafka`](https://kafka.apache.org
 
   Monolithic [`Spring Boot`](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/) application that exposes a REST API to manage `Customers`, `Products` and `Orders`. The data is stored in `MySQL`.
   
-  ![store-api-swagger](images/store-api-swagger.png)
+  ![store-api-swagger](documentation/store-api-swagger.png)
 
 - ### store-streams
 
@@ -20,7 +20,7 @@ The main goal of this project is to play with [`Kafka`](https://kafka.apache.org
 
 ## Prerequisites
 
-- [`Java 11+`](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html)
+- [`Java 11+`](https://www.oracle.com/java/technologies/downloads/#java11)
 - [`Docker`](https://www.docker.com/)
 - [`Docker-Compose`](https://docs.docker.com/compose/install/)
 
@@ -39,7 +39,7 @@ In order to run this project, you can use [`JSON`](https://www.json.org) or [`Av
   > docker-compose build
   > ```
 
-- Wait until all containers are `Up (healthy)`. To check the status of the containers run
+- Wait for all containers to be with state `Up (healthy)`. To check the status of the containers run
   ```
   docker-compose ps
   ```
@@ -96,7 +96,7 @@ Steps to create the connectors:
 
 - On `Kafka Connect UI` (http://localhost:8086), you should see
 
-  ![kafka-connect-ui](images/kafka-connect-ui.png)
+  ![kafka-connect-ui](documentation/kafka-connect-ui.png)
 
 - If there is any problem, you can check `kafka-connect` container logs
   ```

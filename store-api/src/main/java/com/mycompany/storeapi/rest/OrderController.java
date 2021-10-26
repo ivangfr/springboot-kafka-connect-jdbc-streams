@@ -2,9 +2,9 @@ package com.mycompany.storeapi.rest;
 
 import com.mycompany.storeapi.mapper.OrderMapper;
 import com.mycompany.storeapi.model.Order;
-import com.mycompany.storeapi.rest.dto.CreateOrderDto;
-import com.mycompany.storeapi.rest.dto.OrderDto;
-import com.mycompany.storeapi.rest.dto.UpdateOrderDto;
+import com.mycompany.storeapi.rest.dto.CreateOrderRequest;
+import com.mycompany.storeapi.rest.dto.OrderResponse;
+import com.mycompany.storeapi.rest.dto.UpdateOrderRequest;
 import com.mycompany.storeapi.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,34 +31,33 @@ public class OrderController {
     private final OrderMapper orderMapper;
 
     @GetMapping
-    public List<OrderDto> getAllOrders() {
+    public List<OrderResponse> getAllOrders() {
         return orderService.getAllOrders()
                 .stream()
-                .map(orderMapper::toOrderDto)
+                .map(orderMapper::toOrderResponse)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public OrderDto getOrder(@PathVariable UUID id) {
+    public OrderResponse getOrder(@PathVariable UUID id) {
         Order order = orderService.validateAndGetOrderById(id.toString());
-        return orderMapper.toOrderDto(order);
+        return orderMapper.toOrderResponse(order);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public OrderDto createOrder(@Valid @RequestBody CreateOrderDto createOrderDto) {
-        Order order = orderMapper.toOrder(createOrderDto);
+    public OrderResponse createOrder(@Valid @RequestBody CreateOrderRequest createOrderRequest) {
+        Order order = orderMapper.toOrder(createOrderRequest);
         order.setId(UUID.randomUUID().toString());
         order = orderService.saveOrder(order);
-        return orderMapper.toOrderDto(order);
+        return orderMapper.toOrderResponse(order);
     }
 
     @PatchMapping("/{id}")
-    public OrderDto updateOrder(@PathVariable UUID id, @Valid @RequestBody UpdateOrderDto updateOrderDto) {
+    public OrderResponse updateOrder(@PathVariable UUID id, @Valid @RequestBody UpdateOrderRequest updateOrderRequest) {
         Order order = orderService.validateAndGetOrderById(id.toString());
-        orderMapper.updateOrderFromDto(updateOrderDto, order);
+        orderMapper.updateOrderFromRequest(updateOrderRequest, order);
         order = orderService.saveOrder(order);
-        return orderMapper.toOrderDto(order);
+        return orderMapper.toOrderResponse(order);
     }
-
 }

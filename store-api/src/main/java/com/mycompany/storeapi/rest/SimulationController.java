@@ -6,7 +6,7 @@ import com.mycompany.storeapi.model.OrderProduct;
 import com.mycompany.storeapi.model.OrderStatus;
 import com.mycompany.storeapi.model.PaymentType;
 import com.mycompany.storeapi.model.Product;
-import com.mycompany.storeapi.rest.dto.RandomOrdersDto;
+import com.mycompany.storeapi.rest.dto.RandomOrdersRequest;
 import com.mycompany.storeapi.service.CustomerService;
 import com.mycompany.storeapi.service.OrderService;
 import com.mycompany.storeapi.service.ProductService;
@@ -44,9 +44,9 @@ public class SimulationController {
     private final OrderService orderService;
 
     @PostMapping("/orders")
-    public List<String> createRandomOrders(@RequestBody RandomOrdersDto randomOrdersDto) throws InterruptedException {
-        total = randomOrdersDto.getTotal() == null ? total : randomOrdersDto.getTotal();
-        sleep = randomOrdersDto.getSleep() == null ? sleep : randomOrdersDto.getSleep();
+    public List<String> createRandomOrders(@RequestBody RandomOrdersRequest randomOrdersRequest) throws InterruptedException {
+        total = randomOrdersRequest.getTotal() == null ? total : randomOrdersRequest.getTotal();
+        sleep = randomOrdersRequest.getSleep() == null ? sleep : randomOrdersRequest.getSleep();
 
         log.info("## Running order simulation - total: {}, sleep: {}", total, sleep);
 
@@ -99,5 +99,4 @@ public class SimulationController {
     }
 
     private static final Random random = new SecureRandom();
-
 }

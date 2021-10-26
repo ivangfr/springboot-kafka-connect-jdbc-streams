@@ -9,7 +9,7 @@ import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 
 @Data
-public class AddProductDto {
+public class AddProductRequest {
 
     @Schema(example = "MacBook Pro")
     @NotBlank
@@ -19,5 +19,4 @@ public class AddProductDto {
     @NotNull
     @Positive
     private BigDecimal price;
-
 }

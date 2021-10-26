@@ -16,5 +16,4 @@ public class Customer {
 
     @JsonProperty("created_at")
     private Date createdAt;
-
 }

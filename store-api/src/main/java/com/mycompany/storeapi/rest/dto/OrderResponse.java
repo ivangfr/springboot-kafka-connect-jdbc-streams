@@ -7,18 +7,17 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class OrderDto {
+public class OrderResponse {
 
     private String id;
     private Long customerId;
     private PaymentType paymentType;
     private OrderStatus status;
-    private List<ProductDto> products;
+    private List<ProductResponse> products;
 
     @Data
-    public static final class ProductDto {
+    public static final class ProductResponse {
         private Long id;
         private Integer unit;
     }
-
 }

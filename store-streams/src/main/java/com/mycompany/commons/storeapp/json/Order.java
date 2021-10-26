@@ -20,5 +20,4 @@ public class Order {
 
     @JsonProperty("created_at")
     private Date createdAt;
-
 }

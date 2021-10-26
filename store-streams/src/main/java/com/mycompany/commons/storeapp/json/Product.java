@@ -15,5 +15,4 @@ public class Product {
 
     @JsonProperty("created_at")
     private Date createdAt;
-
 }

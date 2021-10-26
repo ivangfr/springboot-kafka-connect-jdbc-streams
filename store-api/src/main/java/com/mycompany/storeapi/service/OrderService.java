@@ -11,5 +11,4 @@ public interface OrderService {
     Order saveOrder(Order order);
 
     Order validateAndGetOrderById(String id);
-
 }

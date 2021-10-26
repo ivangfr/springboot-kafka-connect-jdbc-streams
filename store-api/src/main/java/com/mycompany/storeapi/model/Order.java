@@ -62,5 +62,4 @@ public class Order {
     public void onPreUpdate() {
         updatedAt = LocalDateTime.now();
     }
-
 }

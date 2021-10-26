@@ -6,12 +6,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
-public class UpdateOrderDto {
+public class UpdateOrderRequest {
 
     @Schema(example = "CASH")
     private PaymentType paymentType;
 
     @Schema(example = "PAYED")
     private OrderStatus status;
-
 }

@@ -11,5 +11,4 @@ public class ProductDetail {
     private String name;
     private BigDecimal price;
     private Integer unit;
-
 }
