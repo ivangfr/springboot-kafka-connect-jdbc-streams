@@ -120,7 +120,7 @@ Steps to create the connectors:
 
 - **store-streams**
 
-  - Open a new terminal and inside `springboot-kafka-connect-jdbc-streams` root folder, run
+  - Open a new terminal and inside `springboot-kafka-connect-jdbc-streams` root folder.
 
   - To start application, run
 
