@@ -155,14 +155,14 @@ Steps to create the connectors:
 - **store-api**
 
   | Environment Variable   | Description                                                       |
-  | ---------------------- | ----------------------------------------------------------------- |
+  |------------------------|-------------------------------------------------------------------|
   | `MYSQL_HOST`           | Specify host of the `MySQL` database to use (default `localhost`) |
   | `MYSQL_PORT`           | Specify port of the `MySQL` database to use (default `3306`)      |
 
 - **store-streams**
 
   | Environment Variable   | Description                                                             |
-  | ---------------------- | ----------------------------------------------------------------------- |
+  |------------------------|-------------------------------------------------------------------------|
   | `KAFKA_HOST`           | Specify host of the `Kafka` message broker to use (default `localhost`) |
   | `KAFKA_PORT`           | Specify port of the `Kafka` message broker to use (default `29092`)     |
   | `SCHEMA_REGISTRY_HOST` | Specify host of the `Schema Registry` to use (default `localhost`)      |
@@ -191,7 +191,7 @@ Steps to create the connectors:
 ## Application's URL
 
 | Application   | URL                                   |
-| ------------- | ------------------------------------- |
+|---------------|---------------------------------------|
 | store-api     | http://localhost:9080/swagger-ui.html |
 | store-streams | http://localhost:9081/actuator/health |
 
@@ -346,7 +346,7 @@ Steps to create the connectors:
 
   ```
   docker run --tty --interactive --rm --network=springboot-kafka-connect-jdbc-streams_default \
-    confluentinc/cp-kafkacat:6.1.1 kafkacat -b kafka:9092 \
+    confluentinc/cp-kafkacat:7.0.1 kafkacat -b kafka:9092 \
     -f '\nKey (%K bytes): %k\t\nValue (%S bytes): %s\n\Partition: %p\tOffset: %o\n--\n' \
     -t store.streams.orders -C -c1
   ```
