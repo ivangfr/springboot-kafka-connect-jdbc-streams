@@ -1,0 +1,5 @@
+Access
+
+https://www.confluent.io/hub/
+
+to download updated version of confluentinc-kafka-connect-elasticsearch and confluentinc-kafka-connect-jdbc ZIP files
