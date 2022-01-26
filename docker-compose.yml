@@ -3,7 +3,7 @@ version: "3.8"
 services:
 
   mysql:
-    image: mysql:8.0.27
+    image: mysql:8.0.28
     container_name: mysql
     restart: unless-stopped
     ports:
@@ -24,6 +24,7 @@ services:
     environment:
       discovery.type: single-node
       xpack.security.enabled: false
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
     healthcheck:
       test: "curl -f http://localhost:9200 || exit 1"
 

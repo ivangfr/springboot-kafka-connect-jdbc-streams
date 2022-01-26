@@ -17,7 +17,7 @@
         <spring-cloud.version>2021.0.0</spring-cloud.version>
         <avro.version>1.10.2</avro.version>
         <confluent.version>7.0.1</confluent.version>
-        <springdoc-openapi.version>1.6.2</springdoc-openapi.version>
+        <springdoc-openapi.version>1.6.4</springdoc-openapi.version>
     </properties>
 
     <dependencies>
