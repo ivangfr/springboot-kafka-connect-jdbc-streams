@@ -15,11 +15,13 @@ import org.apache.avro.message.SchemaStore;
 @org.apache.avro.specific.AvroGenerated
 public class Customer extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
   private static final long serialVersionUID = 4144609140680182962L;
+
+
   public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Customer\",\"namespace\":\"com.mycompany.commons.storeapp.avro\",\"fields\":[{\"name\":\"id\",\"type\":\"long\"},{\"name\":\"address\",\"type\":\"string\"},{\"name\":\"created_at\",\"type\":{\"type\":\"long\",\"connect.version\":1,\"connect.name\":\"org.apache.kafka.connect.data.Timestamp\",\"logicalType\":\"timestamp-millis\"}},{\"name\":\"email\",\"type\":\"string\"},{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"phone\",\"type\":\"string\"}],\"connect.name\":\"com.mycompany.commons.storeapp.avro.Customer\"}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
-  private static SpecificData MODEL$ = new SpecificData();
-static {
+  private static final SpecificData MODEL$ = new SpecificData();
+  static {
     MODEL$.addLogicalTypeConversion(new org.apache.avro.data.TimeConversions.TimestampMillisConversion());
   }
 
@@ -74,12 +76,12 @@ static {
     return DECODER.decode(b);
   }
 
-   private long id;
-   private java.lang.CharSequence address;
-   private java.time.Instant created_at;
-   private java.lang.CharSequence email;
-   private java.lang.CharSequence name;
-   private java.lang.CharSequence phone;
+  private long id;
+  private java.lang.CharSequence address;
+  private java.time.Instant created_at;
+  private java.lang.CharSequence email;
+  private java.lang.CharSequence name;
+  private java.lang.CharSequence phone;
 
   /**
    * Default constructor.  Note that this does not initialize fields
@@ -303,7 +305,7 @@ static {
 
     /** Creates a new Builder */
     private Builder() {
-      super(SCHEMA$);
+      super(SCHEMA$, MODEL$);
     }
 
     /**
@@ -343,7 +345,7 @@ static {
      * @param other The existing instance to copy.
      */
     private Builder(com.mycompany.commons.storeapp.avro.Customer other) {
-      super(SCHEMA$);
+      super(SCHEMA$, MODEL$);
       if (isValidValue(fields()[0], other.id)) {
         this.id = data().deepCopy(fields()[0].schema(), other.id);
         fieldSetFlags()[0] = true;

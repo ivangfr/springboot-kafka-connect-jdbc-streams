@@ -15,11 +15,13 @@ import org.apache.avro.message.SchemaStore;
 @org.apache.avro.specific.AvroGenerated
 public class OrderDetailed extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
   private static final long serialVersionUID = -293856184690800085L;
+
+
   public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"OrderDetailed\",\"namespace\":\"com.mycompany.commons.storeapp.avro\",\"fields\":[{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"created_at\",\"type\":{\"type\":\"long\",\"connect.version\":1,\"connect.name\":\"org.apache.kafka.connect.data.Timestamp\",\"logicalType\":\"timestamp-millis\"}},{\"name\":\"payment_type\",\"type\":\"string\"},{\"name\":\"status\",\"type\":\"string\"},{\"name\":\"customer_id\",\"type\":\"long\"},{\"name\":\"customer_name\",\"type\":[\"null\",\"string\"],\"default\":null},{\"name\":\"products\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"ProductDetail\",\"fields\":[{\"name\":\"id\",\"type\":\"long\"},{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"price\",\"type\":\"string\"},{\"name\":\"unit\",\"type\":\"int\"}],\"connect.name\":\"com.mycompany.commons.storeapp.avro.ProductDetail\"}},\"default\":[]}],\"connect.name\":\"com.mycompany.commons.storeapp.avro.OrderDetailed\"}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
-  private static SpecificData MODEL$ = new SpecificData();
-static {
+  private static final SpecificData MODEL$ = new SpecificData();
+  static {
     MODEL$.addLogicalTypeConversion(new org.apache.avro.data.TimeConversions.TimestampMillisConversion());
   }
 
@@ -74,13 +76,13 @@ static {
     return DECODER.decode(b);
   }
 
-   private java.lang.CharSequence id;
-   private java.time.Instant created_at;
-   private java.lang.CharSequence payment_type;
-   private java.lang.CharSequence status;
-   private long customer_id;
-   private java.lang.CharSequence customer_name;
-   private java.util.List<com.mycompany.commons.storeapp.avro.ProductDetail> products;
+  private java.lang.CharSequence id;
+  private java.time.Instant created_at;
+  private java.lang.CharSequence payment_type;
+  private java.lang.CharSequence status;
+  private long customer_id;
+  private java.lang.CharSequence customer_name;
+  private java.util.List<com.mycompany.commons.storeapp.avro.ProductDetail> products;
 
   /**
    * Default constructor.  Note that this does not initialize fields
@@ -327,7 +329,7 @@ static {
 
     /** Creates a new Builder */
     private Builder() {
-      super(SCHEMA$);
+      super(SCHEMA$, MODEL$);
     }
 
     /**
@@ -371,7 +373,7 @@ static {
      * @param other The existing instance to copy.
      */
     private Builder(com.mycompany.commons.storeapp.avro.OrderDetailed other) {
-      super(SCHEMA$);
+      super(SCHEMA$, MODEL$);
       if (isValidValue(fields()[0], other.id)) {
         this.id = data().deepCopy(fields()[0].schema(), other.id);
         fieldSetFlags()[0] = true;

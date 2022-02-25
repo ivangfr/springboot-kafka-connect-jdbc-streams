@@ -15,10 +15,12 @@ import org.apache.avro.message.SchemaStore;
 @org.apache.avro.specific.AvroGenerated
 public class ProductDetailList extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
   private static final long serialVersionUID = 7727836800690201303L;
+
+
   public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"ProductDetailList\",\"namespace\":\"com.mycompany.commons.storeapp.avro\",\"fields\":[{\"name\":\"products\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"ProductDetail\",\"fields\":[{\"name\":\"id\",\"type\":\"long\"},{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"price\",\"type\":\"string\"},{\"name\":\"unit\",\"type\":\"int\"}],\"connect.name\":\"com.mycompany.commons.storeapp.avro.ProductDetail\"}},\"default\":[]}],\"connect.name\":\"com.mycompany.commons.storeapp.avro.ProductDetailList\"}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
-  private static SpecificData MODEL$ = new SpecificData();
+  private static final SpecificData MODEL$ = new SpecificData();
 
   private static final BinaryMessageEncoder<ProductDetailList> ENCODER =
       new BinaryMessageEncoder<ProductDetailList>(MODEL$, SCHEMA$);
@@ -71,7 +73,7 @@ public class ProductDetailList extends org.apache.avro.specific.SpecificRecordBa
     return DECODER.decode(b);
   }
 
-   private java.util.List<com.mycompany.commons.storeapp.avro.ProductDetail> products;
+  private java.util.List<com.mycompany.commons.storeapp.avro.ProductDetail> products;
 
   /**
    * Default constructor.  Note that this does not initialize fields
@@ -169,7 +171,7 @@ public class ProductDetailList extends org.apache.avro.specific.SpecificRecordBa
 
     /** Creates a new Builder */
     private Builder() {
-      super(SCHEMA$);
+      super(SCHEMA$, MODEL$);
     }
 
     /**
@@ -189,7 +191,7 @@ public class ProductDetailList extends org.apache.avro.specific.SpecificRecordBa
      * @param other The existing instance to copy.
      */
     private Builder(com.mycompany.commons.storeapp.avro.ProductDetailList other) {
-      super(SCHEMA$);
+      super(SCHEMA$, MODEL$);
       if (isValidValue(fields()[0], other.products)) {
         this.products = data().deepCopy(fields()[0].schema(), other.products);
         fieldSetFlags()[0] = true;

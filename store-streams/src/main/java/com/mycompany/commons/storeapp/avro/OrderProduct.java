@@ -15,10 +15,12 @@ import org.apache.avro.message.SchemaStore;
 @org.apache.avro.specific.AvroGenerated
 public class OrderProduct extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
   private static final long serialVersionUID = -2403290845378388255L;
+
+
   public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"OrderProduct\",\"namespace\":\"com.mycompany.commons.storeapp.avro\",\"fields\":[{\"name\":\"order_id\",\"type\":\"string\"},{\"name\":\"product_id\",\"type\":\"long\"},{\"name\":\"unit\",\"type\":\"int\"}],\"connect.name\":\"com.mycompany.commons.storeapp.avro.OrderProduct\"}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
-  private static SpecificData MODEL$ = new SpecificData();
+  private static final SpecificData MODEL$ = new SpecificData();
 
   private static final BinaryMessageEncoder<OrderProduct> ENCODER =
       new BinaryMessageEncoder<OrderProduct>(MODEL$, SCHEMA$);
@@ -71,9 +73,9 @@ public class OrderProduct extends org.apache.avro.specific.SpecificRecordBase im
     return DECODER.decode(b);
   }
 
-   private java.lang.CharSequence order_id;
-   private long product_id;
-   private int unit;
+  private java.lang.CharSequence order_id;
+  private long product_id;
+  private int unit;
 
   /**
    * Default constructor.  Note that this does not initialize fields
@@ -215,7 +217,7 @@ public class OrderProduct extends org.apache.avro.specific.SpecificRecordBase im
 
     /** Creates a new Builder */
     private Builder() {
-      super(SCHEMA$);
+      super(SCHEMA$, MODEL$);
     }
 
     /**
@@ -243,7 +245,7 @@ public class OrderProduct extends org.apache.avro.specific.SpecificRecordBase im
      * @param other The existing instance to copy.
      */
     private Builder(com.mycompany.commons.storeapp.avro.OrderProduct other) {
-      super(SCHEMA$);
+      super(SCHEMA$, MODEL$);
       if (isValidValue(fields()[0], other.order_id)) {
         this.order_id = data().deepCopy(fields()[0].schema(), other.order_id);
         fieldSetFlags()[0] = true;

@@ -15,10 +15,12 @@ import org.apache.avro.message.SchemaStore;
 @org.apache.avro.specific.AvroGenerated
 public class ProductDetail extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
   private static final long serialVersionUID = 5849586857392833530L;
+
+
   public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"ProductDetail\",\"namespace\":\"com.mycompany.commons.storeapp.avro\",\"fields\":[{\"name\":\"id\",\"type\":\"long\"},{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"price\",\"type\":\"string\"},{\"name\":\"unit\",\"type\":\"int\"}],\"connect.name\":\"com.mycompany.commons.storeapp.avro.ProductDetail\"}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
-  private static SpecificData MODEL$ = new SpecificData();
+  private static final SpecificData MODEL$ = new SpecificData();
 
   private static final BinaryMessageEncoder<ProductDetail> ENCODER =
       new BinaryMessageEncoder<ProductDetail>(MODEL$, SCHEMA$);
@@ -71,10 +73,10 @@ public class ProductDetail extends org.apache.avro.specific.SpecificRecordBase i
     return DECODER.decode(b);
   }
 
-   private long id;
-   private java.lang.CharSequence name;
-   private java.lang.CharSequence price;
-   private int unit;
+  private long id;
+  private java.lang.CharSequence name;
+  private java.lang.CharSequence price;
+  private int unit;
 
   /**
    * Default constructor.  Note that this does not initialize fields
@@ -238,7 +240,7 @@ public class ProductDetail extends org.apache.avro.specific.SpecificRecordBase i
 
     /** Creates a new Builder */
     private Builder() {
-      super(SCHEMA$);
+      super(SCHEMA$, MODEL$);
     }
 
     /**
@@ -270,7 +272,7 @@ public class ProductDetail extends org.apache.avro.specific.SpecificRecordBase i
      * @param other The existing instance to copy.
      */
     private Builder(com.mycompany.commons.storeapp.avro.ProductDetail other) {
-      super(SCHEMA$);
+      super(SCHEMA$, MODEL$);
       if (isValidValue(fields()[0], other.id)) {
         this.id = data().deepCopy(fields()[0].schema(), other.id);
         fieldSetFlags()[0] = true;
