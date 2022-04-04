@@ -183,11 +183,6 @@ Steps to create the connectors:
     ./start-apps.sh avro
     ```
 
-- Wait for application's Docker containers `STATUS` to be `Up (healthy)`. You can check by running
-  ```
-  docker ps -f name=store-api -f name=store-streams
-  ```
-
 ## Application's URL
 
 | Application   | URL                                   |
