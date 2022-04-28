@@ -5,6 +5,7 @@ import com.mycompany.storeapi.rest.dto.AddProductRequest;
 import com.mycompany.storeapi.rest.dto.ProductResponse;
 import com.mycompany.storeapi.rest.dto.UpdateProductRequest;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
@@ -14,9 +15,15 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 )
 public interface ProductMapper {
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     Product toProduct(AddProductRequest addProductRequest);
 
     ProductResponse toProductResponse(Product product);
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     void updateProductFromRequest(UpdateProductRequest updateProductRequest, @MappingTarget Product product);
 }

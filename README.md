@@ -333,7 +333,7 @@ Steps to create the connectors:
 - **MySQL**
 
   ```
-  docker exec -it mysql mysql -uroot -psecret --database storedb
+  docker exec -it -e MYSQL_PWD=secret mysql mysql -uroot --database storedb
   select * from orders;
   ```
 

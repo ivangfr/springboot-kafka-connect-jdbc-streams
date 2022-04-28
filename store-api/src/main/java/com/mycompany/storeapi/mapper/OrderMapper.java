@@ -33,6 +33,11 @@ public abstract class OrderMapper {
     @Mapping(source = "product.id", target = "id")
     public abstract OrderResponse.ProductResponse toOrderResponseProductResponse(OrderProduct orderProduct);
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "customer", ignore = true)
+    @Mapping(target = "orderProducts", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     public abstract void updateOrderFromRequest(UpdateOrderRequest updateOrderRequest, @MappingTarget Order order);
 
     public Order toOrder(CreateOrderRequest createOrderRequest) {
