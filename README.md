@@ -70,10 +70,13 @@ Steps to create the connectors:
 - Run the following script to create the connectors on `kafka-connect`
 
   - **For JSON (de)serialization**
+
     ```
     ./create-connectors-jsonconverter.sh
     ```
+    
   - **For Avro (de)serialization**
+
     ```
     ./create-connectors-avroconverter.sh
     ```
@@ -125,10 +128,15 @@ Steps to create the connectors:
   - To start application, run
 
     - **For JSON (de)serialization**
+  
       ```
       ./mvnw clean spring-boot:run --projects store-streams -Dspring-boot.run.jvmArguments="-Dserver.port=9081"
       ```
+      
     - **For Avro (de)serialization**
+    
+      > **Warning:** Unable to run in this mode in my machine! The application starts fine when using `avro` profile but, when the 1st event arrives, the `org.apache.kafka.common.errors.SerializationException: Unknown magic byte!` is thrown. The problem doesn't happen while [Running Applications as Docker containers](#running-applications-as-docker-containers). 
+    
       ```
       ./mvnw clean spring-boot:run --projects store-streams -Dspring-boot.run.jvmArguments="-Dserver.port=9081" -Dspring-boot.run.profiles=avro
       ```
@@ -136,8 +144,6 @@ Steps to create the connectors:
       > ```
       > ./mvnw generate-sources --projects store-streams
       > ```
-
-  - If you get an exception saying `Unexpected state transition from ERROR to REBALANCING`, rerun `store-streams`
 
 ## Running Applications as Docker containers
 

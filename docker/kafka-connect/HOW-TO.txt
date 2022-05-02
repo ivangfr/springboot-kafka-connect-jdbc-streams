@@ -1,5 +1,7 @@
-Access
+Access https://www.confluent.io/hub/ to download updated version of
+confluentinc-kafka-connect-elasticsearch and confluentinc-kafka-connect-jdbc ZIP files
 
-https://www.confluent.io/hub/
-
-to download updated version of confluentinc-kafka-connect-elasticsearch and confluentinc-kafka-connect-jdbc ZIP files
+Access https://dev.mysql.com/downloads/connector/j/ to download updated version of
+mysql-connector-java ZIP file
+To download the latest version, you must be logged in.
+Once downloaded, decompress the ZIP file and copy the JAR inside it to jars folder

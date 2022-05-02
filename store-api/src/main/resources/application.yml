@@ -1,9 +1,6 @@
 spring:
   application:
     name: store-api
-  jpa:
-    hibernate:
-      ddl-auto: update
   datasource:
     url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/storedb?characterEncoding=UTF-8&serverTimezone=UTC
     username: root
