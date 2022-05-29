@@ -17,7 +17,7 @@ services:
       test: "mysqladmin ping -u root -p$${MYSQL_ROOT_PASSWORD}"
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.15.2
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.3
     container_name: elasticsearch
     restart: unless-stopped
     ports:
