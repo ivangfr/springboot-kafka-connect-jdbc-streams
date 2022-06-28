@@ -12,7 +12,7 @@ The main goal of this project is to play with [`Kafka`](https://kafka.apache.org
 
   Monolithic [`Spring Boot`](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/) application that exposes a REST API to manage `Customers`, `Products` and `Orders`. The data is stored in `MySQL`.
   
-  ![store-api-swagger](documentation/store-api-swagger.png)
+  ![store-api-swagger](documentation/store-api-swagger.jpeg)
 
 - ### store-streams
 
@@ -99,7 +99,7 @@ Steps to create the connectors:
 
 - On `Kafka Connect UI` (http://localhost:8086), you should see
 
-  ![kafka-connect-ui](documentation/kafka-connect-ui.png)
+  ![kafka-connect-ui](documentation/kafka-connect-ui.jpeg)
 
 - If there is any problem, you can check `kafka-connect` container logs
   ```
@@ -191,10 +191,10 @@ Steps to create the connectors:
 
 ## Application's URL
 
-| Application   | URL                                   |
-|---------------|---------------------------------------|
-| store-api     | http://localhost:9080/swagger-ui.html |
-| store-streams | http://localhost:9081/actuator/health |
+| Application   | URL                                         |
+|---------------|---------------------------------------------|
+| store-api     | http://localhost:9080/swagger-ui/index.html |
+| store-streams | http://localhost:9081/actuator/health       |
 
 ## Testing
 
