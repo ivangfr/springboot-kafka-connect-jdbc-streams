@@ -1,7 +1,7 @@
 {
   "type": "record",
   "name": "Product",
-  "namespace": "com.mycompany.commons.storeapp.avro",
+  "namespace": "com.ivanfranchin.commons.storeapp.avro",
   "fields": [
     {
       "name": "id",
@@ -25,5 +25,5 @@
       "type": "string"
     }
   ],
-  "connect.name": "com.mycompany.commons.storeapp.avro.Product"
+  "connect.name": "com.ivanfranchin.commons.storeapp.avro.Product"
 }

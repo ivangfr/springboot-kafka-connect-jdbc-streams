@@ -1,16 +1,16 @@
 {
   "type": "record",
   "name": "ProductDetailList",
-  "namespace": "com.mycompany.commons.storeapp.avro",
+  "namespace": "com.ivanfranchin.commons.storeapp.avro",
   "fields": [
     {
       "name": "products",
       "type": {
         "type": "array",
-        "items": "com.mycompany.commons.storeapp.avro.ProductDetail"
+        "items": "com.ivanfranchin.commons.storeapp.avro.ProductDetail"
       },
       "default": []
     }
   ],
-  "connect.name": "com.mycompany.commons.storeapp.avro.ProductDetailList"
+  "connect.name": "com.ivanfranchin.commons.storeapp.avro.ProductDetailList"
 }

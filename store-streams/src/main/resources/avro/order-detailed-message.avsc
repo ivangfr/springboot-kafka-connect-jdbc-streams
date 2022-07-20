@@ -1,7 +1,7 @@
 {
   "type": "record",
   "name": "OrderDetailed",
-  "namespace": "com.mycompany.commons.storeapp.avro",
+  "namespace": "com.ivanfranchin.commons.storeapp.avro",
   "fields": [
     {
       "name": "id",
@@ -37,10 +37,10 @@
       "name": "products",
       "type": {
         "type": "array",
-        "items": "com.mycompany.commons.storeapp.avro.ProductDetail"
+        "items": "com.ivanfranchin.commons.storeapp.avro.ProductDetail"
       },
       "default": []
     }
   ],
-  "connect.name": "com.mycompany.commons.storeapp.avro.OrderDetailed"
+  "connect.name": "com.ivanfranchin.commons.storeapp.avro.OrderDetailed"
 }

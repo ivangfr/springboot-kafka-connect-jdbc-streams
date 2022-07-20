@@ -34,7 +34,7 @@ In order to run this project, you can use [`JSON`](https://www.json.org) or [`Av
   ```
   docker-compose up -d
   ```
-  > **Note:** During the first run, an image for `kafka-connect` will be built, whose name is `springboot-kafka-connect-jdbc-streams_kafka-connect`. Run the command below to rebuild it.
+  > **Note**: During the first run, an image for `kafka-connect` will be built, whose name is `springboot-kafka-connect-jdbc-streams_kafka-connect`. Run the command below to rebuild it.
   > ```
   > docker-compose build
   > ```
@@ -135,7 +135,7 @@ Steps to create the connectors:
       
     - **For Avro (de)serialization**
     
-      > **Warning:** Unable to run in this mode in my machine! The application starts fine when using `avro` profile but, when the 1st event arrives, the `org.apache.kafka.common.errors.SerializationException: Unknown magic byte!` is thrown. The problem doesn't happen while [Running Applications as Docker containers](#running-applications-as-docker-containers). 
+      > **Warning**: Unable to run in this mode in my machine! The application starts fine when using `avro` profile but, when the 1st event arrives, the `org.apache.kafka.common.errors.SerializationException: Unknown magic byte!` is thrown. The problem doesn't happen while [Running Applications as Docker containers](#running-applications-as-docker-containers). 
     
       ```
       ./mvnw clean spring-boot:run --projects store-streams -Dspring-boot.run.jvmArguments="-Dserver.port=9081" -Dspring-boot.run.profiles=avro
@@ -226,7 +226,7 @@ Steps to create the connectors:
    }
    ```
 
-1. Now, if we check `Elasticsearch` again
+1. Checking `Elasticsearch`
    ```
    curl "localhost:9200/store.streams.orders/_search?pretty"
    ```
@@ -276,7 +276,7 @@ Steps to create the connectors:
    }
    ```
 
-1. In order to create random orders, we can use also the `simulation` endpoint of `store-api`
+1. In order to create random orders, we can use also the `simulation`
    ```
    curl -i -X POST localhost:9080/api/simulation/orders \
      -H 'Content-Type: application/json' \

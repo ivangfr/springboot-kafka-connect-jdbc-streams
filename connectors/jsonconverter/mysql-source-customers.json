@@ -17,7 +17,7 @@
 
     "_comment": "--- Change the schema name ---",
     "transforms.setSchemaName.type": "org.apache.kafka.connect.transforms.SetSchemaMetadata$Value",
-    "transforms.setSchemaName.schema.name": "com.mycompany.commons.storeapp.events.Customer",
+    "transforms.setSchemaName.schema.name": "com.ivanfranchin.commons.storeapp.events.Customer",
 
     "_comment": "--- Drop fields ---",
     "transforms.dropFields.type": "org.apache.kafka.connect.transforms.ReplaceField$Value",

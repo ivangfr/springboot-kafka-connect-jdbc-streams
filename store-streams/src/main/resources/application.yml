@@ -40,25 +40,25 @@ spring:
             process-in-0:
               consumer:
                 keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
-                valueSerde: com.mycompany.storestreams.serde.json.OrderJsonSerde
+                valueSerde: com.ivanfranchin.storestreams.serde.json.OrderJsonSerde
             process-in-1:
               consumer:
                 keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
-                valueSerde: com.mycompany.storestreams.serde.json.CustomerJsonSerde
+                valueSerde: com.ivanfranchin.storestreams.serde.json.CustomerJsonSerde
                 materializedAs: ktable.customers
             process-in-2:
               consumer:
                 keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
-                valueSerde: com.mycompany.storestreams.serde.json.OrderProductJsonSerde
+                valueSerde: com.ivanfranchin.storestreams.serde.json.OrderProductJsonSerde
             process-in-3:
               consumer:
                 keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
-                valueSerde: com.mycompany.storestreams.serde.json.ProductJsonSerde
+                valueSerde: com.ivanfranchin.storestreams.serde.json.ProductJsonSerde
                 materializedAs: ktable.products
             process-out-0:
               producer:
                 keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
-                valueSerde: com.mycompany.storestreams.serde.json.OrderDetailedJsonSerde
+                valueSerde: com.ivanfranchin.storestreams.serde.json.OrderDetailedJsonSerde
 
 management:
   endpoints:
@@ -82,16 +82,16 @@ spring:
           bindings:
             process-in-0:
               consumer:
-                valueSerde: com.mycompany.storestreams.serde.avro.OrderAvroSerde
+                valueSerde: com.ivanfranchin.storestreams.serde.avro.OrderAvroSerde
             process-in-1:
               consumer:
-                valueSerde: com.mycompany.storestreams.serde.avro.CustomerAvroSerde
+                valueSerde: com.ivanfranchin.storestreams.serde.avro.CustomerAvroSerde
             process-in-2:
               consumer:
-                valueSerde: com.mycompany.storestreams.serde.avro.OrderProductAvroSerde
+                valueSerde: com.ivanfranchin.storestreams.serde.avro.OrderProductAvroSerde
             process-in-3:
               consumer:
-                valueSerde: com.mycompany.storestreams.serde.avro.ProductAvroSerde
+                valueSerde: com.ivanfranchin.storestreams.serde.avro.ProductAvroSerde
             process-out-0:
               producer:
-                valueSerde: com.mycompany.storestreams.serde.avro.OrderDetailedAvroSerde
+                valueSerde: com.ivanfranchin.storestreams.serde.avro.OrderDetailedAvroSerde
