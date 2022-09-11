@@ -101,7 +101,12 @@ public class StoreStreamsJson {
     }
 
     private ProductDetail toProductDetail(OrderProduct orderProduct, Product product) {
-        return new ProductDetail(orderProduct.productId(), product.name(), product.price(), orderProduct.unit());
+        ProductDetail productDetail = new ProductDetail();
+        productDetail.setId(orderProduct.productId());
+        productDetail.setName(product.name());
+        productDetail.setPrice(product.price());
+        productDetail.setUnit(orderProduct.unit());
+        return productDetail;
     }
 
     private List<ProductDetail> addProductDetail(ProductDetail productDetail, List<ProductDetail> productDetailList) {
