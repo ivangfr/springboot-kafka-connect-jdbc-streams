@@ -1,16 +1,8 @@
 package com.ivanfranchin.commons.storeapp.json;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
 
-@Data
-public class OrderProduct {
-
-    @JsonProperty("order_id")
-    private String orderId;
-
-    @JsonProperty("product_id")
-    private Long productId;
-
-    private Integer unit;
+public record OrderProduct(@JsonProperty("order_id") String orderId,
+                           @JsonProperty("product_id") Long productId,
+                           Integer unit) {
 }

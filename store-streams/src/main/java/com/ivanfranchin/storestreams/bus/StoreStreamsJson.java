@@ -58,7 +58,7 @@ public class StoreStreamsJson {
                                                 .peek(this::logKeyValue)
                                                 .join(
                                                         customerGlobalKTable,
-                                                        (s, order) -> String.valueOf(order.getCustomerId()),
+                                                        (s, order) -> String.valueOf(order.customerId()),
                                                         this::toOrderDetailed
                                                 )
                                                 .join(
@@ -66,7 +66,7 @@ public class StoreStreamsJson {
                                                                 .peek(this::logKeyValue)
                                                                 .join(
                                                                         productGlobalKTable,
-                                                                        (s, orderProduct) -> String.valueOf(orderProduct.getProductId()),
+                                                                        (s, orderProduct) -> String.valueOf(orderProduct.productId()),
                                                                         this::toProductDetail
                                                                 )
                                                                 .groupByKey()
@@ -90,23 +90,18 @@ public class StoreStreamsJson {
 
     private OrderDetailed toOrderDetailed(Order order, Customer customer) {
         OrderDetailed orderDetailed = new OrderDetailed();
-        orderDetailed.setId(order.getId());
-        orderDetailed.setCustomerId(order.getCustomerId());
-        orderDetailed.setCustomerName(customer.getName());
-        orderDetailed.setStatus(order.getStatus());
-        orderDetailed.setPaymentType(order.getPaymentType());
-        orderDetailed.setCreatedAt(order.getCreatedAt());
+        orderDetailed.setId(order.id());
+        orderDetailed.setCustomerId(order.customerId());
+        orderDetailed.setCustomerName(customer.name());
+        orderDetailed.setStatus(order.status());
+        orderDetailed.setPaymentType(order.paymentType());
+        orderDetailed.setCreatedAt(order.createdAt());
         orderDetailed.setProducts(Collections.emptyList());
         return orderDetailed;
     }
 
     private ProductDetail toProductDetail(OrderProduct orderProduct, Product product) {
-        ProductDetail productDetail = new ProductDetail();
-        productDetail.setId(orderProduct.getProductId());
-        productDetail.setName(product.getName());
-        productDetail.setPrice(product.getPrice());
-        productDetail.setUnit(orderProduct.getUnit());
-        return productDetail;
+        return new ProductDetail(orderProduct.productId(), product.name(), product.price(), orderProduct.unit());
     }
 
     private List<ProductDetail> addProductDetail(ProductDetail productDetail, List<ProductDetail> productDetailList) {

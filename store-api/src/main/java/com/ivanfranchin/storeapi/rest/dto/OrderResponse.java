@@ -2,22 +2,12 @@ package com.ivanfranchin.storeapi.rest.dto;
 
 import com.ivanfranchin.storeapi.model.OrderStatus;
 import com.ivanfranchin.storeapi.model.PaymentType;
-import lombok.Data;
 
 import java.util.List;
 
-@Data
-public class OrderResponse {
+public record OrderResponse(String id, Long customerId, PaymentType paymentType, OrderStatus status,
+                            List<ProductResponse> products) {
 
-    private String id;
-    private Long customerId;
-    private PaymentType paymentType;
-    private OrderStatus status;
-    private List<ProductResponse> products;
-
-    @Data
-    public static final class ProductResponse {
-        private Long id;
-        private Integer unit;
+    public record ProductResponse(Long id, Integer unit) {
     }
 }

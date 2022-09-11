@@ -1,19 +1,9 @@
 package com.ivanfranchin.commons.storeapp.json;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
 
 import java.util.Date;
 
-@Data
-public class Customer {
-
-    private Long id;
-    private String name;
-    private String email;
-    private String address;
-    private String phone;
-
-    @JsonProperty("created_at")
-    private Date createdAt;
+public record Customer(Long id, String name, String email, String address, String phone,
+                       @JsonProperty("created_at") Date createdAt) {
 }
