@@ -3,11 +3,11 @@ package com.ivanfranchin.storeapi.rest.dto;
 import com.ivanfranchin.storeapi.model.OrderStatus;
 import com.ivanfranchin.storeapi.model.PaymentType;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 import java.util.List;
 
 @Data

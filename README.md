@@ -347,7 +347,7 @@ Steps to create the connectors:
 
   ```
   docker run --tty --interactive --rm --network=springboot-kafka-connect-jdbc-streams_default \
-    confluentinc/cp-kafkacat:7.0.1 kafkacat -b kafka:9092 \
+    confluentinc/cp-kafkacat:6.1.9 kafkacat -b kafka:9092 \
     -f '\nKey (%K bytes): %k\t\nValue (%S bytes): %s\n\Partition: %p\tOffset: %o\n--\n' \
     -t store.streams.orders -C -c1
   ```

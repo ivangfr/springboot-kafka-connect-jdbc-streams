@@ -1,9 +1,9 @@
 package com.ivanfranchin.storeapi.rest.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
-import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 
 @Data

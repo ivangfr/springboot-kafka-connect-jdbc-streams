@@ -14,10 +14,10 @@
     <description>Demo project for Spring Boot</description>
 
     <properties>
-        <spring-cloud.version>2021.0.3</spring-cloud.version>
+        <spring-cloud.version>2022.0.1</spring-cloud.version>
         <avro.version>1.11.1</avro.version>
-        <confluent.version>7.0.1</confluent.version>
-        <springdoc-openapi.version>1.6.11</springdoc-openapi.version>
+        <confluent.version>7.3.1</confluent.version>
+        <springdoc-openapi.version>2.0.2</springdoc-openapi.version>
     </properties>
 
     <dependencies>
@@ -64,7 +64,7 @@
         <!-- SpringDoc OpenApi -->
         <dependency>
             <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-ui</artifactId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>${springdoc-openapi.version}</version>
         </dependency>
 
@@ -80,10 +80,8 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-stream</artifactId>
+            <artifactId>spring-cloud-stream-test-binder</artifactId>
             <scope>test</scope>
-            <classifier>test-binder</classifier>
-            <type>test-jar</type>
         </dependency>
     </dependencies>
 

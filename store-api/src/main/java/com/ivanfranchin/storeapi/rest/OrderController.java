@@ -2,10 +2,11 @@ package com.ivanfranchin.storeapi.rest;
 
 import com.ivanfranchin.storeapi.mapper.OrderMapper;
 import com.ivanfranchin.storeapi.model.Order;
-import com.ivanfranchin.storeapi.rest.dto.OrderResponse;
-import com.ivanfranchin.storeapi.service.OrderService;
 import com.ivanfranchin.storeapi.rest.dto.CreateOrderRequest;
+import com.ivanfranchin.storeapi.rest.dto.OrderResponse;
 import com.ivanfranchin.storeapi.rest.dto.UpdateOrderRequest;
+import com.ivanfranchin.storeapi.service.OrderService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,10 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
@@ -35,7 +34,7 @@ public class OrderController {
         return orderService.getAllOrders()
                 .stream()
                 .map(orderMapper::toOrderResponse)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @GetMapping("/{id}")

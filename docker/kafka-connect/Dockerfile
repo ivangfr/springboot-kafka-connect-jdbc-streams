@@ -1,4 +1,4 @@
-FROM confluentinc/cp-kafka-connect:7.0.1
+FROM confluentinc/cp-kafka-connect:7.3.1
 
 LABEL maintainer="ivangfr@yahoo.com.br"
 
