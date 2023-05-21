@@ -19,7 +19,7 @@
     <properties>
         <java.version>17</java.version>
         <jib-maven-plugin.version>3.3.2</jib-maven-plugin.version>
-        <jdk-image.version>17.0.6</jdk-image.version>
+        <jdk-image.version>17.0.7</jdk-image.version>
         <docker-image.prefix>ivanfranchin</docker-image.prefix>
     </properties>
 
