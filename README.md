@@ -30,7 +30,6 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 
 - [`Java 17+`](https://www.oracle.com/java/technologies/downloads/#java17)
 - [`Docker`](https://www.docker.com/)
-- [`Docker-Compose`](https://docs.docker.com/compose/install/)
 
 ## (De)Serialization formats
 
@@ -40,16 +39,16 @@ In order to run this project, you can use [`JSON`](https://www.json.org) or [`Av
 
 - Open a terminal and inside `springboot-kafka-connect-jdbc-streams` root folder run
   ```
-  docker-compose up -d
+  docker compose up -d
   ```
   > **Note**: During the first run, an image for `kafka-connect` will be built, whose name is `springboot-kafka-connect-jdbc-streams_kafka-connect`. Run the command below to rebuild it.
   > ```
-  > docker-compose build
+  > docker compose build
   > ```
 
 - Wait for all Docker containers to be up and running. To check it, run
   ```
-  docker-compose ps
+  docker compose ps
   ```
   
 ## Create Kafka Topics
@@ -359,9 +358,9 @@ Steps to create the connectors:
     ```
     ./stop-apps.sh
     ```
-- To stop and remove docker-compose containers, network and volumes, go to a terminal and, inside `springboot-kafka-connect-jdbc-streams` root folder, run the following command
+- To stop and remove docker compose containers, network and volumes, go to a terminal and, inside `springboot-kafka-connect-jdbc-streams` root folder, run the following command
   ```
-  docker-compose down -v
+  docker compose down -v
   ```
 
 ## Cleanup
