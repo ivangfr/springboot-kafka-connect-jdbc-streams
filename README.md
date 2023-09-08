@@ -233,7 +233,7 @@ Steps to create the connectors:
    }
    ```
 
-1. Checking `Elasticsearch`
+2. Checking `Elasticsearch`
    ```
    curl "localhost:9200/store.streams.orders/_search?pretty"
    ```
@@ -283,7 +283,7 @@ Steps to create the connectors:
    }
    ```
 
-1. In order to create random orders, we can use also the `simulation`
+3. In order to create random orders, we can use also the `simulation`
    ```
    curl -i -X POST localhost:9080/api/simulation/orders \
      -H 'Content-Type: application/json' \
