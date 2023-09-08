@@ -6,6 +6,10 @@ The main goal of this project is to play with [`Kafka`](https://kafka.apache.org
 
 On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-Concepts (PoCs) and articles. You can easily search for the technology you are interested in by using the filter. Who knows, perhaps I have already implemented a PoC or written an article about what you are looking for.
 
+## Additional Readings
+
+- \[**Medium**\] [**Streaming MySQL changes to Elasticsearch using Kafka Connect**](https://medium.com/@ivangfr/streaming-mysql-changes-to-elasticsearch-using-kafka-connect-fe22a5d0aa27)
+
 ## Project Diagram
 
 ![project-diagram](documentation/project-diagram.png)
