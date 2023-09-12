@@ -9,6 +9,7 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 ## Additional Readings
 
 - \[**Medium**\] [**Streaming MySQL changes to Elasticsearch using Kafka Connect**](https://medium.com/@ivangfr/streaming-mysql-changes-to-elasticsearch-using-kafka-connect-fe22a5d0aa27)
+- \[**Medium**\] [**Enhancing a MySQL-KafkaConnect-Elasticsearch Setup with Spring Boot Applications**](https://medium.com/@ivangfr/enhancing-a-mysql-kafkaconnect-elasticsearch-setup-with-spring-boot-applications-257c65ff0965)
 
 ## Project Diagram
 
