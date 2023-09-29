@@ -15,7 +15,7 @@
 
     <properties>
         <spring-cloud.version>2022.0.4</spring-cloud.version>
-        <avro.version>1.11.1</avro.version>
+        <avro.version>1.11.3</avro.version>
         <confluent.version>7.4.1</confluent.version>
         <springdoc-openapi.version>2.2.0</springdoc-openapi.version>
     </properties>
