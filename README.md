@@ -38,7 +38,7 @@ In order to run this project, you can use [`JSON`](https://www.json.org) or [`Av
 
 ## Start Environment
 
-- Open a terminal and inside `springboot-kafka-connect-jdbc-streams` root folder run
+- Open a terminal and inside `springboot-kafka-connect-jdbc-streams` root folder run:
   ```
   docker compose up -d
   ```
@@ -47,7 +47,7 @@ In order to run this project, you can use [`JSON`](https://www.json.org) or [`Av
   > docker compose build
   > ```
 
-- Wait for all Docker containers to be up and running. To check it, run
+- Wait for all Docker containers to be up and running. To check it, run:
   ```
   docker compose ps
   ```
@@ -56,9 +56,9 @@ In order to run this project, you can use [`JSON`](https://www.json.org) or [`Av
 
 In order to have topics in `Kafka` with more than `1` partition, we have to create them manually and not let the connectors to create them for us. So, for it:
 
-- Open a new terminal and make sure you are in `springboot-kafka-connect-jdbc-streams` root folder
+- Open a new terminal and make sure you are in `springboot-kafka-connect-jdbc-streams` root folder;
 
-- Run the script below
+- Run the script below:
   ```
   ./create-kafka-topics.sh
   ```
@@ -69,13 +69,13 @@ In order to have topics in `Kafka` with more than `1` partition, we have to crea
 
 Connectors use `Converters` for data serialization and deserialization. If you are configuring `For JSON (de)serialization`, the converter used is `JsonConverter`. On the other hand, the converter used is `AvroConverter`.
 
-**Important**: if the `Source Connector Converter` serializes data, for instance, from `JSON` to `bytes` (using `JsonConverter`), then the `Sink Connector Converter` must also use `JsonConverter` to deserialize the `bytes`, otherwise an error will be thrown. The document [Kafka Connect Deep Dive – Converters and Serialization Explained](https://www.confluent.io/blog/kafka-connect-deep-dive-converters-serialization-explained) explains it very well.
+> **Important**: if the `Source Connector Converter` serializes data, for instance, from `JSON` to `bytes` (using `JsonConverter`), then the `Sink Connector Converter` must also use `JsonConverter` to deserialize the `bytes`, otherwise an error will be thrown. The document [Kafka Connect Deep Dive – Converters and Serialization Explained](https://www.confluent.io/blog/kafka-connect-deep-dive-converters-serialization-explained) explains it very well.
 
 Steps to create the connectors:
 
 - In a terminal, navigate to `springboot-kafka-connect-jdbc-streams` root folder
 
-- Run the following script to create the connectors on `kafka-connect`
+- Run the following script to create the connectors on `kafka-connect`:
 
   - **For JSON (de)serialization**
 
@@ -89,12 +89,12 @@ Steps to create the connectors:
     ./create-connectors-avroconverter.sh
     ```
 
-- You can check the state of the connectors and their tasks on `Kafka Connect UI` or running the following script
+- You can check the state of the connectors and their tasks on `Kafka Connect UI` or running the following script:
   ```
   ./check-connectors-state.sh
   ```
 
-- Once the connectors and their tasks are ready (`RUNNING` state), you should see something like
+- Once the connectors and their tasks are ready (`RUNNING` state), you should see something like:
   ```
   {"name":"mysql-source-customers","connector":{"state":"RUNNING","worker_id":"kafka-connect:8083"},"tasks":[{"id":0,"state":"RUNNING","worker_id":"kafka-connect:8083"}],"type":"source"}
   {"name":"mysql-source-products","connector":{"state":"RUNNING","worker_id":"kafka-connect:8083"},"tasks":[{"id":0,"state":"RUNNING","worker_id":"kafka-connect:8083"}],"type":"source"}
@@ -105,11 +105,11 @@ Steps to create the connectors:
   {"name":"elasticsearch-sink-orders","connector":{"state":"RUNNING","worker_id":"kafka-connect:8083"},"tasks":[{"id":0,"state":"RUNNING","worker_id":"kafka-connect:8083"}],"type":"sink"}
   ```
 
-- On `Kafka Connect UI` (http://localhost:8086), you should see
+- On `Kafka Connect UI` (http://localhost:8086), you should see:
 
   ![kafka-connect-ui](documentation/kafka-connect-ui.jpeg)
 
-- If there is any problem, you can check `kafka-connect` container logs
+- If there is any problem, you can check `kafka-connect` container logs:
   ```
   docker logs kafka-connect
   ```
@@ -119,7 +119,7 @@ Steps to create the connectors:
 
   - Open a new terminal and make sure you are in `springboot-kafka-connect-jdbc-streams` root folder.
   
-  - Run the command below to start the application
+  - Run the command below to start the application:
     ```
     ./mvnw clean spring-boot:run --projects store-api -Dspring-boot.run.jvmArguments="-Dserver.port=9080"
     ```
@@ -133,7 +133,7 @@ Steps to create the connectors:
 
   - Open a new terminal and inside `springboot-kafka-connect-jdbc-streams` root folder.
 
-  - To start application, run
+  - To start application, run:
 
     - **For JSON (de)serialization**
   
@@ -157,9 +157,9 @@ Steps to create the connectors:
 
 ### Build Application’s Docker Image
 
-- In a terminal, make sure you are inside `springboot-kafka-connect-jdbc-streams` root folder
+- In a terminal, make sure you are inside `springboot-kafka-connect-jdbc-streams` root folder;
 
-- Run the following script to build the application's docker image
+- Run the following script to build the application's docker image:
   ```
   ./docker-build.sh
   ```
@@ -184,9 +184,9 @@ Steps to create the connectors:
 
 ### Run Application’s Docker Container
 
-- In a terminal, make sure you are inside `springboot-kafka-connect-jdbc-streams` root folder
+- In a terminal, make sure you are inside `springboot-kafka-connect-jdbc-streams` root folder;
 
-- In order to run the application's docker containers, you can pick between `JSON` or `Avro`
+- In order to run the application's docker containers, you can pick between `JSON` or `Avro`:
 
   - **For JSON (de)serialization**
     ```
@@ -215,14 +215,14 @@ Steps to create the connectors:
    {"id":15, "name":"iPhone Xr", "price":900.00}
    ```
 
-   In a terminal, run the following `curl` command
+   In a terminal, run the following `curl` command:
    ```
    curl -i -X POST localhost:9080/api/orders \
      -H 'Content-Type: application/json' \
      -d '{"customerId": 1, "paymentType": "BITCOIN", "status": "OPEN", "products": [{"id": 15, "unit": 1}]}'
    ```
 
-   The response should be
+   The response should be:
    ```
    HTTP/1.1 201
    {
@@ -234,12 +234,12 @@ Steps to create the connectors:
    }
    ```
 
-2. Checking `Elasticsearch`
+2. Checking `Elasticsearch`:
    ```
    curl "localhost:9200/store.streams.orders/_search?pretty"
    ```
    
-   We should have one order with a customer and products names.
+   We should have one order with a customer and products names:
    ```
    {
      "took" : 844,
@@ -284,7 +284,7 @@ Steps to create the connectors:
    }
    ```
 
-3. In order to create random orders, we can use also the `simulation`
+3. In order to create random orders, we can use also the `simulation`:
    ```
    curl -i -X POST localhost:9080/api/simulation/orders \
      -H 'Content-Type: application/json' \
@@ -323,21 +323,21 @@ Steps to create the connectors:
   `Kafka Manager` can be accessed at http://localhost:9000
 
   _Configuration_
-  - First, you must create a new cluster. Click on `Cluster` (dropdown on the header) and then on `Add Cluster`
-  - Type the name of your cluster in `Cluster Name` field, for example: `MyCluster`
-  - Type `zookeeper:2181` in `Cluster Zookeeper Hosts` field
-  - Enable checkbox `Poll consumer information (Not recommended for large # of consumers if ZK is used for offsets tracking on older Kafka versions)`
+  - First, you must create a new cluster. Click on `Cluster` (dropdown on the header) and then on `Add Cluster`;
+  - Type the name of your cluster in `Cluster Name` field, for example: `MyCluster`;
+  - Type `zookeeper:2181` in `Cluster Zookeeper Hosts` field;
+  - Enable checkbox `Poll consumer information (Not recommended for large # of consumers if ZK is used for offsets tracking on older Kafka versions)`;
   - Click on `Save` button at the bottom of the page.
 
 - **Elasticsearch**
 
   `Elasticsearch` can be accessed at http://localhost:9200
 
-  - Get all indices
+  - Get all indices:
     ```
     curl "localhost:9200/_cat/indices?v"
     ```
-  - Search for documents
+  - Search for documents:
     ```
     curl "localhost:9200/mysql.storedb.customers/_search?pretty"
     curl "localhost:9200/mysql.storedb.products/_search?pretty"
@@ -353,20 +353,20 @@ Steps to create the connectors:
   
 ## Shutdown
 
-- To stop applications
-  - If they were started with `Maven`, go to the terminals where they are running and press `Ctrl+C`
-  - If they were started as Docker containers, go to a terminal and, inside `springboot-kafka-connect-jdbc-streams` root folder, run the script below
+- To stop applications:
+  - If they were started with `Maven`, go to the terminals where they are running and press `Ctrl+C`;
+  - If they were started as Docker containers, go to a terminal and, inside `springboot-kafka-connect-jdbc-streams` root folder, run the script below:
     ```
     ./stop-apps.sh
     ```
-- To stop and remove docker compose containers, network and volumes, go to a terminal and, inside `springboot-kafka-connect-jdbc-streams` root folder, run the following command
+- To stop and remove docker compose containers, network and volumes, go to a terminal and, inside `springboot-kafka-connect-jdbc-streams` root folder, run the following command:
   ```
   docker compose down -v
   ```
 
 ## Cleanup
 
-To remove the Docker images created by this project, go to a terminal and, inside `springboot-kafka-connect-jdbc-streams` root folder, run the script below
+To remove the Docker images created by this project, go to a terminal and, inside `springboot-kafka-connect-jdbc-streams` root folder, run the script below:
 ```
 ./remove-docker-images.sh
 ```
