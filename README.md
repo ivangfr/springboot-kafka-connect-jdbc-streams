@@ -161,7 +161,7 @@ Steps to create the connectors:
 
 - Run the following script to build the application's docker image:
   ```
-  ./docker-build.sh
+  ./build-docker-images.sh
   ```
 
 ### Application’s Environment Variables
