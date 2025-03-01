@@ -19,8 +19,6 @@
     <properties>
         <java.version>17</java.version>
         <jib-maven-plugin.version>3.4.4</jib-maven-plugin.version>
-        <jdk-image.version>17.0.8</jdk-image.version>
-        <docker-image.prefix>ivanfranchin</docker-image.prefix>
     </properties>
 
     <modules>
@@ -34,14 +32,6 @@
                 <groupId>com.google.cloud.tools</groupId>
                 <artifactId>jib-maven-plugin</artifactId>
                 <version>${jib-maven-plugin.version}</version>
-                <configuration>
-                    <from>
-                        <image>amazoncorretto:${jdk-image.version}</image>
-                    </from>
-                    <to>
-                        <image>${docker-image.prefix}/${project.artifactId}:${project.version}</image>
-                    </to>
-                </configuration>
             </plugin>
         </plugins>
     </build>
