@@ -1,6 +1,6 @@
 # springboot-kafka-connect-jdbc-streams
 
-The main goal of this project is to play with [`Kafka`](https://kafka.apache.org), [`Kafka Connect`](https://docs.confluent.io/current/connect/index.html) and [`Kafka Streams`](https://docs.confluent.io/current/streams/index.html). For this, we have: `store-api` that inserts/updates records in [`MySQL`](https://www.mysql.com); `Source Connectors` that monitor inserted/updated records in `MySQL` and push messages related to those changes to `Kafka`; `Sink Connectors` that listen messages from `Kafka` and insert/update documents in [`Elasticsearch`](https://www.elastic.co); finally, `store-streams` that listens messages from `Kafka`, treats them using `Kafka Streams` and push new messages back to `Kafka`.
+The main goal of this project is to play with [`Kafka`](https://kafka.apache.org), [`Kafka Connect`](https://docs.confluent.io/platform/current/connect/index.html) and [`Kafka Streams`](https://docs.confluent.io/platform/current/streams/overview.html). For this, we have: `store-api` that inserts/updates records in [`MySQL`](https://www.mysql.com); `Source Connectors` that monitor inserted/updated records in `MySQL` and push messages related to those changes to `Kafka`; `Sink Connectors` that listen messages from `Kafka` and insert/update documents in [`Elasticsearch`](https://www.elastic.co); finally, `store-streams` that listens messages from `Kafka`, treats them using `Kafka Streams` and push new messages back to `Kafka`.
 
 ## Proof-of-Concepts & Articles
 
@@ -19,7 +19,7 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 
 - ### store-api
 
-  Monolithic [`Spring Boot`](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/) application that exposes a REST API to manage `Customers`, `Products` and `Orders`. The data is stored in `MySQL`.
+  Monolithic [`Spring Boot`](https://docs.spring.io/spring-boot/index.html) application that exposes a REST API to manage `Customers`, `Products` and `Orders`. The data is stored in `MySQL`.
   
   ![store-api-swagger](documentation/store-api-swagger.jpeg)
 
@@ -29,16 +29,16 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 
 ## Prerequisites
 
-- [`Java 17+`](https://www.oracle.com/java/technologies/downloads/#java17)
-- [`Docker`](https://www.docker.com/)
+- [`Java 17`](https://www.oracle.com/java/technologies/downloads/#java17) or higher;
+- A containerization tool (e.g., [`Docker`](https://www.docker.com), [`Podman`](https://podman.io), etc.)
 
 ## (De)Serialization formats
 
-In order to run this project, you can use [`JSON`](https://www.json.org) or [`Avro`](https://avro.apache.org/docs/current/gettingstartedjava.html) format to serialize/deserialize data to/from the `binary` format used by Kafka. The default format is `JSON`. Throughout this document, I will point out what to do if you want to use `Avro`.
+In order to run this project, you can use [`JSON`](https://www.json.org) or [`Avro`](https://avro.apache.org) format to serialize/deserialize data to/from the `binary` format used by Kafka. The default format is `JSON`. Throughout this document, I will point out what to do if you want to use `Avro`.
 
 ## Start Environment
 
-- Open a terminal and inside `springboot-kafka-connect-jdbc-streams` root folder run:
+- Open a terminal and inside the `springboot-kafka-connect-jdbc-streams` root folder run:
   ```
   docker compose up -d
   ```
@@ -49,14 +49,14 @@ In order to run this project, you can use [`JSON`](https://www.json.org) or [`Av
 
 - Wait for all Docker containers to be up and running. To check it, run:
   ```
-  docker compose ps
+  docker ps -a
   ```
   
 ## Create Kafka Topics
 
 In order to have topics in `Kafka` with more than `1` partition, we have to create them manually and not let the connectors to create them for us. So, for it:
 
-- Open a new terminal and make sure you are in `springboot-kafka-connect-jdbc-streams` root folder;
+- Open a new terminal and make sure you are in the `springboot-kafka-connect-jdbc-streams` root folder;
 
 - Run the script below:
   ```
@@ -73,7 +73,7 @@ Connectors use `Converters` for data serialization and deserialization. If you a
 
 Steps to create the connectors:
 
-- In a terminal, navigate to `springboot-kafka-connect-jdbc-streams` root folder
+- In a terminal, navigate to the `springboot-kafka-connect-jdbc-streams` root folder
 
 - Run the following script to create the connectors on `kafka-connect`:
 
@@ -117,7 +117,7 @@ Steps to create the connectors:
 
 - **store-api**
 
-  - Open a new terminal and make sure you are in `springboot-kafka-connect-jdbc-streams` root folder.
+  - Open a new terminal and make sure you are in the `springboot-kafka-connect-jdbc-streams` root folder.
   
   - Run the command below to start the application:
     ```
@@ -131,7 +131,7 @@ Steps to create the connectors:
 
 - **store-streams**
 
-  - Open a new terminal and inside `springboot-kafka-connect-jdbc-streams` root folder.
+  - Open a new terminal and inside the `springboot-kafka-connect-jdbc-streams` root folder.
 
   - To start application, run:
 
@@ -157,7 +157,7 @@ Steps to create the connectors:
 
 ### Build Application’s Docker Image
 
-- In a terminal, make sure you are inside `springboot-kafka-connect-jdbc-streams` root folder;
+- In a terminal, make sure you are inside the `springboot-kafka-connect-jdbc-streams` root folder;
 
 - Run the following script to build the application's docker image:
   ```
@@ -184,7 +184,7 @@ Steps to create the connectors:
 
 ### Run Application’s Docker Container
 
-- In a terminal, make sure you are inside `springboot-kafka-connect-jdbc-streams` root folder;
+- In a terminal, make sure you are inside the `springboot-kafka-connect-jdbc-streams` root folder;
 
 - In order to run the application's docker containers, you can pick between `JSON` or `Avro`:
 
@@ -355,18 +355,18 @@ Steps to create the connectors:
 
 - To stop applications:
   - If they were started with `Maven`, go to the terminals where they are running and press `Ctrl+C`;
-  - If they were started as Docker containers, go to a terminal and, inside `springboot-kafka-connect-jdbc-streams` root folder, run the script below:
+  - If they were started as Docker containers, go to a terminal and, inside the `springboot-kafka-connect-jdbc-streams` root folder, run the script below:
     ```
     ./stop-apps.sh
     ```
-- To stop and remove docker compose containers, network and volumes, go to a terminal and, inside `springboot-kafka-connect-jdbc-streams` root folder, run the following command:
+- To stop and remove docker compose containers, network and volumes, go to a terminal and, inside the `springboot-kafka-connect-jdbc-streams` root folder, run the following command:
   ```
   docker compose down -v
   ```
 
 ## Cleanup
 
-To remove the Docker images created by this project, go to a terminal and, inside `springboot-kafka-connect-jdbc-streams` root folder, run the script below:
+To remove the Docker images created by this project, go to a terminal and, inside the `springboot-kafka-connect-jdbc-streams` root folder, run the script below:
 ```
 ./remove-docker-images.sh
 ```
@@ -374,10 +374,3 @@ To remove the Docker images created by this project, go to a terminal and, insid
 ## Issues
 
 - Product `price` field, [numeric.mapping doesn't work for DECIMAL fields #563](https://github.com/confluentinc/kafka-connect-jdbc/issues/563). For now, the workaround is using `String` instead of `BigDecimal` as type for this field.
-
-## References
-
-- https://cloud.spring.io/spring-cloud-static/spring-cloud-stream-binder-kafka/current/reference/html/spring-cloud-stream-binder-kafka.html#_kafka_streams_binder
-- https://github.com/spring-cloud/spring-cloud-stream-samples/tree/master/schema-registry-samples
-- https://www.confluent.io/blog/simplest-useful-kafka-connect-data-pipeline-world-thereabouts-part-1 (2 and 3)
-- https://www.confluent.io/blog/kafka-connect-deep-dive-converters-serialization-explained
