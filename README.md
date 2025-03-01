@@ -1,6 +1,6 @@
 # springboot-kafka-connect-jdbc-streams
 
-The main goal of this project is to play with [`Kafka`](https://kafka.apache.org), [`Kafka Connect`](https://docs.confluent.io/platform/current/connect/index.html) and [`Kafka Streams`](https://docs.confluent.io/platform/current/streams/overview.html). For this, we have: `store-api` that inserts/updates records in [`MySQL`](https://www.mysql.com); `Source Connectors` that monitor inserted/updated records in `MySQL` and push messages related to those changes to `Kafka`; `Sink Connectors` that listen messages from `Kafka` and insert/update documents in [`Elasticsearch`](https://www.elastic.co); finally, `store-streams` that listens messages from `Kafka`, treats them using `Kafka Streams` and push new messages back to `Kafka`.
+The main goal of this project is to explore [`Kafka`](https://kafka.apache.org), [`Kafka Connect`](https://docs.confluent.io/platform/current/connect/index.html), and [`Kafka Streams`](https://docs.confluent.io/platform/current/streams/overview.html). The project includes: `store-api`, which inserts/updates records in [`MySQL`](https://www.mysql.com); `Source Connectors` that monitor these records in `MySQL` and push related messages to `Kafka`; `Sink Connectors` that listen to messages from `Kafka` and insert/update documents in [`Elasticsearch`](https://www.elastic.co); and `store-streams`, which listens to messages from `Kafka`, processes them using `Kafka Streams`, and pushes new messages back to `Kafka`.
 
 ## Proof-of-Concepts & Articles
 
@@ -42,7 +42,7 @@ In order to run this project, you can use [`JSON`](https://www.json.org) or [`Av
   ```
   docker compose up -d
   ```
-  > **Note**: During the first run, an image for `kafka-connect` will be built, whose name is `springboot-kafka-connect-jdbc-streams_kafka-connect`. Run the command below to rebuild it.
+  > **Note**: During the first run, an image for `kafka-connect` will be built with the name `springboot-kafka-connect-jdbc-streams_kafka-connect`. Use the command below to rebuild it.
   > ```
   > docker compose build
   > ```
@@ -69,7 +69,7 @@ In order to have topics in `Kafka` with more than `1` partition, we have to crea
 
 Connectors use `Converters` for data serialization and deserialization. If you are configuring `For JSON (de)serialization`, the converter used is `JsonConverter`. On the other hand, the converter used is `AvroConverter`.
 
-> **Important**: if the `Source Connector Converter` serializes data, for instance, from `JSON` to `bytes` (using `JsonConverter`), then the `Sink Connector Converter` must also use `JsonConverter` to deserialize the `bytes`, otherwise an error will be thrown. The document [Kafka Connect Deep Dive – Converters and Serialization Explained](https://www.confluent.io/blog/kafka-connect-deep-dive-converters-serialization-explained) explains it very well.
+> **Important**: If the `Source Connector Converter` serializes data (e.g., from `JSON` to `bytes` using `JsonConverter`), the `Sink Connector Converter` must also use `JsonConverter` to deserialize the `bytes`. Otherwise, an error will be thrown. The document [Kafka Connect Deep Dive – Converters and Serialization Explained](https://www.confluent.io/blog/kafka-connect-deep-dive-converters-serialization-explained) explains this in detail.
 
 Steps to create the connectors:
 
@@ -121,7 +121,8 @@ Steps to create the connectors:
   
   - Run the command below to start the application:
     ```
-    ./mvnw clean spring-boot:run --projects store-api -Dspring-boot.run.jvmArguments="-Dserver.port=9080"
+    ./mvnw clean spring-boot:run --projects store-api \
+    -Dspring-boot.run.jvmArguments="-Dserver.port=9080"
     ```
     > **Note**
     >
@@ -138,15 +139,17 @@ Steps to create the connectors:
     - **For JSON (de)serialization**
   
       ```
-      ./mvnw clean spring-boot:run --projects store-streams -Dspring-boot.run.jvmArguments="-Dserver.port=9081"
+      ./mvnw clean spring-boot:run --projects store-streams \
+      -Dspring-boot.run.jvmArguments="-Dserver.port=9081"
       ```
       
     - **For Avro (de)serialization**
-    
-      > **Warning**: Unable to run in this mode in my machine! The application starts fine when using `avro` profile but, when the 1st event arrives, the `org.apache.kafka.common.errors.SerializationException: Unknown magic byte!` is thrown. The problem doesn't happen while [Running Applications as Docker containers](#running-applications-as-docker-containers). 
-    
+     
+      > **Warning**: Unable to run in this mode on my machine! The application starts fine when using the `avro` profile, but when the first event arrives, the `org.apache.kafka.common.errors.SerializationException: Unknown magic byte!` is thrown. This problem does not occur when [Running Applications as Docker containers](#running-applications-as-docker-containers).
       ```
-      ./mvnw clean spring-boot:run --projects store-streams -Dspring-boot.run.jvmArguments="-Dserver.port=9081" -Dspring-boot.run.profiles=avro
+      ./mvnw clean spring-boot:run --projects store-streams \
+      -Dspring-boot.run.jvmArguments="-Dserver.port=9081" \
+      -Dspring-boot.run.profiles=avro
       ```
       > The command below generates Java classes from Avro files present in `src/main/resources/avro`
       > ```
