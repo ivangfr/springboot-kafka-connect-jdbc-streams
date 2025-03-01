@@ -1,181 +1,181 @@
 services:
 
   mysql:
-    image: mysql:9.1.0
-    container_name: mysql
-    restart: unless-stopped
+    image: 'mysql:9.1.0'
+    container_name: 'mysql'
+    restart: 'unless-stopped'
     ports:
-      - "3306:3306"
+      - '3306:3306'
     environment:
-      - MYSQL_ROOT_PASSWORD=secret
-      - MYSQL_DATABASE=storedb
+      - 'MYSQL_ROOT_PASSWORD=secret'
+      - 'MYSQL_DATABASE=storedb'
     volumes:
-      - ./docker/mysql/init:/docker-entrypoint-initdb.d
+      - './docker/mysql/init:/docker-entrypoint-initdb.d'
     healthcheck:
-      test: "mysqladmin ping -u root -p$${MYSQL_ROOT_PASSWORD}"
+      test: 'mysqladmin ping -u root -p$${MYSQL_ROOT_PASSWORD}'
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.15.4
-    container_name: elasticsearch
-    restart: unless-stopped
+    image: 'docker.elastic.co/elasticsearch/elasticsearch:8.15.4'
+    container_name: 'elasticsearch'
+    restart: 'unless-stopped'
     ports:
-      - "9200:9200"
-      - "9300:9300"
+      - '9200:9200'
+      - '9300:9300'
     environment:
-      discovery.type: single-node
-      xpack.security.enabled: false
-      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+      - 'discovery.type=single-node'
+      - 'xpack.security.enabled=false'
+      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
     healthcheck:
-      test: "curl -f http://localhost:9200 || exit 1"
+      test: 'curl -f http://localhost:9200 || exit 1'
 
   zookeeper:
-    image: confluentinc/cp-zookeeper:7.8.0
-    container_name: zookeeper
-    restart: unless-stopped
+    image: 'confluentinc/cp-zookeeper:7.8.0'
+    container_name: 'zookeeper'
+    restart: 'unless-stopped'
     ports:
-      - "2181:2181"
+      - '2181:2181'
     environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
+      - 'ZOOKEEPER_CLIENT_PORT=2181'
     healthcheck:
-      test: "echo stat | nc localhost $$ZOOKEEPER_CLIENT_PORT"
+      test: 'echo stat | nc localhost $$ZOOKEEPER_CLIENT_PORT'
 
   kafka:
-    image: confluentinc/cp-kafka:7.8.0
-    container_name: kafka
-    restart: unless-stopped
+    image: 'confluentinc/cp-kafka:7.8.0'
+    container_name: 'kafka'
+    restart: 'unless-stopped'
     depends_on:
-      - zookeeper
+      - 'zookeeper'
     ports:
-      - "9092:9092"
-      - "29092:29092"
+      - '9092:9092'
+      - '29092:29092'
     environment:
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      - 'KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181'
+      - 'KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
+      - 'KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092'
+      - 'KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1'
     healthcheck:
       test: [ "CMD", "nc", "-z", "localhost", "9092" ]
 
   schema-registry:
-    image: confluentinc/cp-schema-registry:7.8.0
-    container_name: schema-registry
-    restart: unless-stopped
+    image: 'confluentinc/cp-schema-registry:7.8.0'
+    container_name: 'schema-registry'
+    restart: 'unless-stopped'
     depends_on:
-      - kafka
+      - 'kafka'
     ports:
-      - "8081:8081"
+      - '8081:8081'
     environment:
-      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka:9092
-      SCHEMA_REGISTRY_HOST_NAME: schema-registry
-      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+      - 'SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS=kafka:9092'
+      - 'SCHEMA_REGISTRY_HOST_NAME=schema-registry'
+      - 'SCHEMA_REGISTRY_LISTENERS=http://0.0.0.0:8081'
     healthcheck:
-      test: "curl -f http://localhost:8081 || exit 1"
+      test: 'curl -f http://localhost:8081 || exit 1'
 
   schema-registry-ui:
-    image: landoop/schema-registry-ui:0.9.5
-    container_name: kafka-schema-registry-ui
-    restart: unless-stopped
+    image: 'landoop/schema-registry-ui:0.9.5'
+    container_name: 'kafka-schema-registry-ui'
+    restart: 'unless-stopped'
     depends_on:
-      - schema-registry
+      - 'schema-registry'
     ports:
-      - "8001:8000"
+      - '8001:8000'
     environment:
-      SCHEMAREGISTRY_URL: http://schema-registry:8081
-      PROXY: "true"
+      - 'SCHEMAREGISTRY_URL=http://schema-registry:8081'
+      - 'PROXY=true'
     healthcheck:
-      test: "wget --quiet --tries=1 --spider http://localhost:8000 || exit 1"
+      test: 'wget --quiet --tries=1 --spider http://localhost:8000 || exit 1'
 
   kafka-rest-proxy:
-    image: confluentinc/cp-kafka-rest:7.8.0
-    container_name: kafka-rest-proxy
-    restart: unless-stopped
+    image: 'confluentinc/cp-kafka-rest:7.8.0'
+    container_name: 'kafka-rest-proxy'
+    restart: 'unless-stopped'
     depends_on:
-      - zookeeper
-      - kafka
+      - 'zookeeper'
+      - 'kafka'
     ports:
-      - "8082:8082"
+      - '8082:8082'
     environment:
-      KAFKA_REST_BOOTSTRAP_SERVERS: PLAINTEXT://kafka:9092
-      KAFKA_REST_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_REST_HOST_NAME: kafka-rest-proxy
-      KAFKA_REST_LISTENERS: http://0.0.0.0:8082
-      KAFKA_REST_SCHEMA_REGISTRY_URL: http://schema-registry:8081
-      KAFKA_REST_CONSUMER_REQUEST_TIMEOUT_MS: 30000
+      - 'KAFKA_REST_BOOTSTRAP_SERVERS=PLAINTEXT://kafka:9092'
+      - 'KAFKA_REST_ZOOKEEPER_CONNECT=zookeeper:2181'
+      - 'KAFKA_REST_HOST_NAME=kafka-rest-proxy'
+      - 'KAFKA_REST_LISTENERS=http://0.0.0.0:8082'
+      - 'KAFKA_REST_SCHEMA_REGISTRY_URL=http://schema-registry:8081'
+      - 'KAFKA_REST_CONSUMER_REQUEST_TIMEOUT_MS=30000'
     healthcheck:
-      test: "curl -f http://localhost:8082 || exit 1"
+      test: 'curl -f http://localhost:8082 || exit 1'
 
   kafka-topics-ui:
-    image: landoop/kafka-topics-ui:0.9.4
-    container_name: kafka-topics-ui
-    restart: unless-stopped
+    image: 'landoop/kafka-topics-ui:0.9.4'
+    container_name: 'kafka-topics-ui'
+    restart: 'unless-stopped'
     depends_on:
-      - kafka-rest-proxy
+      - 'kafka-rest-proxy'
     ports:
-      - "8085:8000"
+      - '8085:8000'
     environment:
-      KAFKA_REST_PROXY_URL: http://kafka-rest-proxy:8082
-      PROXY: "true"
+      - 'KAFKA_REST_PROXY_URL=http://kafka-rest-proxy:8082'
+      - 'PROXY=true'
     healthcheck:
-      test: "wget --quiet --tries=1 --spider http://localhost:8000 || exit 1"
+      test: 'wget --quiet --tries=1 --spider http://localhost:8000 || exit 1'
 
   kafka-connect:
-    build: docker/kafka-connect
-    container_name: kafka-connect
-    restart: unless-stopped
+    build: 'docker/kafka-connect'
+    container_name: 'kafka-connect'
+    restart: 'unless-stopped'
     depends_on:
-      - schema-registry
+      - 'schema-registry'
     ports:
-      - "8083:8083"
+      - '8083:8083'
     environment:
-      CONNECT_BOOTSTRAP_SERVERS: kafka:9092
-      CONNECT_REST_PORT: 8083
-      CONNECT_GROUP_ID: compose-connect-group
-      CONNECT_CONFIG_STORAGE_TOPIC: docker-connect-configs
-      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: 1
-      CONNECT_OFFSET_STORAGE_TOPIC: docker-connect-offsets
-      CONNECT_OFFSET_STORAGE_PARTITIONS: 3
-      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 1
-      CONNECT_STATUS_STORAGE_TOPIC: docker-connect-status
-      CONNECT_STATUS_STORAGE_PARTITIONS: 3
-      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 1
-      CONNECT_KEY_CONVERTER: io.confluent.connect.avro.AvroConverter
-      CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
-      CONNECT_VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
-      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
-      CONNECT_INTERNAL_KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
-      CONNECT_INTERNAL_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
-      CONNECT_REST_ADVERTISED_HOST_NAME: kafka-connect
-      CONNECT_LOG4J_ROOT_LOGLEVEL: INFO
-      CONNECT_LOG4J_LOGGERS: "org.apache.kafka.connect.runtime.rest=WARN,org.reflections=ERROR"
-      CONNECT_PLUGIN_PATH: "/usr/share/java"
+      - 'CONNECT_BOOTSTRAP_SERVERS=kafka:9092'
+      - 'CONNECT_REST_PORT=8083'
+      - 'CONNECT_GROUP_ID=compose-connect-group'
+      - 'CONNECT_CONFIG_STORAGE_TOPIC=docker-connect-configs'
+      - 'CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR=1'
+      - 'CONNECT_OFFSET_STORAGE_TOPIC=docker-connect-offsets'
+      - 'CONNECT_OFFSET_STORAGE_PARTITIONS=3'
+      - 'CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR=1'
+      - 'CONNECT_STATUS_STORAGE_TOPIC=docker-connect-status'
+      - 'CONNECT_STATUS_STORAGE_PARTITIONS=3'
+      - 'CONNECT_STATUS_STORAGE_REPLICATION_FACTOR=1'
+      - 'CONNECT_KEY_CONVERTER=io.confluent.connect.avro.AvroConverter'
+      - 'CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL=http://schema-registry:8081'
+      - 'CONNECT_VALUE_CONVERTER=io.confluent.connect.avro.AvroConverter'
+      - 'CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL=http://schema-registry:8081'
+      - 'CONNECT_INTERNAL_KEY_CONVERTER=org.apache.kafka.connect.json.JsonConverter'
+      - 'CONNECT_INTERNAL_VALUE_CONVERTER=org.apache.kafka.connect.json.JsonConverter'
+      - 'CONNECT_REST_ADVERTISED_HOST_NAME=kafka-connect'
+      - 'CONNECT_LOG4J_ROOT_LOGLEVEL=INFO'
+      - 'CONNECT_LOG4J_LOGGERS=org.apache.kafka.connect.runtime.rest=WARN,org.reflections=ERROR'
+      - 'CONNECT_PLUGIN_PATH=/usr/share/java'
     healthcheck:
-      test: "curl -f http://localhost:$$CONNECT_REST_PORT || exit 1"
+      test: 'curl -f http://localhost:$$CONNECT_REST_PORT || exit 1'
 
   kafka-connect-ui:
-    image: landoop/kafka-connect-ui:0.9.7
-    container_name: kafka-connect-ui
-    restart: unless-stopped
+    image: 'landoop/kafka-connect-ui:0.9.7'
+    container_name: 'kafka-connect-ui'
+    restart: 'unless-stopped'
     depends_on:
-      - kafka-connect
+      - 'kafka-connect'
     ports:
-      - "8086:8000"
+      - '8086:8000'
     environment:
-      CONNECT_URL: http://kafka-connect:8083
-      PROXY: "true"
+      - 'CONNECT_URL=http://kafka-connect:8083'
+      - 'PROXY=true'
     healthcheck:
-      test: "wget --quiet --tries=1 --spider http://localhost:8000 || exit 1"
+      test: 'wget --quiet --tries=1 --spider http://localhost:8000 || exit 1'
 
   kafka-manager:
-    image: hlebalbau/kafka-manager:3.0.0.5
-    container_name: kafka-manager
-    restart: unless-stopped
+    image: 'hlebalbau/kafka-manager:3.0.0.5'
+    container_name: 'kafka-manager'
+    restart: 'unless-stopped'
     depends_on:
-      - zookeeper
+      - 'zookeeper'
     ports:
-      - "9000:9000"
+      - '9000:9000'
     environment:
-      ZK_HOSTS: zookeeper:2181
-      APPLICATION_SECRET: "random-secret"
-    command: -Dpidfile.path=/dev/null
+      - 'ZK_HOSTS=zookeeper:2181'
+      - 'APPLICATION_SECRET=random-secret'
+    command: '-Dpidfile.path=/dev/null'
     healthcheck:
-      test: "curl -f http://localhost:9000 || exit 1"
+      test: 'curl -f http://localhost:9000 || exit 1'

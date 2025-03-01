@@ -8,18 +8,28 @@
         <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-
     <artifactId>store-streams</artifactId>
     <name>store-streams</name>
     <description>Demo project for Spring Boot</description>
-
+    <url/>
+    <licenses>
+        <license/>
+    </licenses>
+    <developers>
+        <developer/>
+    </developers>
+    <scm>
+        <connection/>
+        <developerConnection/>
+        <tag/>
+        <url/>
+    </scm>
     <properties>
         <spring-cloud.version>2024.0.0</spring-cloud.version>
         <avro.version>1.11.3</avro.version>
         <confluent.version>7.8.0</confluent.version>
         <springdoc-openapi.version>2.8.5</springdoc-openapi.version>
     </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -84,7 +94,6 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -99,18 +108,6 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>org.apache.avro</groupId>
                 <artifactId>avro-maven-plugin</artifactId>
@@ -132,6 +129,18 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
             </plugin>
         </plugins>
     </build>
