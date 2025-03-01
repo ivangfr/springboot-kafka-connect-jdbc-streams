@@ -58,7 +58,7 @@ public class StoreStreamsAvro {
     }
 
     @Bean
-    public Function<KStream<String, Order>,
+    Function<KStream<String, Order>,
             Function<GlobalKTable<String, Customer>,
                     Function<KStream<String, OrderProduct>,
                             Function<GlobalKTable<String, Product>,
