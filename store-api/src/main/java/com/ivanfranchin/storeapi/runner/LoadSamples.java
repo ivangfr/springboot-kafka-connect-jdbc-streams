@@ -1,9 +1,9 @@
 package com.ivanfranchin.storeapi.runner;
 
-import com.ivanfranchin.storeapi.model.Customer;
-import com.ivanfranchin.storeapi.model.Product;
-import com.ivanfranchin.storeapi.service.CustomerService;
-import com.ivanfranchin.storeapi.service.ProductService;
+import com.ivanfranchin.storeapi.customer.model.Customer;
+import com.ivanfranchin.storeapi.product.model.Product;
+import com.ivanfranchin.storeapi.customer.CustomerService;
+import com.ivanfranchin.storeapi.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
