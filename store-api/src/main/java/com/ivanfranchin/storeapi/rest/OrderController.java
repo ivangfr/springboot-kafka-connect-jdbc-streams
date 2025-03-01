@@ -1,11 +1,13 @@
 package com.ivanfranchin.storeapi.rest;
 
-import com.ivanfranchin.storeapi.mapper.OrderMapper;
 import com.ivanfranchin.storeapi.model.Order;
+import com.ivanfranchin.storeapi.model.OrderProduct;
 import com.ivanfranchin.storeapi.rest.dto.CreateOrderRequest;
 import com.ivanfranchin.storeapi.rest.dto.OrderResponse;
 import com.ivanfranchin.storeapi.rest.dto.UpdateOrderRequest;
+import com.ivanfranchin.storeapi.service.CustomerService;
 import com.ivanfranchin.storeapi.service.OrderService;
+import com.ivanfranchin.storeapi.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,36 +29,53 @@ import java.util.UUID;
 public class OrderController {
 
     private final OrderService orderService;
-    private final OrderMapper orderMapper;
+    private final CustomerService customerService;
+    private final ProductService productService;
 
     @GetMapping
     public List<OrderResponse> getAllOrders() {
         return orderService.getAllOrders()
                 .stream()
-                .map(orderMapper::toOrderResponse)
+                .map(OrderResponse::from)
                 .toList();
     }
 
     @GetMapping("/{id}")
     public OrderResponse getOrder(@PathVariable UUID id) {
         Order order = orderService.validateAndGetOrderById(id.toString());
-        return orderMapper.toOrderResponse(order);
+        return OrderResponse.from(order);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public OrderResponse createOrder(@Valid @RequestBody CreateOrderRequest createOrderRequest) {
-        Order order = orderMapper.toOrder(createOrderRequest);
+        Order order = toOrder(createOrderRequest);
         order.setId(UUID.randomUUID().toString());
         order = orderService.saveOrder(order);
-        return orderMapper.toOrderResponse(order);
+        return OrderResponse.from(order);
     }
 
     @PatchMapping("/{id}")
     public OrderResponse updateOrder(@PathVariable UUID id, @Valid @RequestBody UpdateOrderRequest updateOrderRequest) {
         Order order = orderService.validateAndGetOrderById(id.toString());
-        orderMapper.updateOrderFromRequest(updateOrderRequest, order);
+        Order.updateFrom(updateOrderRequest, order);
         order = orderService.saveOrder(order);
-        return orderMapper.toOrderResponse(order);
+        return OrderResponse.from(order);
+    }
+
+    public Order toOrder(CreateOrderRequest createOrderRequest) {
+        Order order = new Order();
+        order.setPaymentType(createOrderRequest.paymentType());
+        order.setStatus(createOrderRequest.status());
+        order.setCustomer(customerService.validateAndGetCustomerById(createOrderRequest.customerId()));
+
+        for (CreateOrderRequest.CreateOrderProductRequest p : createOrderRequest.products()) {
+            OrderProduct orderProduct = new OrderProduct();
+            orderProduct.setOrder(order);
+            orderProduct.setProduct(productService.validateAndGetProductById(p.id()));
+            orderProduct.setUnit(p.unit());
+            order.getOrderProducts().add(orderProduct);
+        }
+        return order;
     }
 }

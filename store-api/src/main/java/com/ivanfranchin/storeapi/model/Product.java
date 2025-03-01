@@ -1,5 +1,7 @@
 package com.ivanfranchin.storeapi.model;
 
+import com.ivanfranchin.storeapi.rest.dto.AddProductRequest;
+import com.ivanfranchin.storeapi.rest.dto.UpdateProductRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -44,5 +46,21 @@ public class Product {
     @PreUpdate
     public void onPreUpdate() {
         updatedAt = LocalDateTime.now();
+    }
+
+    public static Product from(AddProductRequest addProductRequest) {
+        Product product = new Product();
+        product.setName(addProductRequest.name());
+        product.setPrice(addProductRequest.price().toString());
+        return product;
+    }
+
+    public static void updateFrom(UpdateProductRequest updateProductRequest, Product product) {
+        if (updateProductRequest.name() != null) {
+            product.setName(updateProductRequest.name());
+        }
+        if (updateProductRequest.price() != null) {
+            product.setPrice(updateProductRequest.price().toString());
+        }
     }
 }

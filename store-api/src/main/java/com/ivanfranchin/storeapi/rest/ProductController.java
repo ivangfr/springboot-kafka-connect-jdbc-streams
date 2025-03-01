@@ -1,6 +1,5 @@
 package com.ivanfranchin.storeapi.rest;
 
-import com.ivanfranchin.storeapi.mapper.ProductMapper;
 import com.ivanfranchin.storeapi.model.Product;
 import com.ivanfranchin.storeapi.rest.dto.AddProductRequest;
 import com.ivanfranchin.storeapi.rest.dto.ProductResponse;
@@ -27,42 +26,41 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
-    private final ProductMapper productMapper;
 
     @GetMapping
     public List<ProductResponse> getAllProducts() {
         return productService.getAllProducts()
                 .stream()
-                .map(productMapper::toProductResponse)
+                .map(ProductResponse::from)
                 .toList();
     }
 
     @GetMapping("/{id}")
     public ProductResponse getProduct(@PathVariable Long id) {
         Product product = productService.validateAndGetProductById(id);
-        return productMapper.toProductResponse(product);
+        return ProductResponse.from(product);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public ProductResponse addProduct(@Valid @RequestBody AddProductRequest addProductRequest) {
-        Product product = productMapper.toProduct(addProductRequest);
+        Product product = Product.from(addProductRequest);
         product = productService.saveProduct(product);
-        return productMapper.toProductResponse(product);
+        return ProductResponse.from(product);
     }
 
     @PatchMapping("/{id}")
     public ProductResponse updateProduct(@PathVariable Long id, @Valid @RequestBody UpdateProductRequest updateProductRequest) {
         Product product = productService.validateAndGetProductById(id);
-        productMapper.updateProductFromRequest(updateProductRequest, product);
+        Product.updateFrom(updateProductRequest, product);
         product = productService.saveProduct(product);
-        return productMapper.toProductResponse(product);
+        return ProductResponse.from(product);
     }
 
     @DeleteMapping("/{id}")
     public ProductResponse deleteProduct(@PathVariable Long id) {
         Product product = productService.validateAndGetProductById(id);
         productService.deleteProduct(product);
-        return productMapper.toProductResponse(product);
+        return ProductResponse.from(product);
     }
 }

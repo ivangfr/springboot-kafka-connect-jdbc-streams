@@ -1,6 +1,5 @@
 package com.ivanfranchin.storeapi.rest;
 
-import com.ivanfranchin.storeapi.mapper.CustomerMapper;
 import com.ivanfranchin.storeapi.model.Customer;
 import com.ivanfranchin.storeapi.rest.dto.AddCustomerRequest;
 import com.ivanfranchin.storeapi.rest.dto.CustomerResponse;
@@ -27,42 +26,41 @@ import java.util.List;
 public class CustomerController {
 
     private final CustomerService customerService;
-    private final CustomerMapper customerMapper;
 
     @GetMapping
     public List<CustomerResponse> getAllCustomers() {
         return customerService.getAllCustomers()
                 .stream()
-                .map(customerMapper::toCustomerResponse)
+                .map(CustomerResponse::from)
                 .toList();
     }
 
     @GetMapping("/{id}")
     public CustomerResponse getCustomer(@PathVariable Long id) {
         Customer customer = customerService.validateAndGetCustomerById(id);
-        return customerMapper.toCustomerResponse(customer);
+        return CustomerResponse.from(customer);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public CustomerResponse addCustomer(@Valid @RequestBody AddCustomerRequest addCustomerRequest) {
-        Customer customer = customerMapper.toCustomer(addCustomerRequest);
+        Customer customer = Customer.from(addCustomerRequest);
         customer = customerService.saveCustomer(customer);
-        return customerMapper.toCustomerResponse(customer);
+        return CustomerResponse.from(customer);
     }
 
     @PatchMapping("/{id}")
     public CustomerResponse updateCustomer(@PathVariable Long id, @Valid @RequestBody UpdateCustomerRequest updateCustomerRequest) {
         Customer customer = customerService.validateAndGetCustomerById(id);
-        customerMapper.updateCustomerFromRequest(updateCustomerRequest, customer);
+        Customer.updateFrom(updateCustomerRequest, customer);
         customer = customerService.saveCustomer(customer);
-        return customerMapper.toCustomerResponse(customer);
+        return CustomerResponse.from(customer);
     }
 
     @DeleteMapping("/{id}")
     public CustomerResponse deleteCustomer(@PathVariable Long id) {
         Customer customer = customerService.validateAndGetCustomerById(id);
         customerService.deleteCustomer(customer);
-        return customerMapper.toCustomerResponse(customer);
+        return CustomerResponse.from(customer);
     }
 }

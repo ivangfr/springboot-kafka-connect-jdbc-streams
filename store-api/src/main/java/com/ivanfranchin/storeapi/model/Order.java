@@ -1,5 +1,6 @@
 package com.ivanfranchin.storeapi.model;
 
+import com.ivanfranchin.storeapi.rest.dto.UpdateOrderRequest;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -61,5 +62,14 @@ public class Order {
     @PreUpdate
     public void onPreUpdate() {
         updatedAt = LocalDateTime.now();
+    }
+
+    public static void updateFrom(UpdateOrderRequest updateOrderRequest, Order order) {
+        if (updateOrderRequest.paymentType() != null) {
+            order.setPaymentType(updateOrderRequest.paymentType());
+        }
+        if (updateOrderRequest.status() != null) {
+            order.setStatus(updateOrderRequest.status());
+        }
     }
 }
