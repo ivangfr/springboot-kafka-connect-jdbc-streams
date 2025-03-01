@@ -45,15 +45,15 @@ public abstract class OrderMapper {
             return null;
         }
         Order order = new Order();
-        order.setPaymentType(createOrderRequest.getPaymentType());
-        order.setStatus(createOrderRequest.getStatus());
-        order.setCustomer(customerService.validateAndGetCustomerById(createOrderRequest.getCustomerId()));
+        order.setPaymentType(createOrderRequest.paymentType());
+        order.setStatus(createOrderRequest.status());
+        order.setCustomer(customerService.validateAndGetCustomerById(createOrderRequest.customerId()));
 
-        for (CreateOrderRequest.CreateOrderProductRequest p : createOrderRequest.getProducts()) {
+        for (CreateOrderRequest.CreateOrderProductRequest p : createOrderRequest.products()) {
             OrderProduct orderProduct = new OrderProduct();
             orderProduct.setOrder(order);
-            orderProduct.setProduct(productService.validateAndGetProductById(p.getId()));
-            orderProduct.setUnit(p.getUnit());
+            orderProduct.setProduct(productService.validateAndGetProductById(p.id()));
+            orderProduct.setUnit(p.unit());
             order.getOrderProducts().add(orderProduct);
         }
         return order;
