@@ -44,7 +44,6 @@ public class OrderController {
     @PostMapping
     public OrderResponse createOrder(@Valid @RequestBody CreateOrderRequest createOrderRequest) {
         Order order = orderService.createOrderFrom(createOrderRequest);
-        order.setId(UUID.randomUUID().toString());
         order = orderService.saveOrder(order);
         return OrderResponse.from(order);
     }

@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -33,6 +34,7 @@ public class OrderService {
 
     public Order createOrderFrom(CreateOrderRequest createOrderRequest) {
         Order order = new Order();
+        order.setId(UUID.randomUUID().toString());
         order.setPaymentType(createOrderRequest.paymentType());
         order.setStatus(createOrderRequest.status());
         order.setCustomer(customerService.validateAndGetCustomerById(createOrderRequest.customerId()));
