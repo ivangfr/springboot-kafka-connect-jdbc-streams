@@ -1,12 +1,9 @@
 package com.ivanfranchin.storeapi.order;
 
-import com.ivanfranchin.storeapi.order.model.Order;
-import com.ivanfranchin.storeapi.order.model.OrderProduct;
 import com.ivanfranchin.storeapi.order.dto.CreateOrderRequest;
 import com.ivanfranchin.storeapi.order.dto.OrderResponse;
 import com.ivanfranchin.storeapi.order.dto.UpdateOrderRequest;
-import com.ivanfranchin.storeapi.customer.CustomerService;
-import com.ivanfranchin.storeapi.product.ProductService;
+import com.ivanfranchin.storeapi.order.model.Order;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,8 +25,6 @@ import java.util.UUID;
 public class OrderController {
 
     private final OrderService orderService;
-    private final CustomerService customerService;
-    private final ProductService productService;
 
     @GetMapping
     public List<OrderResponse> getAllOrders() {
@@ -48,7 +43,7 @@ public class OrderController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public OrderResponse createOrder(@Valid @RequestBody CreateOrderRequest createOrderRequest) {
-        Order order = toOrder(createOrderRequest);
+        Order order = orderService.createOrderFrom(createOrderRequest);
         order.setId(UUID.randomUUID().toString());
         order = orderService.saveOrder(order);
         return OrderResponse.from(order);
@@ -60,21 +55,5 @@ public class OrderController {
         Order.updateFrom(updateOrderRequest, order);
         order = orderService.saveOrder(order);
         return OrderResponse.from(order);
-    }
-
-    public Order toOrder(CreateOrderRequest createOrderRequest) {
-        Order order = new Order();
-        order.setPaymentType(createOrderRequest.paymentType());
-        order.setStatus(createOrderRequest.status());
-        order.setCustomer(customerService.validateAndGetCustomerById(createOrderRequest.customerId()));
-
-        for (CreateOrderRequest.CreateOrderProductRequest p : createOrderRequest.products()) {
-            OrderProduct orderProduct = new OrderProduct();
-            orderProduct.setOrder(order);
-            orderProduct.setProduct(productService.validateAndGetProductById(p.id()));
-            orderProduct.setUnit(p.unit());
-            order.getOrderProducts().add(orderProduct);
-        }
-        return order;
     }
 }
