@@ -1,4 +1,4 @@
-package com.ivanfranchin.storeapi.simulator;
+package com.ivanfranchin.storeapi.simulation;
 
 import com.ivanfranchin.storeapi.customer.model.Customer;
 import com.ivanfranchin.storeapi.order.model.Order;
@@ -6,7 +6,7 @@ import com.ivanfranchin.storeapi.order.model.OrderProduct;
 import com.ivanfranchin.storeapi.order.model.OrderStatus;
 import com.ivanfranchin.storeapi.order.model.PaymentType;
 import com.ivanfranchin.storeapi.product.model.Product;
-import com.ivanfranchin.storeapi.order.dto.RandomOrdersRequest;
+import com.ivanfranchin.storeapi.simulation.dto.RandomOrdersRequest;
 import com.ivanfranchin.storeapi.customer.CustomerService;
 import com.ivanfranchin.storeapi.order.OrderService;
 import com.ivanfranchin.storeapi.product.ProductService;

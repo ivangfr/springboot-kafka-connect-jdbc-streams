@@ -1,4 +1,4 @@
-package com.ivanfranchin.storeapi.order.dto;
+package com.ivanfranchin.storeapi.simulation.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
