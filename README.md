@@ -39,16 +39,16 @@ In order to run this project, you can use [`JSON`](https://www.json.org) or [`Av
 ## Start Environment
 
 - Open a terminal and inside the `springboot-kafka-connect-jdbc-streams` root folder run:
-  ```
+  ```bash
   docker compose up -d
   ```
   > **Note**: During the first run, an image for `kafka-connect` will be built with the name `springboot-kafka-connect-jdbc-streams_kafka-connect`. Use the command below to rebuild it.
-  > ```
+  > ```bash
   > docker compose build
   > ```
 
 - Wait for all Docker containers to be up and running. To check it, run:
-  ```
+  ```bash
   docker ps -a
   ```
   
@@ -59,7 +59,7 @@ In order to have topics in `Kafka` with more than `1` partition, we have to crea
 - Open a new terminal and make sure you are in the `springboot-kafka-connect-jdbc-streams` root folder;
 
 - Run the script below:
-  ```
+  ```bash
   ./create-kafka-topics.sh
   ```
 
@@ -79,23 +79,23 @@ Steps to create the connectors:
 
   - **For JSON (de)serialization**
 
-    ```
+    ```bash
     ./create-connectors-jsonconverter.sh
     ```
     
   - **For Avro (de)serialization**
 
-    ```
+    ```bash
     ./create-connectors-avroconverter.sh
     ```
 
 - You can check the state of the connectors and their tasks on `Kafka Connect UI` or running the following script:
-  ```
+  ```bash
   ./check-connectors-state.sh
   ```
 
 - Once the connectors and their tasks are ready (`RUNNING` state), you should see something like:
-  ```
+  ```text
   {"name":"mysql-source-customers","connector":{"state":"RUNNING","worker_id":"kafka-connect:8083"},"tasks":[{"id":0,"state":"RUNNING","worker_id":"kafka-connect:8083"}],"type":"source"}
   {"name":"mysql-source-products","connector":{"state":"RUNNING","worker_id":"kafka-connect:8083"},"tasks":[{"id":0,"state":"RUNNING","worker_id":"kafka-connect:8083"}],"type":"source"}
   {"name":"mysql-source-orders","connector":{"state":"RUNNING","worker_id":"kafka-connect:8083"},"tasks":[{"id":0,"state":"RUNNING","worker_id":"kafka-connect:8083"}],"type":"source"}
@@ -110,7 +110,7 @@ Steps to create the connectors:
   ![kafka-connect-ui](documentation/kafka-connect-ui.jpeg)
 
 - If there is any problem, you can check `kafka-connect` container logs:
-  ```
+  ```bash
   docker logs kafka-connect
   ```
 ## Running Applications with Maven
@@ -120,7 +120,7 @@ Steps to create the connectors:
   - Open a new terminal and make sure you are in the `springboot-kafka-connect-jdbc-streams` root folder.
   
   - Run the command below to start the application:
-    ```
+    ```bash
     ./mvnw clean spring-boot:run --projects store-api \
     -Dspring-boot.run.jvmArguments="-Dserver.port=9080"
     ```
@@ -138,7 +138,7 @@ Steps to create the connectors:
 
     - **For JSON (de)serialization**
   
-      ```
+      ```bash
       ./mvnw clean spring-boot:run --projects store-streams \
       -Dspring-boot.run.jvmArguments="-Dserver.port=9081"
       ```
@@ -146,13 +146,13 @@ Steps to create the connectors:
     - **For Avro (de)serialization**
      
       > **Warning**: Unable to run in this mode on my machine! The application starts fine when using the `avro` profile, but when the first event arrives, the `org.apache.kafka.common.errors.SerializationException: Unknown magic byte!` is thrown. This problem does not occur when [Running Applications as Docker containers](#running-applications-as-docker-containers).
-      ```
+      ```bash
       ./mvnw clean spring-boot:run --projects store-streams \
       -Dspring-boot.run.jvmArguments="-Dserver.port=9081" \
       -Dspring-boot.run.profiles=avro
       ```
       > The command below generates Java classes from Avro files present in `src/main/resources/avro`
-      > ```
+      > ```bash
       > ./mvnw generate-sources --projects store-streams
       > ```
 
@@ -163,7 +163,7 @@ Steps to create the connectors:
 - In a terminal, make sure you are inside the `springboot-kafka-connect-jdbc-streams` root folder;
 
 - Run the following script to build the application's docker image:
-  ```
+  ```bash
   ./build-docker-images.sh
   ```
 
@@ -192,11 +192,11 @@ Steps to create the connectors:
 - In order to run the application's docker containers, you can pick between `JSON` or `Avro`:
 
   - **For JSON (de)serialization**
-    ```
+    ```bash
     ./start-apps.sh
     ```
   - **For Avro (de)serialization**
-    ```
+    ```bash
     ./start-apps.sh avro
     ```
 
@@ -210,23 +210,23 @@ Steps to create the connectors:
 ## Testing
 
 1. Let's simulate an order creation. In this example, customer with id `1`
-   ```
+   ```json
    {"id":1, "name":"John Gates", "email":"john.gates@test.com", "address":"street 1", "phone":"112233"}
    ```
    will order one unit of the product with id `15`
-   ```
+   ```json
    {"id":15, "name":"iPhone Xr", "price":900.00}
    ```
 
    In a terminal, run the following `curl` command:
-   ```
+   ```bash
    curl -i -X POST localhost:9080/api/orders \
      -H 'Content-Type: application/json' \
      -d '{"customerId": 1, "paymentType": "BITCOIN", "status": "OPEN", "products": [{"id": 15, "unit": 1}]}'
    ```
 
    The response should be:
-   ```
+   ```text
    HTTP/1.1 201
    {
      "id": "47675629-4f0d-440d-b6df-c829874ee2a6",
@@ -238,12 +238,12 @@ Steps to create the connectors:
    ```
 
 2. Checking `Elasticsearch`:
-   ```
+   ```bash
    curl "localhost:9200/store.streams.orders/_search?pretty"
    ```
    
    We should have one order with a customer and products names:
-   ```
+   ```json
    {
      "took" : 844,
      "timed_out" : false,
@@ -288,7 +288,7 @@ Steps to create the connectors:
    ```
 
 3. In order to create random orders, we can use also the `simulation`:
-   ```
+   ```bash
    curl -i -X POST localhost:9080/api/simulation/orders \
      -H 'Content-Type: application/json' \
      -d '{"total": 10, "sleep": 100}'
@@ -313,11 +313,11 @@ Steps to create the connectors:
   You can use `curl` to check the subjects in `Schema Registry`
 
   - Get the list of subjects
-    ```
+    ```bash
     curl localhost:8081/subjects
     ```
   - Get the latest version of the subject `mysql.storedb.customers-value`
-    ```
+    ```bash
     curl localhost:8081/subjects/mysql.storedb.customers-value/versions/latest
     ```
 
@@ -337,11 +337,11 @@ Steps to create the connectors:
   `Elasticsearch` can be accessed at http://localhost:9200
 
   - Get all indices:
-    ```
+    ```bash
     curl "localhost:9200/_cat/indices?v"
     ```
   - Search for documents:
-    ```
+    ```bash
     curl "localhost:9200/mysql.storedb.customers/_search?pretty"
     curl "localhost:9200/mysql.storedb.products/_search?pretty"
     curl "localhost:9200/store.streams.orders/_search?pretty"
@@ -349,7 +349,7 @@ Steps to create the connectors:
 
 - **MySQL**
 
-  ```
+  ```bash
   docker exec -it -e MYSQL_PWD=secret mysql mysql -uroot --database storedb
   select * from orders;
   ```
@@ -359,18 +359,18 @@ Steps to create the connectors:
 - To stop applications:
   - If they were started with `Maven`, go to the terminals where they are running and press `Ctrl+C`;
   - If they were started as Docker containers, go to a terminal and, inside the `springboot-kafka-connect-jdbc-streams` root folder, run the script below:
-    ```
+    ```bash
     ./stop-apps.sh
     ```
 - To stop and remove docker compose containers, network and volumes, go to a terminal and, inside the `springboot-kafka-connect-jdbc-streams` root folder, run the following command:
-  ```
+  ```bash
   docker compose down -v
   ```
 
 ## Cleanup
 
 To remove the Docker images created by this project, go to a terminal and, inside the `springboot-kafka-connect-jdbc-streams` root folder, run the script below:
-```
+```bash
 ./remove-docker-images.sh
 ```
 
