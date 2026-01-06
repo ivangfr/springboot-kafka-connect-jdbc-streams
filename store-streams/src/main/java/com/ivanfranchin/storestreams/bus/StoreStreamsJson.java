@@ -16,8 +16,8 @@ import org.apache.kafka.streams.kstream.Materialized;
 import org.apache.kafka.streams.kstream.StreamJoined;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
-import org.springframework.kafka.support.serializer.JsonDeserializer;
-import org.springframework.kafka.support.serializer.JsonSerializer;
+import org.springframework.kafka.support.serializer.JacksonJsonDeserializer;
+import org.springframework.kafka.support.serializer.JacksonJsonSerializer;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
@@ -35,12 +35,12 @@ public class StoreStreamsJson {
     public static final Serde<OrderDetailed> orderDetailedSerde;
 
     static {
-        JsonSerializer<List<ProductDetail>> setSerializer = new JsonSerializer<>();
-        JsonDeserializer<List<ProductDetail>> setDeserializer = new JsonDeserializer<>(List.class);
+        JacksonJsonSerializer<List<ProductDetail>> setSerializer = new JacksonJsonSerializer<>();
+        JacksonJsonDeserializer<List<ProductDetail>> setDeserializer = new JacksonJsonDeserializer<>(List.class);
         productDetailListSerde = Serdes.serdeFrom(setSerializer, setDeserializer);
 
-        JsonSerializer<OrderDetailed> orderDetailedSerializer = new JsonSerializer<>();
-        JsonDeserializer<OrderDetailed> orderDetailedDeserializer = new JsonDeserializer<>(OrderDetailed.class);
+        JacksonJsonSerializer<OrderDetailed> orderDetailedSerializer = new JacksonJsonSerializer<>();
+        JacksonJsonDeserializer<OrderDetailed> orderDetailedDeserializer = new JacksonJsonDeserializer<>(OrderDetailed.class);
         orderDetailedSerde = Serdes.serdeFrom(orderDetailedSerializer, orderDetailedDeserializer);
     }
 

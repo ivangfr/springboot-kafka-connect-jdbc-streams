@@ -1,7 +1,7 @@
 package com.ivanfranchin.storestreams.serde.json;
 
 import com.ivanfranchin.commons.storeapp.json.Order;
-import org.springframework.kafka.support.serializer.JsonSerde;
+import org.springframework.kafka.support.serializer.JacksonJsonSerde;
 
-public class OrderJsonSerde extends JsonSerde<Order> {
+public class OrderJsonSerde extends JacksonJsonSerde<Order> {
 }
