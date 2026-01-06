@@ -121,8 +121,7 @@ Steps to create the connectors:
   
   - Run the command below to start the application:
     ```bash
-    ./mvnw clean spring-boot:run --projects store-api \
-    -Dspring-boot.run.jvmArguments="-Dserver.port=9080"
+    ./mvnw clean spring-boot:run --projects store-api -Dspring-boot.run.jvmArguments="-Dserver.port=9080"
     ```
     > **Note**
     >
@@ -137,19 +136,13 @@ Steps to create the connectors:
   - To start application, run:
 
     - **For JSON (de)serialization**
-  
       ```bash
-      ./mvnw clean spring-boot:run --projects store-streams \
-      -Dspring-boot.run.jvmArguments="-Dserver.port=9081"
+      ./mvnw clean spring-boot:run --projects store-streams -Dspring-boot.run.jvmArguments="-Dserver.port=9081"
       ```
       
     - **For Avro (de)serialization**
-     
-      > **Warning**: Unable to run in this mode on my machine! The application starts fine when using the `avro` profile, but when the first event arrives, the `org.apache.kafka.common.errors.SerializationException: Unknown magic byte!` is thrown. This problem does not occur when [Running Applications as Docker containers](#running-applications-as-docker-containers).
       ```bash
-      ./mvnw clean spring-boot:run --projects store-streams \
-      -Dspring-boot.run.jvmArguments="-Dserver.port=9081" \
-      -Dspring-boot.run.profiles=avro
+      ./mvnw clean spring-boot:run --projects store-streams -Dspring-boot.run.jvmArguments="-Dserver.port=9081" -Dspring-boot.run.profiles=avro
       ```
       > The command below generates Java classes from Avro files present in `src/main/resources/avro`
       > ```bash

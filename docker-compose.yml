@@ -1,7 +1,7 @@
 services:
 
   mysql:
-    image: 'mysql:9.1.0'
+    image: 'mysql:9.2.0'
     container_name: 'mysql'
     restart: 'unless-stopped'
     ports:
@@ -15,7 +15,7 @@ services:
       test: 'mysqladmin ping -u root -p$${MYSQL_ROOT_PASSWORD}'
 
   elasticsearch:
-    image: 'docker.elastic.co/elasticsearch/elasticsearch:8.15.4'
+    image: 'docker.elastic.co/elasticsearch/elasticsearch:8.18.8'
     container_name: 'elasticsearch'
     restart: 'unless-stopped'
     ports:
@@ -29,7 +29,7 @@ services:
       test: 'curl -f http://localhost:9200 || exit 1'
 
   zookeeper:
-    image: 'confluentinc/cp-zookeeper:7.8.0'
+    image: 'confluentinc/cp-zookeeper:7.9.5'
     container_name: 'zookeeper'
     restart: 'unless-stopped'
     ports:
@@ -40,7 +40,7 @@ services:
       test: 'echo stat | nc localhost $$ZOOKEEPER_CLIENT_PORT'
 
   kafka:
-    image: 'confluentinc/cp-kafka:7.8.0'
+    image: 'confluentinc/cp-kafka:7.9.5'
     container_name: 'kafka'
     restart: 'unless-stopped'
     depends_on:
@@ -57,7 +57,7 @@ services:
       test: [ "CMD", "nc", "-z", "localhost", "9092" ]
 
   schema-registry:
-    image: 'confluentinc/cp-schema-registry:7.8.0'
+    image: 'confluentinc/cp-schema-registry:7.9.5'
     container_name: 'schema-registry'
     restart: 'unless-stopped'
     depends_on:
@@ -86,7 +86,7 @@ services:
       test: 'wget --quiet --tries=1 --spider http://localhost:8000 || exit 1'
 
   kafka-rest-proxy:
-    image: 'confluentinc/cp-kafka-rest:7.8.0'
+    image: 'confluentinc/cp-kafka-rest:7.9.5'
     container_name: 'kafka-rest-proxy'
     restart: 'unless-stopped'
     depends_on:

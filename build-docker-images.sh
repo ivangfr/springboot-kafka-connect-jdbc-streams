@@ -11,12 +11,12 @@ STORE_STREAMS_DOCKER_IMAGE_NAME="${DOCKER_IMAGE_PREFIX}/${STORE_STREAMS_APP_NAME
 
 SKIP_TESTS="true"
 
-./mvnw clean compile jib:dockerBuild \
+./mvnw clean spring-boot:build-image \
   --projects "$STORE_API_APP_NAME" \
   -DskipTests="$SKIP_TESTS" \
-  -Dimage="$STORE_API_DOCKER_IMAGE_NAME"
+  -Dspring-boot.build-image.imageName="$STORE_API_DOCKER_IMAGE_NAME"
 
-./mvnw clean compile jib:dockerBuild \
+./mvnw clean spring-boot:build-image \
   --projects "$STORE_STREAMS_APP_NAME" \
   -DskipTests="$SKIP_TESTS" \
-  -Dimage="$STORE_STREAMS_DOCKER_IMAGE_NAME"
+  -Dspring-boot.build-image.imageName="$STORE_STREAMS_DOCKER_IMAGE_NAME"
